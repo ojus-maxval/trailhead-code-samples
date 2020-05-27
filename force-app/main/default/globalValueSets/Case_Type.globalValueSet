@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>All</fullName>
+        <default>false</default>
+        <label>All</label>
+    </customValue>
+    <customValue>
+        <fullName>Associated Trademark</fullName>
+        <default>false</default>
+        <label>Associated Trademark</label>
+    </customValue>
+    <customValue>
+        <fullName>Cautionary Notice</fullName>
+        <default>false</default>
+        <label>Cautionary Notice</label>
+    </customValue>
+    <customValue>
+        <fullName>Continuation</fullName>
+        <default>false</default>
+        <label>Continuation</label>
+    </customValue>
+    <customValue>
+        <fullName>Continuation-in-Part</fullName>
+        <default>false</default>
+        <label>Continuation-in-Part</label>
+    </customValue>
+    <customValue>
+        <fullName>Conversion to Priority Filing</fullName>
+        <default>false</default>
+        <label>Conversion to Priority Filing</label>
+    </customValue>
+    <customValue>
+        <fullName>Defensive Publication</fullName>
+        <default>false</default>
+        <label>Defensive Publication</label>
+    </customValue>
+    <customValue>
+        <fullName>Divisional</fullName>
+        <default>false</default>
+        <label>Divisional</label>
+    </customValue>
+    <customValue>
+        <fullName>EP Validation</fullName>
+        <default>false</default>
+        <label>EP Validation</label>
+    </customValue>
+    <customValue>
+        <fullName>Eurasian Validation</fullName>
+        <default>false</default>
+        <label>Eurasian Validation</label>
+    </customValue>
+    <customValue>
+        <fullName>Hague</fullName>
+        <default>false</default>
+        <label>Hague</label>
+    </customValue>
+    <customValue>
+        <fullName>Madrid Designation</fullName>
+        <default>false</default>
+        <label>Madrid Designation</label>
+    </customValue>
+    <customValue>
+        <fullName>Madrid Subsequent Designation</fullName>
+        <default>false</default>
+        <label>Madrid Subsequent Designation</label>
+    </customValue>
+    <customValue>
+        <fullName>Other</fullName>
+        <default>false</default>
+        <label>Other</label>
+    </customValue>
+    <customValue>
+        <fullName>Paediatric Extension</fullName>
+        <default>false</default>
+        <label>Paediatric Extension</label>
+    </customValue>
+    <customValue>
+        <fullName>Patent of Addition</fullName>
+        <default>false</default>
+        <label>Patent of Addition</label>
+    </customValue>
+    <customValue>
+        <fullName>Patent Term Extension</fullName>
+        <default>false</default>
+        <label>Patent Term Extension</label>
+    </customValue>
+    <customValue>
+        <fullName>PCT National</fullName>
+        <default>false</default>
+        <label>PCT National</label>
+    </customValue>
+    <customValue>
+        <fullName>Pipeline</fullName>
+        <default>false</default>
+        <label>Pipeline</label>
+    </customValue>
+    <customValue>
+        <fullName>Plant</fullName>
+        <default>false</default>
+        <label>Plant</label>
+    </customValue>
+    <customValue>
+        <fullName>Primary</fullName>
+        <default>false</default>
+        <label>Primary</label>
+    </customValue>
+    <customValue>
+        <fullName>Provisional</fullName>
+        <default>false</default>
+        <label>Provisional</label>
+    </customValue>
+    <customValue>
+        <fullName>Re-Examination</fullName>
+        <default>false</default>
+        <label>Re-Examination</label>
+    </customValue>
+    <customValue>
+        <fullName>Re-Issue</fullName>
+        <default>false</default>
+        <label>Re-Issue</label>
+    </customValue>
+    <customValue>
+        <fullName>Reputation Mark</fullName>
+        <default>false</default>
+        <label>Reputation Mark</label>
+    </customValue>
+    <customValue>
+        <fullName>Re-Registration</fullName>
+        <default>false</default>
+        <label>Re-Registration</label>
+    </customValue>
+    <customValue>
+        <fullName>Secondary</fullName>
+        <default>false</default>
+        <label>Secondary</label>
+    </customValue>
+    <customValue>
+        <fullName>Similar</fullName>
+        <default>false</default>
+        <label>Similar</label>
+    </customValue>
+    <customValue>
+        <fullName>Slogan</fullName>
+        <default>false</default>
+        <label>Slogan</label>
+    </customValue>
+    <customValue>
+        <fullName>State Filing</fullName>
+        <default>false</default>
+        <label>State Filing</label>
+    </customValue>
+    <customValue>
+        <fullName>Subsequent</fullName>
+        <default>false</default>
+        <label>Subsequent</label>
+    </customValue>
+    <customValue>
+        <fullName>Supplementary Protection Certificate</fullName>
+        <default>false</default>
+        <label>Supplementary Protection Certificate</label>
+    </customValue>
+    <customValue>
+        <fullName>Tradename</fullName>
+        <default>false</default>
+        <label>Tradename</label>
+    </customValue>
+    <customValue>
+        <fullName>Utility Non-Provisional</fullName>
+        <default>false</default>
+        <label>Utility Non-Provisional</label>
+    </customValue>
+    <customValue>
+        <fullName>Utility Original</fullName>
+        <default>false</default>
+        <label>Utility Original</label>
+    </customValue>
+    <customValue>
+        <fullName>Pediatric Exclusivity</fullName>
+        <default>false</default>
+        <label>Pediatric Exclusivity</label>
+    </customValue>
+    <customValue>
+        <fullName>Aesthetic - Divisional</fullName>
+        <default>false</default>
+        <label>Aesthetic - Divisional</label>
+    </customValue>
+    <customValue>
+        <fullName>Aesthetic - Primary</fullName>
+        <default>false</default>
+        <label>Aesthetic - Primary</label>
+    </customValue>
+    <customValue>
+        <fullName>Aesthetic - Secondary</fullName>
+        <default>false</default>
+        <label>Aesthetic - Secondary</label>
+    </customValue>
+    <customValue>
+        <fullName>Functional - Divisional</fullName>
+        <default>false</default>
+        <label>Functional - Divisional</label>
+    </customValue>
+    <customValue>
+        <fullName>Functional - Primary</fullName>
+        <default>false</default>
+        <label>Functional - Primary</label>
+    </customValue>
+    <customValue>
+        <fullName>Functional - Secondary</fullName>
+        <default>false</default>
+        <label>Functional - Secondary</label>
+    </customValue>
+    <masterLabel>Case Type</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>
