@@ -1,0 +1,1635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Docketing Rule Engine</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Docketing Rules</value>
+    </caseValues>
+    <fields>
+        <label><!-- Adjust to a Specific Date --></label>
+        <name>Adjust_to_a_Specific_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Adjustment --></label>
+        <name>AdjustmentType__c</name>
+        <picklistValues>
+            <masterLabel>Adjust to a specific date</masterLabel>
+            <translation><!-- Adjust to a specific date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Adjusted to the effective filing date day and month</masterLabel>
+            <translation><!-- Adjusted to the effective filing date day and month --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>End of month</masterLabel>
+            <translation><!-- End of month --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>End of quarter</masterLabel>
+            <translation><!-- End of quarter --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>End of year</masterLabel>
+            <translation><!-- End of year --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>First Day Of The Month Following The Month Of International Publication</masterLabel>
+            <translation><!-- First Day Of The Month Following The Month Of International Publication --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Less 1 day</masterLabel>
+            <translation><!-- Less 1 day --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Plus 0 days</masterLabel>
+            <translation><!-- Plus 0 days --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Plus 10 days</masterLabel>
+            <translation><!-- Plus 10 days --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Plus 15 days</masterLabel>
+            <translation><!-- Plus 15 days --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Asset Type --></label>
+        <name>Asset_Type__c</name>
+    </fields>
+    <fields>
+        <label><!-- Base Date 1 --></label>
+        <name>Base_Date_1__c</name>
+    </fields>
+    <fields>
+        <label><!-- Base Date Compound --></label>
+        <name>Base_Date_Compound__c</name>
+        <picklistValues>
+            <masterLabel>Earliest Priority Date</masterLabel>
+            <translation><!-- Earliest Priority Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Effective Filing Date</masterLabel>
+            <translation><!-- Effective Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Filing Date</masterLabel>
+            <translation><!-- Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Grant Date</masterLabel>
+            <translation><!-- Grant Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Hearing Date</masterLabel>
+            <translation><!-- Hearing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Mail Date</masterLabel>
+            <translation><!-- Mail Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Marketing Approval Date</masterLabel>
+            <translation><!-- Marketing Approval Date --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Base Date --></label>
+        <name>Base_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- CD Rule Calculation 1 - No. --></label>
+        <name>CCount1__c</name>
+    </fields>
+    <fields>
+        <label><!-- CD Rule Calculation - No. --></label>
+        <name>CCount__c</name>
+    </fields>
+    <fields>
+        <label><!-- CD Rule Calculation 1 - +/- --></label>
+        <name>COperator1__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- CD Rule Calculation - +/- --></label>
+        <name>COperator__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- CD Rule Calculation 1 - M/D --></label>
+        <name>CPeriod_Type1__c</name>
+        <picklistValues>
+            <masterLabel>Day(s)</masterLabel>
+            <translation><!-- Day(s) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month(s)</masterLabel>
+            <translation><!-- Month(s) --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- CD Rule Calculation - M/D --></label>
+        <name>CPeriod_Type__c</name>
+        <picklistValues>
+            <masterLabel>Day(s)</masterLabel>
+            <translation><!-- Day(s) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month(s)</masterLabel>
+            <translation><!-- Month(s) --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- CD Rule Calculation - Year(s) --></label>
+        <name>CYearsToCal__c</name>
+    </fields>
+    <fields>
+        <label><!-- Case Type --></label>
+        <name>Case_Type__c</name>
+    </fields>
+    <fields>
+        <label><!-- Classification --></label>
+        <name>Classification__c</name>
+        <picklistValues>
+            <masterLabel>Action</masterLabel>
+            <translation><!-- Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Reminder</masterLabel>
+            <translation><!-- Reminder --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- DD End Date - Year(s) --></label>
+        <name>CloseYearsToCal__c</name>
+    </fields>
+    <fields>
+        <label><!-- DD End Date 1 - No. --></label>
+        <name>Close_Count1__c</name>
+    </fields>
+    <fields>
+        <label><!-- DD End Date - No. --></label>
+        <name>Close_Count__c</name>
+    </fields>
+    <fields>
+        <label><!-- DD End Date 1 - +/- --></label>
+        <name>Close_Operator1__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- DD End Date - +/- --></label>
+        <name>Close_Operator__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- DD End Date 1 - M/D --></label>
+        <name>Close_Period_Type1__c</name>
+        <picklistValues>
+            <masterLabel>Day(s)</masterLabel>
+            <translation><!-- Day(s) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month(s)</masterLabel>
+            <translation><!-- Month(s) --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- DD End Date - M/D --></label>
+        <name>Close_Period_Type__c</name>
+        <picklistValues>
+            <masterLabel>Day(s)</masterLabel>
+            <translation><!-- Day(s) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month(s)</masterLabel>
+            <translation><!-- Month(s) --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Compound Selection --></label>
+        <name>Compound_Selection__c</name>
+        <picklistValues>
+            <masterLabel>Earlier of</masterLabel>
+            <translation><!-- Earlier of --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Later Of</masterLabel>
+            <translation><!-- Later Of --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- D Rule Calculation 1 - No. --></label>
+        <name>Count1__c</name>
+    </fields>
+    <fields>
+        <label><!-- D Rule Calculation - No. --></label>
+        <name>Count__c</name>
+    </fields>
+    <fields>
+        <label><!-- Country Code --></label>
+        <name>Country_Code__c</name>
+    </fields>
+    <fields>
+        <label><!-- Custom Rule --></label>
+        <name>Custom_Rule__c</name>
+    </fields>
+    <fields>
+        <label><!-- D Base Date Compound Calculation --></label>
+        <name>D_Base_Date_Compound_Calculation__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- D Base Type Rule Calculation --></label>
+        <name>D_Base_Type_Rule_Calculation__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Docket Action --></label>
+        <name>Docket_Action__c</name>
+    </fields>
+    <fields>
+        <label><!-- Calculation --></label>
+        <name>Due__c</name>
+    </fields>
+    <fields>
+        <label><!-- Extension of --></label>
+        <name>Extension_of__c</name>
+    </fields>
+    <fields>
+        <label><!-- Importance --></label>
+        <name>Importance__c</name>
+        <picklistValues>
+            <masterLabel>High</masterLabel>
+            <translation><!-- High --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Low</masterLabel>
+            <translation><!-- Low --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Medium</masterLabel>
+            <translation><!-- Medium --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Life Cycle Stage --></label>
+        <name>Life_Cycle_Stage__c</name>
+    </fields>
+    <fields>
+        <label><!-- Manual Due Date --></label>
+        <name>Manual_Due_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Mark Closed --></label>
+        <name>Mark_Closed__c</name>
+    </fields>
+    <fields>
+        <label><!-- Mark Completed --></label>
+        <name>Mark_Completed__c</name>
+    </fields>
+    <fields>
+        <label><!-- Notes Extension --></label>
+        <name>Notes_Extension__c</name>
+    </fields>
+    <fields>
+        <label><!-- Notes General --></label>
+        <name>Notes_General__c</name>
+    </fields>
+    <fields>
+        <label><!-- Notes Rule Calculation Description --></label>
+        <name>Notes_Rule_Calculation_Description__c</name>
+    </fields>
+    <fields>
+        <label><!-- Notes Source --></label>
+        <name>Notes_Source__c</name>
+    </fields>
+    <fields>
+        <label><!-- D Rule Calculation 1 - +/- --></label>
+        <name>Operator1__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- D Rule Calculation - +/- --></label>
+        <name>Operator__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- D Rule Calculation 1 - M/D --></label>
+        <name>Period_Type1__c</name>
+        <picklistValues>
+            <masterLabel>Day(s)</masterLabel>
+            <translation><!-- Day(s) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month(s)</masterLabel>
+            <translation><!-- Month(s) --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- D Rule Calculation - M/D --></label>
+        <name>Period_Type__c</name>
+        <picklistValues>
+            <masterLabel>Day(s)</masterLabel>
+            <translation><!-- Day(s) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month(s)</masterLabel>
+            <translation><!-- Month(s) --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- RuleUpdatedOn --></label>
+        <name>RuleUpdatedOn__c</name>
+    </fields>
+    <fields>
+        <label><!-- Rule Active --></label>
+        <name>Rule_Active__c</name>
+    </fields>
+    <fields>
+        <label><!-- Rule Base Date --></label>
+        <name>Rule_Base_date__c</name>
+        <picklistValues>
+            <masterLabel>Effective Filing Date</masterLabel>
+            <translation><!-- Effective Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Expiration Date</masterLabel>
+            <translation><!-- Expiration Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Filing Date</masterLabel>
+            <translation><!-- Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Grant Date</masterLabel>
+            <translation><!-- Grant Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Immediate Parent Expiration Date</masterLabel>
+            <translation><!-- Immediate Parent Expiration Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Next Renewal Date</masterLabel>
+            <translation><!-- Next Renewal Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registration Date</masterLabel>
+            <translation><!-- Registration Date --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Rule End Date --></label>
+        <name>Rule_End_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Rule Start Date --></label>
+        <name>Rule_Start_Date__c</name>
+    </fields>
+    <fields>
+        <label><!-- Rule Type --></label>
+        <name>Rule_Type__c</name>
+        <picklistValues>
+            <masterLabel>De-Docketing</masterLabel>
+            <translation><!-- De-Docketing --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Docketing</masterLabel>
+            <translation><!-- Docketing --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Sweep</masterLabel>
+            <translation><!-- Sweep --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- DD Start Date - Year(s) --></label>
+        <name>StartYearsToCal__c</name>
+    </fields>
+    <fields>
+        <label><!-- DD Start Date 1 - No. --></label>
+        <name>Start_Count1__c</name>
+    </fields>
+    <fields>
+        <label><!-- DD Start Date - No. --></label>
+        <name>Start_Count__c</name>
+    </fields>
+    <fields>
+        <label><!-- DD Start Date 1 - +/- --></label>
+        <name>Start_Operator1__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- DD Start Date - +/- --></label>
+        <name>Start_Operator__c</name>
+        <picklistValues>
+            <masterLabel>+</masterLabel>
+            <translation><!-- + --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>-</masterLabel>
+            <translation><!-- - --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- DD Start Date 1 - M/D --></label>
+        <name>Start_Period_Type1__c</name>
+        <picklistValues>
+            <masterLabel>Day(s)</masterLabel>
+            <translation><!-- Day(s) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month(s)</masterLabel>
+            <translation><!-- Month(s) --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- DD Start Date - M/D --></label>
+        <name>Start_Period_Type__c</name>
+        <picklistValues>
+            <masterLabel>Day(s)</masterLabel>
+            <translation><!-- Day(s) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month(s)</masterLabel>
+            <translation><!-- Month(s) --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Term Id --></label>
+        <name>Term_Id__c</name>
+    </fields>
+    <fields>
+        <label><!-- Trigger Type --></label>
+        <name>Trigger_Type__c</name>
+        <picklistValues>
+            <masterLabel>Daily Sweep</masterLabel>
+            <translation><!-- Daily Sweep --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Date</masterLabel>
+            <translation><!-- Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Document Code</masterLabel>
+            <translation><!-- Document Code --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Event</masterLabel>
+            <translation><!-- Event --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Trigger --></label>
+        <name>Trigger__c</name>
+        <picklistValues>
+            <masterLabel>371.RQ.M922</masterLabel>
+            <translation><!-- 371.RQ.M922 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>55555555555555</masterLabel>
+            <translation><!-- 55555555555555 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>A...</masterLabel>
+            <translation><!-- A... --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>A.NE</masterLabel>
+            <translation><!-- A.NE --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>A.QU</masterLabel>
+            <translation><!-- A.QU --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>A1/A2 Publication Date</masterLabel>
+            <translation><!-- A1/A2 Publication Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>A1/A3 Publication Date</masterLabel>
+            <translation><!-- A1/A3 Publication Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>ABN</masterLabel>
+            <translation><!-- ABN --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>AP.B</masterLabel>
+            <translation><!-- AP.B --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APD1</masterLabel>
+            <translation><!-- APD1 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APD2</masterLabel>
+            <translation><!-- APD2 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APD3</masterLabel>
+            <translation><!-- APD3 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APDA</masterLabel>
+            <translation><!-- APDA --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APDN</masterLabel>
+            <translation><!-- APDN --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APDP</masterLabel>
+            <translation><!-- APDP --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APDR</masterLabel>
+            <translation><!-- APDR --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APDT</masterLabel>
+            <translation><!-- APDT --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APE2</masterLabel>
+            <translation><!-- APE2 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APEA</masterLabel>
+            <translation><!-- APEA --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APLW</masterLabel>
+            <translation><!-- APLW --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APOH</masterLabel>
+            <translation><!-- APOH --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APP.FILE.REC</masterLabel>
+            <translation><!-- APP.FILE.REC --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>APRB</masterLabel>
+            <translation><!-- APRB --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Acceptance Advertisement</masterLabel>
+            <translation><!-- Acceptance Advertisement --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Adjusted Expiration Date</masterLabel>
+            <translation><!-- Adjusted Expiration Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Admissibility Examination Communication</masterLabel>
+            <translation><!-- Admissibility Examination Communication --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Allowance Date</masterLabel>
+            <translation><!-- Allowance Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Appeal Brief Due Date</masterLabel>
+            <translation><!-- Appeal Brief Due Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Appeal Brief Due Notification</masterLabel>
+            <translation><!-- Appeal Brief Due Notification --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Applicant Legitimacy Notice</masterLabel>
+            <translation><!-- Applicant Legitimacy Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>COCOUT</masterLabel>
+            <translation><!-- COCOUT --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>CTAV</masterLabel>
+            <translation><!-- CTAV --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>CTEQ</masterLabel>
+            <translation><!-- CTEQ --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>CTFR</masterLabel>
+            <translation><!-- CTFR --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>CTNF</masterLabel>
+            <translation><!-- CTNF --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>CTRS</masterLabel>
+            <translation><!-- CTRS --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Claim Fee Due</masterLabel>
+            <translation><!-- Claim Fee Due --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Class Fee Deficiency Notice</masterLabel>
+            <translation><!-- Class Fee Deficiency Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Classification Deficiency Notice</masterLabel>
+            <translation><!-- Classification Deficiency Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Communication from Appeal Board</masterLabel>
+            <translation><!-- Communication from Appeal Board --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Communication under Rule 161</masterLabel>
+            <translation><!-- Communication under Rule 161 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Communication under Rule 163(1)</masterLabel>
+            <translation><!-- Communication under Rule 163(1) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Communication under Rule 59 and Rule 163(2) EPC</masterLabel>
+            <translation><!-- Communication under Rule 59 and Rule 163(2) EPC --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Communication under Rule 60</masterLabel>
+            <translation><!-- Communication under Rule 60 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Communication under Rule 71 (3) (Intention to Grant)</masterLabel>
+            <translation><!-- Communication under Rule 71 (3) (Intention to Grant) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Controller&apos;s Order</masterLabel>
+            <translation><!-- Controller&apos;s Order --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Date of Invitation to Pay Additional Search Fee</masterLabel>
+            <translation><!-- Date of Invitation to Pay Additional Search Fee --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Date of Removal of Cause of Non-Compliance</masterLabel>
+            <translation><!-- Date of Removal of Cause of Non-Compliance --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Date of Service of Patent Owner Statement</masterLabel>
+            <translation><!-- Date of Service of Patent Owner Statement --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Date of Service of PatentOwner Statement</masterLabel>
+            <translation><!-- Date of Service of PatentOwner Statement --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Decision of Re-Examination Board</masterLabel>
+            <translation><!-- Decision of Re-Examination Board --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Decision of Refusal</masterLabel>
+            <translation><!-- Decision of Refusal --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Decision of Registration</masterLabel>
+            <translation><!-- Decision of Registration --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Decision of Rejection</masterLabel>
+            <translation><!-- Decision of Rejection --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Decision to Grant</masterLabel>
+            <translation><!-- Decision to Grant --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Decision to Refuse the Patent Application</masterLabel>
+            <translation><!-- Decision to Refuse the Patent Application --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Decision to Revoke Acceptance</masterLabel>
+            <translation><!-- Decision to Revoke Acceptance --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>E-filing Formality Deficiency Notice</masterLabel>
+            <translation><!-- E-filing Formality Deficiency Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>ELC.</masterLabel>
+            <translation><!-- ELC. --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>EP Exam Request</masterLabel>
+            <translation><!-- EP Exam Request --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>EX.A</masterLabel>
+            <translation><!-- EX.A --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>EXIN</masterLabel>
+            <translation><!-- EXIN --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Earliest Priority Date</masterLabel>
+            <translation><!-- Earliest Priority Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Effective Filing Date</masterLabel>
+            <translation><!-- Effective Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Estimated Expiration Date</masterLabel>
+            <translation><!-- Estimated Expiration Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Estimated Expiration DateGrant Date (adjusted to the day and month of Filing Date)</masterLabel>
+            <translation><!-- Estimated Expiration DateGrant Date (adjusted to the day and month of Filing Date) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Exam Request</masterLabel>
+            <translation><!-- Exam Request --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Examination Decision</masterLabel>
+            <translation><!-- Examination Decision --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Examination Report</masterLabel>
+            <translation><!-- Examination Report --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Examiner&apos;s Amendment</masterLabel>
+            <translation><!-- Examiner&apos;s Amendment --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Examiner&apos;s Invitation to File Search Results (Rule 70b(1))</masterLabel>
+            <translation><!-- Examiner&apos;s Invitation to File Search Results (Rule 70b(1)) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Expiration Date</masterLabel>
+            <translation><!-- Expiration Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Filing Date</masterLabel>
+            <translation><!-- Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Filing Date (Annuities)</masterLabel>
+            <translation><!-- Filing Date (Annuities) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Filing Date Requirements Deficiency</masterLabel>
+            <translation><!-- Filing Date Requirements Deficiency --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Filing and Requested Deferred Publication</masterLabel>
+            <translation><!-- Filing and Requested Deferred Publication --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Filing and Requested Deferred Registration</masterLabel>
+            <translation><!-- Filing and Requested Deferred Registration --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Final Action</masterLabel>
+            <translation><!-- Final Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Final Office Action</masterLabel>
+            <translation><!-- Final Office Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>First Action</masterLabel>
+            <translation><!-- First Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>First Examination Report</masterLabel>
+            <translation><!-- First Examination Report --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>First Examiners Report</masterLabel>
+            <translation><!-- First Examiners Report --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>First Office Action</masterLabel>
+            <translation><!-- First Office Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Formal Deficiencies Notice</masterLabel>
+            <translation><!-- Formal Deficiencies Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Formalities Direction</masterLabel>
+            <translation><!-- Formalities Direction --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Formalities Office Action</masterLabel>
+            <translation><!-- Formalities Office Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Grant Date</masterLabel>
+            <translation><!-- Grant Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Grant Date (adjusted to the day and month of Filing Date)</masterLabel>
+            <translation><!-- Grant Date (adjusted to the day and month of Filing Date) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>IFEE</masterLabel>
+            <translation><!-- IFEE --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>IMPI Review Decision</masterLabel>
+            <translation><!-- IMPI Review Decision --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>IPI Administrative Order</masterLabel>
+            <translation><!-- IPI Administrative Order --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>IR Cancellation</masterLabel>
+            <translation><!-- IR Cancellation --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>ISSUE.NTF</masterLabel>
+            <translation><!-- ISSUE.NTF --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Immediate Parent Expiration Date</masterLabel>
+            <translation><!-- Immediate Parent Expiration Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Immediate Parent Filing Date</masterLabel>
+            <translation><!-- Immediate Parent Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Immediate Parent Grant Date</masterLabel>
+            <translation><!-- Immediate Parent Grant Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Intent-to-Use (ITU)/Divisional Unit Office Action</masterLabel>
+            <translation><!-- Intent-to-Use (ITU)/Divisional Unit Office Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>International Filing Date</masterLabel>
+            <translation><!-- International Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>International Grant Date</masterLabel>
+            <translation><!-- International Grant Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>International Reg Publication Date</masterLabel>
+            <translation><!-- International Reg Publication Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation pursuant to Article 94(3) and Rule 71(1) EPC (EPO Form 2049B) (Written Opinion/Communication)</masterLabel>
+            <translation><!-- Invitation pursuant to Article 94(3) and Rule 71(1) EPC (EPO Form 2049B) (Written Opinion/Communication) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to Correct Defects</masterLabel>
+            <translation><!-- Invitation to Correct Defects --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to Correct Defects in Demand</masterLabel>
+            <translation><!-- Invitation to Correct Defects in Demand --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to File Translation of Priority Document</masterLabel>
+            <translation><!-- Invitation to File Translation of Priority Document --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to File Translation of Priority document under Rule 53(3) EPC</masterLabel>
+            <translation><!-- Invitation to File Translation of Priority document under Rule 53(3) EPC --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to Pay Additional Search Fee</masterLabel>
+            <translation><!-- Invitation to Pay Additional Search Fee --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to Remedy Deficiencies</masterLabel>
+            <translation><!-- Invitation to Remedy Deficiencies --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to Remedy Deficiency</masterLabel>
+            <translation><!-- Invitation to Remedy Deficiency --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to Remedy Deficiency in Priority</masterLabel>
+            <translation><!-- Invitation to Remedy Deficiency in Priority --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to Submit Designation of Inventors</masterLabel>
+            <translation><!-- Invitation to Submit Designation of Inventors --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Invitation to Submit Prior Art</masterLabel>
+            <translation><!-- Invitation to Submit Prior Art --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Irregularity Notice</masterLabel>
+            <translation><!-- Irregularity Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Issue Date (Annuity)</masterLabel>
+            <translation><!-- Issue Date (Annuity) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Issue Date of Patent</masterLabel>
+            <translation><!-- Issue Date of Patent --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Joint Legality And Form Examination Notice</masterLabel>
+            <translation><!-- Joint Legality And Form Examination Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Joint Notice For Formal Examination And Filing Date Deficiency</masterLabel>
+            <translation><!-- Joint Notice For Formal Examination And Filing Date Deficiency --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Lack of Unity Rejection</masterLabel>
+            <translation><!-- Lack of Unity Rejection --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Late Examiners Report</masterLabel>
+            <translation><!-- Late Examiners Report --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Legality Examination Suspension Notice</masterLabel>
+            <translation><!-- Legality Examination Suspension Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Letter of Suspension</masterLabel>
+            <translation><!-- Letter of Suspension --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Location Date</masterLabel>
+            <translation><!-- Location Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Mail Date</masterLabel>
+            <translation><!-- Mail Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Marketing Approval Date</masterLabel>
+            <translation><!-- Marketing Approval Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Marketing Approval Date or Parent Grant Date</masterLabel>
+            <translation><!-- Marketing Approval Date or Parent Grant Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Month and day of the Registration Date and the year of the Filing Date</masterLabel>
+            <translation><!-- Month and day of the Registration Date and the year of the Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>N/AP</masterLabel>
+            <translation><!-- N/AP --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>NOA</masterLabel>
+            <translation><!-- NOA --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>NT.CR.APP.PA</masterLabel>
+            <translation><!-- NT.CR.APP.PA --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>NT.INC.REPLY</masterLabel>
+            <translation><!-- NT.INC.REPLY --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>NT.INCPL.APP</masterLabel>
+            <translation><!-- NT.INCPL.APP --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>NTC.A.NONCPL</masterLabel>
+            <translation><!-- NTC.A.NONCPL --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>NTC.MISS.PRT</masterLabel>
+            <translation><!-- NTC.MISS.PRT --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>NTC.OMIT.APP</masterLabel>
+            <translation><!-- NTC.OMIT.APP --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>NTC.PUB</masterLabel>
+            <translation><!-- NTC.PUB --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Next Renewal Date</masterLabel>
+            <translation><!-- Next Renewal Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Non-Final Office Action</masterLabel>
+            <translation><!-- Non-Final Office Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice Of Filing Date Deficiency</masterLabel>
+            <translation><!-- Notice Of Filing Date Deficiency --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice Of Formal Deficiencies</masterLabel>
+            <translation><!-- Notice Of Formal Deficiencies --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice Of Formal Examination Deficiency</masterLabel>
+            <translation><!-- Notice Of Formal Examination Deficiency --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice Of PTO Decision</masterLabel>
+            <translation><!-- Notice Of PTO Decision --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice Requesting Registration of Ownership Documents</masterLabel>
+            <translation><!-- Notice Requesting Registration of Ownership Documents --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice To File Russian Translation</masterLabel>
+            <translation><!-- Notice To File Russian Translation --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Abandonment</masterLabel>
+            <translation><!-- Notice of Abandonment --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Acceptance</masterLabel>
+            <translation><!-- Notice of Acceptance --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Allowance</masterLabel>
+            <translation><!-- Notice of Allowance --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Counterclaim</masterLabel>
+            <translation><!-- Notice of Counterclaim --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Deemed Withdrawal</masterLabel>
+            <translation><!-- Notice of Deemed Withdrawal --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Entering Examination Procedure</masterLabel>
+            <translation><!-- Notice of Entering Examination Procedure --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Extension Acceptance</masterLabel>
+            <translation><!-- Notice of Extension Acceptance --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Final Rejection</masterLabel>
+            <translation><!-- Notice of Final Rejection --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Institution of Cancellation Proceeding</masterLabel>
+            <translation><!-- Notice of Institution of Cancellation Proceeding --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Institution of Opposition Proceeding</masterLabel>
+            <translation><!-- Notice of Institution of Opposition Proceeding --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Reasons for Rejection</masterLabel>
+            <translation><!-- Notice of Reasons for Rejection --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of Refusal</masterLabel>
+            <translation><!-- Notice of Refusal --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice of incomplete response</masterLabel>
+            <translation><!-- Notice of incomplete response --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice to Comply with Formalities Direction</masterLabel>
+            <translation><!-- Notice to Comply with Formalities Direction --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice to File Priority Document</masterLabel>
+            <translation><!-- Notice to File Priority Document --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice to Remedy Defects</masterLabel>
+            <translation><!-- Notice to Remedy Defects --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice to comply with Minimum Filing Requirements</masterLabel>
+            <translation><!-- Notice to comply with Minimum Filing Requirements --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice to pay Filing Fees</masterLabel>
+            <translation><!-- Notice to pay Filing Fees --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notice to provide Address for Service</masterLabel>
+            <translation><!-- Notice to provide Address for Service --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification Of Approval</masterLabel>
+            <translation><!-- Notification Of Approval --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification Of Missing Fee Amount</masterLabel>
+            <translation><!-- Notification Of Missing Fee Amount --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification Of Registration</masterLabel>
+            <translation><!-- Notification Of Registration --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification Of Rufusal</masterLabel>
+            <translation><!-- Notification Of Rufusal --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification Requesting Address for Service</masterLabel>
+            <translation><!-- Notification Requesting Address for Service --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification Requesting Suitable Representation</masterLabel>
+            <translation><!-- Notification Requesting Suitable Representation --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification Requesting Translation</masterLabel>
+            <translation><!-- Notification Requesting Translation --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification To File Declaration Of Intention To Use</masterLabel>
+            <translation><!-- Notification To File Declaration Of Intention To Use --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification To Pay Registration Fees</masterLabel>
+            <translation><!-- Notification To Pay Registration Fees --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of Allowance of Limitation Request under Rule 95(3)</masterLabel>
+            <translation><!-- Notification of Allowance of Limitation Request under Rule 95(3) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of First Written Opinion</masterLabel>
+            <translation><!-- Notification of First Written Opinion --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of Intention to Make Declaration that the International Application is Considered Withdrawn</masterLabel>
+            <translation><!-- Notification of Intention to Make Declaration that the International Application is Considered Withdrawn --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of Opposition</masterLabel>
+            <translation><!-- Notification of Opposition --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of Reasons of Refusal</masterLabel>
+            <translation><!-- Notification of Reasons of Refusal --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of Rejection of Limitation Request under Rule 94 or 95(4)</masterLabel>
+            <translation><!-- Notification of Rejection of Limitation Request under Rule 94 or 95(4) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of Second Written Opinion</masterLabel>
+            <translation><!-- Notification of Second Written Opinion --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of intention to make declaration that International Application considered withdrawn</masterLabel>
+            <translation><!-- Notification of intention to make declaration that International Application considered withdrawn --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification of rejection of revocation request under Rule 94 or 105b(2)</masterLabel>
+            <translation><!-- Notification of rejection of revocation request under Rule 94 or 105b(2) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification to Correct Deficiency in the Amendments (Rule 137(4))</masterLabel>
+            <translation><!-- Notification to Correct Deficiency in the Amendments (Rule 137(4)) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification to Correct Formal Deficiencies under Rule 94</masterLabel>
+            <translation><!-- Notification to Correct Formal Deficiencies under Rule 94 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification to Correct Substantive Deficiencies under Rule 95(2)</masterLabel>
+            <translation><!-- Notification to Correct Substantive Deficiencies under Rule 95(2) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification to Elect Independent Claims to be Searched (Rule 62(a))</masterLabel>
+            <translation><!-- Notification to Elect Independent Claims to be Searched (Rule 62(a)) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification to File Statement of Subject Matter to be Searched (Rule 63)</masterLabel>
+            <translation><!-- Notification to File Statement of Subject Matter to be Searched (Rule 63) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Notification to Pay Further Search Fee (Rule 64)</masterLabel>
+            <translation><!-- Notification to Pay Further Search Fee (Rule 64) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Office Action</masterLabel>
+            <translation><!-- Office Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Opposition Mail Date</masterLabel>
+            <translation><!-- Opposition Mail Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>P.TR</masterLabel>
+            <translation><!-- P.TR --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>PCT Filing Date (Annuity)</masterLabel>
+            <translation><!-- PCT Filing Date (Annuity) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>PEFN</masterLabel>
+            <translation><!-- PEFN --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>PEFR</masterLabel>
+            <translation><!-- PEFR --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>PEFRSEQ</masterLabel>
+            <translation><!-- PEFRSEQ --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>PTE Date</masterLabel>
+            <translation><!-- PTE Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Parent Expiry or Grant Date</masterLabel>
+            <translation><!-- Parent Expiry or Grant Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Parent Registration Date</masterLabel>
+            <translation><!-- Parent Registration Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Parent Renewal Date</masterLabel>
+            <translation><!-- Parent Renewal Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Pay Renewal Fee</masterLabel>
+            <translation><!-- Pay Renewal Fee --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Petition to Director Inquiry Letter</masterLabel>
+            <translation><!-- Petition to Director Inquiry Letter --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Petition to Revive Deficiency Letter</masterLabel>
+            <translation><!-- Petition to Revive Deficiency Letter --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Post Examination Publication</masterLabel>
+            <translation><!-- Post Examination Publication --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Post Grant Publication</masterLabel>
+            <translation><!-- Post Grant Publication --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Post-Registration Office Action</masterLabel>
+            <translation><!-- Post-Registration Office Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Potential Bar Date</masterLabel>
+            <translation><!-- Potential Bar Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Pre-Exam Formalities Notice</masterLabel>
+            <translation><!-- Pre-Exam Formalities Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Pre-Grant Publication A1</masterLabel>
+            <translation><!-- Pre-Grant Publication A1 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Pre-Grant Publication A2</masterLabel>
+            <translation><!-- Pre-Grant Publication A2 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Pre-Grant Publication A3</masterLabel>
+            <translation><!-- Pre-Grant Publication A3 --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Priority Action</masterLabel>
+            <translation><!-- Priority Action --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Priority Claim Filing</masterLabel>
+            <translation><!-- Priority Claim Filing --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Priority Date</masterLabel>
+            <translation><!-- Priority Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Priority Document Submission Date</masterLabel>
+            <translation><!-- Priority Document Submission Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Prosecution Status Date</masterLabel>
+            <translation><!-- Prosecution Status Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Provisional Refusal</masterLabel>
+            <translation><!-- Provisional Refusal --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Publication Date</masterLabel>
+            <translation><!-- Publication Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Publication of Grant</masterLabel>
+            <translation><!-- Publication of Grant --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RCEX</masterLabel>
+            <translation><!-- RCEX --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RXCERT</masterLabel>
+            <translation><!-- RXCERT --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RXEPQ.</masterLabel>
+            <translation><!-- RXEPQ. --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RXFR..</masterLabel>
+            <translation><!-- RXFR.. --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RXNIRC</masterLabel>
+            <translation><!-- RXNIRC --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RXNRQREC</masterLabel>
+            <translation><!-- RXNRQREC --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RXR.NF</masterLabel>
+            <translation><!-- RXR.NF --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RXREXD</masterLabel>
+            <translation><!-- RXREXD --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>RXREXO</masterLabel>
+            <translation><!-- RXREXO --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Refusal Decision</masterLabel>
+            <translation><!-- Refusal Decision --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registrar Decision</masterLabel>
+            <translation><!-- Registrar Decision --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registrar&apos;s Invitation to Pay Application Filing Fee</masterLabel>
+            <translation><!-- Registrar&apos;s Invitation to Pay Application Filing Fee --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registrar&apos;s Invitation to Pay Examination Request Fee</masterLabel>
+            <translation><!-- Registrar&apos;s Invitation to Pay Examination Request Fee --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registrar&apos;s Invitation to Pay Hearing Request Fee</masterLabel>
+            <translation><!-- Registrar&apos;s Invitation to Pay Hearing Request Fee --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registrar&apos;s Invitation to Pay Registration Request Fee</masterLabel>
+            <translation><!-- Registrar&apos;s Invitation to Pay Registration Request Fee --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registrar&apos;s Notice to Correct Formal Deficiencies</masterLabel>
+            <translation><!-- Registrar&apos;s Notice to Correct Formal Deficiencies --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registrar&apos;s Request to File Copy of Basic Application</masterLabel>
+            <translation><!-- Registrar&apos;s Request to File Copy of Basic Application --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Registration Date</masterLabel>
+            <translation><!-- Registration Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Removal from Trademark Register</masterLabel>
+            <translation><!-- Removal from Trademark Register --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Removal of the Cause of Non-Compliance</masterLabel>
+            <translation><!-- Removal of the Cause of Non-Compliance --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Renewal Paid</masterLabel>
+            <translation><!-- Renewal Paid --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Request For Supplementary Material</masterLabel>
+            <translation><!-- Request For Supplementary Material --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Request for Information Disclosure Statement</masterLabel>
+            <translation><!-- Request for Information Disclosure Statement --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Request for Material Relied Upon</masterLabel>
+            <translation><!-- Request for Material Relied Upon --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Request for Priority Document Translation</masterLabel>
+            <translation><!-- Request for Priority Document Translation --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Request for Translation</masterLabel>
+            <translation><!-- Request for Translation --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Revocation Request Filing Date</masterLabel>
+            <translation><!-- Revocation Request Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>SEQ.REQ.DISC</masterLabel>
+            <translation><!-- SEQ.REQ.DISC --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>SPC Expiry Date</masterLabel>
+            <translation><!-- SPC Expiry Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>SPTO Final Decision</masterLabel>
+            <translation><!-- SPTO Final Decision --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Seniority Claim</masterLabel>
+            <translation><!-- Seniority Claim --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Statement of Formal Objections</masterLabel>
+            <translation><!-- Statement of Formal Objections --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Statement of Objections</masterLabel>
+            <translation><!-- Statement of Objections --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Statement of Substantive Objections</masterLabel>
+            <translation><!-- Statement of Substantive Objections --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>StatusChangeTime</masterLabel>
+            <translation><!-- StatusChangeTime --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>StatusChangeTimeDraftCompletion</masterLabel>
+            <translation><!-- StatusChangeTimeDraftCompletion --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Subsequent Examination Report</masterLabel>
+            <translation><!-- Subsequent Examination Report --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Subsequent Examiners Report</masterLabel>
+            <translation><!-- Subsequent Examiners Report --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Summons to Attend Oral Proceedings (Rule 115 (1) EPC) (Enter Oral Proceedings Date)</masterLabel>
+            <translation><!-- Summons to Attend Oral Proceedings (Rule 115 (1) EPC) (Enter Oral Proceedings Date) --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Suspension Inquiry</masterLabel>
+            <translation><!-- Suspension Inquiry --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>TR.PROV</masterLabel>
+            <translation><!-- TR.PROV --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>TRAB Decision</masterLabel>
+            <translation><!-- TRAB Decision --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>TRNA</masterLabel>
+            <translation><!-- TRNA --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Target Filing Date</masterLabel>
+            <translation><!-- Target Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Term Date</masterLabel>
+            <translation><!-- Term Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Test Event</masterLabel>
+            <translation><!-- Test Event --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Test Event for Manual Due Date Entry</masterLabel>
+            <translation><!-- Test Event for Manual Due Date Entry --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Third Party Observation</masterLabel>
+            <translation><!-- Third Party Observation --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Translation deficiency Notice</masterLabel>
+            <translation><!-- Translation deficiency Notice --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Transmittal Date of International Search Report or Filing Date</masterLabel>
+            <translation><!-- Transmittal Date of International Search Report or Filing Date --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Written Decision to Refuse</masterLabel>
+            <translation><!-- Written Decision to Refuse --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>at case creation</masterLabel>
+            <translation><!-- at case creation --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Unique Id --></label>
+        <name>Unique_Id__c</name>
+    </fields>
+    <fields>
+        <label><!-- D Rule Calculation - Year(s) --></label>
+        <name>YearsToCal__c</name>
+    </fields>
+    <layouts>
+        <layout>Docketing Rule Engine Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

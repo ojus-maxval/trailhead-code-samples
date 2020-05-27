@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Earliest Priority Date</fullName>
+        <default>false</default>
+        <label>Earliest Priority Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Effective Filing Date</fullName>
+        <default>false</default>
+        <label>Effective Filing Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Expiration Date</fullName>
+        <default>false</default>
+        <label>Expiration Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Filing Date</fullName>
+        <default>false</default>
+        <label>Filing Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Filing Date (Annuities)</fullName>
+        <default>false</default>
+        <label>Filing Date (Annuities)</label>
+    </customValue>
+    <customValue>
+        <fullName>Grant Date</fullName>
+        <default>false</default>
+        <label>Grant Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Grant Date (adjusted to the day and month of Filing Date)</fullName>
+        <default>false</default>
+        <label>Grant Date (adjusted to the day and month of Filing Date)</label>
+    </customValue>
+    <customValue>
+        <fullName>Immediate Parent Expiration Date</fullName>
+        <default>false</default>
+        <label>Immediate Parent Expiration Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Immediate Parent Filing Date</fullName>
+        <default>false</default>
+        <label>Immediate Parent Filing Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Immediate Parent Grant Date</fullName>
+        <default>false</default>
+        <label>Immediate Parent Grant Date</label>
+    </customValue>
+    <customValue>
+        <fullName>International Filing Date</fullName>
+        <default>false</default>
+        <label>International Filing Date</label>
+    </customValue>
+    <customValue>
+        <fullName>International Grant Date</fullName>
+        <default>false</default>
+        <label>International Grant Date</label>
+    </customValue>
+    <customValue>
+        <fullName>International Reg Publication Date</fullName>
+        <default>false</default>
+        <label>International Reg Publication Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Issue Date (Annuity)</fullName>
+        <default>false</default>
+        <label>Issue Date (Annuity)</label>
+    </customValue>
+    <customValue>
+        <fullName>Issue Date of Patent</fullName>
+        <default>false</default>
+        <label>Issue Date of Patent</label>
+    </customValue>
+    <customValue>
+        <fullName>Location Date</fullName>
+        <default>false</default>
+        <label>Location Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Mail Date</fullName>
+        <default>false</default>
+        <label>Mail Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Marketing Approval Date</fullName>
+        <default>false</default>
+        <label>Marketing Approval Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Next Renewal Date</fullName>
+        <default>false</default>
+        <label>Next Renewal Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Parent Registration Date</fullName>
+        <default>false</default>
+        <label>Parent Registration Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Parent Renewal Date</fullName>
+        <default>false</default>
+        <label>Parent Renewal Date</label>
+    </customValue>
+    <customValue>
+        <fullName>PCT Filing Date (Annuity)</fullName>
+        <default>false</default>
+        <label>PCT Filing Date (Annuity)</label>
+    </customValue>
+    <customValue>
+        <fullName>Potential Bar Date</fullName>
+        <default>false</default>
+        <label>Potential Bar Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Priority Date</fullName>
+        <default>false</default>
+        <label>Priority Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Prosecution Status Date</fullName>
+        <default>false</default>
+        <label>Prosecution Status Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Publication Date</fullName>
+        <default>false</default>
+        <label>Publication Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Registration Date</fullName>
+        <default>false</default>
+        <label>Registration Date</label>
+    </customValue>
+    <customValue>
+        <fullName>StatusChangeTime</fullName>
+        <default>false</default>
+        <label>StatusChangeTime</label>
+    </customValue>
+    <customValue>
+        <fullName>StatusChangeTimeDraftCompletion</fullName>
+        <default>false</default>
+        <label>StatusChangeTimeDraftCompletion</label>
+    </customValue>
+    <customValue>
+        <fullName>Target Filing Date</fullName>
+        <default>false</default>
+        <label>Target Filing Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Term Date</fullName>
+        <default>false</default>
+        <label>Term Date</label>
+    </customValue>
+    <customValue>
+        <fullName>Month and day of the Registration Date and the year of the Filing Date</fullName>
+        <default>false</default>
+        <label>Month and day of the Registration Date and the year of the Filing Date</label>
+    </customValue>
+    <customValue>
+        <fullName>SPC Expiry Date</fullName>
+        <default>false</default>
+        <label>SPC Expiry Date</label>
+    </customValue>
+    <masterLabel>Base Dates</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>
