@@ -2,7 +2,10 @@
 # More information: https://prettier.io/docs/en/ignore.html
 #
 
+<<<<<<< HEAD
 **/staticresources/**
+=======
+>>>>>>> cacb57aa7ca5ba7adda23fcb65a3c4b7a545ab0c
 .localdevserver
 .sfdx
 
