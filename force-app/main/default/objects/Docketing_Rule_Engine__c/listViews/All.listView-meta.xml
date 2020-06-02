@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>Trigger__c</columns>
+    <columns>Docket_Action__c</columns>
+    <columns>Rule_Start_Date__c</columns>
+    <columns>Rule_End_Date__c</columns>
+    <columns>Rule_Type__c</columns>
+    <columns>Asset_Type__c</columns>
+    <columns>Case_Type__c</columns>
+    <columns>Base_Date__c</columns>
+    <columns>Mark_Closed__c</columns>
+    <columns>Mark_Completed__c</columns>
+    <columns>Due__c</columns>
+    <columns>Rule_Active__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Rule_Type__c</field>
+        <operation>equals</operation>
+        <value>De-Docketing</value>
+    </filters>
+    <filters>
+        <field>Trigger_Type__c</field>
+        <operation>equals</operation>
+        <value>Document Code</value>
+    </filters>
+    <filters>
+        <field>Trigger__c</field>
+        <operation>equals</operation>
+        <value>A.NE</value>
+    </filters>
+    <filters>
+        <field>Case_Type__c</field>
+        <operation>equals</operation>
+        <value>Utility Original</value>
+    </filters>
+    <label>De-Docketing Rules: TriggerType-DocCode</label>
+</ListView>
