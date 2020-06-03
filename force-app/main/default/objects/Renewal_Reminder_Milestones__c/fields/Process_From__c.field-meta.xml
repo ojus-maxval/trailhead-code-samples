@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Process_From__c</fullName>
+    <externalId>false</externalId>
+    <label>Process From</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Due Month</fullName>
+                <default>false</default>
+                <label>Due Month</label>
+            </value>
+            <value>
+                <fullName>Due Quarter</fullName>
+                <default>false</default>
+                <label>Due Quarter</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
