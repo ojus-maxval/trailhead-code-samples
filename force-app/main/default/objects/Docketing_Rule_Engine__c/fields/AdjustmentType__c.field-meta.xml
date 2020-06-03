@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AdjustmentType__c</fullName>
+    <description>Due date Adjustment</description>
+    <externalId>false</externalId>
+    <label>Adjustment</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>End of month</fullName>
+                <default>false</default>
+                <label>End of month</label>
+            </value>
+            <value>
+                <fullName>End of quarter</fullName>
+                <default>false</default>
+                <label>End of quarter</label>
+            </value>
+            <value>
+                <fullName>End of year</fullName>
+                <default>false</default>
+                <label>End of year</label>
+            </value>
+            <value>
+                <fullName>Plus 15 days</fullName>
+                <default>false</default>
+                <label>Plus 15 days</label>
+            </value>
+            <value>
+                <fullName>Plus 10 days</fullName>
+                <default>false</default>
+                <label>Plus 10 days</label>
+            </value>
+            <value>
+                <fullName>Less 1 day</fullName>
+                <default>false</default>
+                <label>Less 1 day</label>
+            </value>
+            <value>
+                <fullName>Adjust to a specific date</fullName>
+                <default>false</default>
+                <label>Adjust to a specific date</label>
+            </value>
+            <value>
+                <fullName>Adjusted to the effective filing date day and month</fullName>
+                <default>false</default>
+                <label>Adjusted to the effective filing date day and month</label>
+            </value>
+            <value>
+                <fullName>Plus 0 days</fullName>
+                <default>false</default>
+                <label>Plus 0 days</label>
+            </value>
+            <value>
+                <fullName>First Day Of The Month Following The Month Of International Publication</fullName>
+                <default>false</default>
+                <label>First Day Of The Month Following The Month Of International Publication</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
