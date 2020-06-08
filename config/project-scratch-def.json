@@ -1,18 +1,18 @@
 {
-  "orgName": "MaRSTYv1",
-  "edition": "Partner Developer",
-  "features": ["MaxApexCodeSize:10"],
+  "orgName": "KarthikMarsJune2020",
+  "edition": "Developer",
+  "features": [],
   "settings": {
-      "orgPreferenceSettings": {
-        "s1EncryptedStoragePref2": false,
-        "notesReservedPref01": true,
-        "chatterEnabled": true,
-        "analyticsSharingEnable": true
+    "lightningExperienceSettings": {
+        "enableS1DesktopEnabled": true
     },
     "securitySettings": {
-        "sessionSettings": {
-            "sessionTimeout": "TwelveHours"
+        "passwordPolicies": {
+            "enableSetPasswordInApi": true
         }
+    },
+    "mobileSettings": {
+        "enableS1EncryptedStoragePref2": false
     }
-  }    
+  }
 }

@@ -30,10 +30,6 @@
     </types>
     <types>
         <members>*</members>
-        <name>AppMenu</name>
-    </types>
-    <types>
-        <members>*</members>
         <name>ApprovalProcess</name>
     </types>
     <types>
@@ -91,10 +87,6 @@
     </types>
     <types>
         <members>*</members>
-        <name>ConnectedApp</name>
-    </types>
-    <types>
-        <members>*</members>
         <name>ContentAsset</name>
     </types>
     <types>
@@ -104,14 +96,6 @@
     <types>
         <members>*</members>
         <name>CspTrustedSite</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>CustomApplication</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>CustomApplicationComponent</name>
     </types>
     <types>
         <members>Account.Active__c</members>
@@ -291,8 +275,6 @@
         <members>RecordAction</members>
         <members>RecordMergeHistory</members>
         <members>RevenueElement</members>
-        <members>SOSSession</members>
-        <members>SOSSessionActivity</members>
         <members>Scorecard</members>
         <members>ScorecardAssociation</members>
         <members>ScorecardMetric</members>
@@ -306,10 +288,6 @@
         <members>User</members>
         <members>UserProvisioningRequest</members>
         <name>CustomObject</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>CustomObjectTranslation</name>
     </types>
     <types>
         <members>*</members>
@@ -342,10 +320,6 @@
     <types>
         <members>*</members>
         <name>Documents</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>DuplicateRule</name>
     </types>
     <types>
         <members>*</members>
@@ -423,10 +397,6 @@
     <types>
         <members>*</members>
         <name>HomePageLayout</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>InstalledPackage</name>
     </types>
     <types>
         <members>*</members>
@@ -555,10 +525,6 @@
         <members>WorkFeedbackRequest.All</members>
         <members>WorkFeedbackTemplate.All</members>
         <name>ListView</name>
-    </types>
-    <types>
-        <members>news</members>
-        <name>ManagedContentType</name>
     </types>
     <types>
         <members>Account.Standard_Account_Match_Rule_v1_0</members>
