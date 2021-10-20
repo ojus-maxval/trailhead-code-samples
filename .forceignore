@@ -39,7 +39,6 @@ force-app\main\default\objects\EntityMilestone\fields\StoppedTimeInDays.field-me
 force-app\main\default\objects\EntityMilestone\fields\StoppedTimeInHrs.field-meta.xml
 force-app\main\default\objects\EntityMilestone\fields\StoppedTimeInMins.field-meta.xml 
 force-app\main\default\objects\StreamActivityAccess\fields\ActivityTeamId.field-meta.xml 
-force-app\main\default\profiles
 force-app\main\default\objects\Order_Item__c\listViews\Make_Payments_Recommended_Agent.listView-meta.xml
 force-app\main\default\layouts\Order_Item__c-Order Item Layout.layout-meta.xml 
 force-app\main\default\objects\Order_Item__c\listViews\Make_Payments_Recommended_Agent.listView-meta.xml  
@@ -49,4 +48,3 @@ force-app\main\default\objects\Order_Item__c\listViews\Record_Payments.listView-
 force-app\main\default\objects\Order_Item__c\listViews\X1_Instructed_Assets.listView-meta.xml
 force-app\main\default\objects\Order_Item__c\listViews\X2_Outstanding_Payments_for_Renewals.listView-meta.xml
 force-app\main\default\objects\Order_Item__c\listViews\X2_Waiting_for_approval_to_pay_PTO_fee.listView-meta.xml
-force-app\main\default\applications\Renewals.app-meta.xml
