@@ -10,3 +10,43 @@ package.xml
 
 # LWC Jest
 **/__tests__/**
+force-app\main\default\objects\CollaborationGroup\CollaborationGroup.object-meta.xml 
+force-app\main\default\objects\LearningLinkProgress\LearningLinkProgress.object-meta.xml 
+force-app\main\default\objects\LocationTrustMeasure\LocationTrustMeasure.object-meta.xml 
+force-app\main\default\objects\ProcessException\ProcessException.object-meta.xml 
+force-app\main\default\objects\ProfileSkill\ProfileSkill.object-meta.xml
+force-app\main\default\objects\LearningAssignment\LearningAssignment.object-meta.xml
+force-app\main\default\objects\LearningAssignmentProgress\LearningAssignmentProgress.object-meta.xml
+force-app\main\default\objects\CollaborationGroupMember\CollaborationGroupMember.object-meta.xml 
+force-app\main\default\objects\ProfileSkillEndorsement\ProfileSkillEndorsement.object-meta.xml
+force-app\main\default\objects\ProfileSkillUser\ProfileSkillUser.object-meta.xml  
+force-app\main\default\objects\SocialPersona\SocialPersona.object-meta.xml
+force-app\main\default\objects\SocialPost\SocialPost.object-meta.xml
+force-app\main\default\objects\WorkBadge\WorkBadge.object-meta.xml
+force-app\main\default\objects\Asset\fields\OwnerId.field-meta.xml 
+force-app\main\default\objects\WorkBadgeDefinition\WorkBadgeDefinition.object-meta.xml
+force-app\main\default\objects\WorkThanks\WorkThanks.object-meta.xml
+force-app\main\default\objects\CaseMilestone\fields\ActualElapsedTimeInDays.field-meta.xml
+force-app\main\default\objects\CaseMilestone\fields\ActualElapsedTimeInHrs.field-meta.xml 
+force-app\main\default\objects\CaseMilestone\fields\ActualElapsedTimeInMins.field-meta.xml 
+force-app\main\default\objects\CaseMilestone\fields\StoppedTimeInDays.field-meta.xml
+force-app\main\default\objects\CaseMilestone\fields\StoppedTimeInHrs.field-meta.xml
+force-app\main\default\objects\CaseMilestone\fields\StoppedTimeInMins.field-meta.xml 
+force-app\main\default\objects\EntityMilestone\fields\ActualElapsedTimeInDays.field-meta.xml 
+force-app\main\default\objects\EntityMilestone\fields\ActualElapsedTimeInHrs.field-meta.xml 
+force-app\main\default\objects\EntityMilestone\fields\ActualElapsedTimeInMins.field-meta.xml
+force-app\main\default\objects\EntityMilestone\fields\StoppedTimeInDays.field-meta.xml
+force-app\main\default\objects\EntityMilestone\fields\StoppedTimeInHrs.field-meta.xml
+force-app\main\default\objects\EntityMilestone\fields\StoppedTimeInMins.field-meta.xml 
+force-app\main\default\objects\StreamActivityAccess\fields\ActivityTeamId.field-meta.xml 
+force-app\main\default\profiles
+force-app\main\default\objects\Order_Item__c\listViews\Make_Payments_Recommended_Agent.listView-meta.xml
+force-app\main\default\layouts\Order_Item__c-Order Item Layout.layout-meta.xml 
+force-app\main\default\objects\Order_Item__c\listViews\Make_Payments_Recommended_Agent.listView-meta.xml  
+force-app\main\default\objects\Order_Item__c\listViews\Make_Payments_Recommended_CC.listView-meta.xml 
+force-app\main\default\objects\Order_Item__c\listViews\Make_Payments_Recommended_Wire.listView-meta.xml
+force-app\main\default\objects\Order_Item__c\listViews\Record_Payments.listView-meta.xml
+force-app\main\default\objects\Order_Item__c\listViews\X1_Instructed_Assets.listView-meta.xml
+force-app\main\default\objects\Order_Item__c\listViews\X2_Outstanding_Payments_for_Renewals.listView-meta.xml
+force-app\main\default\objects\Order_Item__c\listViews\X2_Waiting_for_approval_to_pay_PTO_fee.listView-meta.xml
+force-app\main\default\applications\Renewals.app-meta.xml
