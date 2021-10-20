@@ -5,7 +5,7 @@
         <description>send a mail with generate invoice1</description>
         <protected>false</protected>
         <recipients>
-            <recipient>mars-qat@maxval.com</recipient>
+            <recipient>scratchorgtest@example.com</recipient>
             <type>user</type>
         </recipients>
         <senderType>CurrentUser</senderType>
@@ -13,7 +13,7 @@
     </alerts>
     <rules>
         <fullName>Send a mail with invoice</fullName>
-        <active>true</active>
+        <active>false</active>
         <formula>TRUE</formula>
         <triggerType>onCreateOnly</triggerType>
         <workflowTimeTriggers>
