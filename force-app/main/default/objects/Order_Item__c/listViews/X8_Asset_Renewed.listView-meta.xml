@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>X8_Asset_Renewed</fullName>
+    <booleanFilter>(1 AND 2) OR 3</booleanFilter>
+    <columns>NAME</columns>
+    <columns>Client__c</columns>
+    <columns>Jurisdiction__c</columns>
+    <columns>Due_Date__c</columns>
+    <columns>Term_Name__c</columns>
+    <columns>Docket_No__c</columns>
+    <columns>Application_No__c</columns>
+    <columns>Publication_No__c</columns>
+    <columns>Patent_No__c</columns>
+    <columns>Amount__c</columns>
+    <columns>Order__c</columns>
+    <columns>Invoice__c</columns>
+    <columns>Payment_Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Payment_Status__c</field>
+        <operation>equals</operation>
+        <value>Asset Renewed</value>
+    </filters>
+    <filters>
+        <field>Renewal_Instruction__c</field>
+        <operation>equals</operation>
+        <value>Renew</value>
+    </filters>
+    <filters>
+        <field>Renewal_Status__c</field>
+        <operation>equals</operation>
+        <value>Asset Renewed</value>
+    </filters>
+    <label>Asset Renewed</label>
+</ListView>

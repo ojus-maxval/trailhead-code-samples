@@ -1,0 +1,50 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" 
+                controller="cmpAssetFilingReceiptUploadDownloadCtrl">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="recordData" type="object" />
+    <aura:attribute name="showSpinner" type="boolean" default="true"/>
+    <aura:attribute name="filetype" type="List" default="['.png', '.jpg', '.jpeg', '.pdf']" />
+    <aura:attribute name="multiple" type="Boolean" default="true" />
+    <aura:attribute name="disabled" type="Boolean" default="true" />    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:card>
+        <aura:set attribute="title">
+            <lightning:icon iconName="standard:file" size="medium"/>
+            Filing Receipt
+        </aura:set>        
+        <aura:if isTrue="{!v.showSpinner}">
+            <div class="slds-p-around--xx-large" style="position: relative;">
+                <lightning:spinner alternativeText="Loading" size="medium" variant="brand"/>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-p-left_medium">
+                    <aura:if isTrue="{!v.recordData.fileuploaded}">
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_2-of-3">
+                                {!v.recordData.fileName}
+                            </div>
+                            <div class="slds-grid slds-size_1-of-3">
+                                <div class="slds-col slds-no-flex slds-p-right_x-small">
+                                    <a href="{!'/sfc/servlet.shepherd/version/download/' + v.recordData.fileId}" target="_blank">
+                                        <lightning:buttonIcon iconName="utility:download" variant="bare" size="small" />
+                                    </a>
+                                </div>
+                                <div class="slds-col slds-no-flex">
+                                    <lightning:buttonIcon iconName="utility:delete" variant="bare" size="small" onclick="{!c.deleteFile}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <aura:set attribute="else">
+                            <lightning:fileUpload label="Attach receipt"
+                                                  name="fileUploader"
+                                                  multiple="false"
+                                                  accept="{!v.filetype}"
+                                                  recordId="{!v.recordId}"
+                                                  onuploadfinished="{!c.handleUploadFinished}" />
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </aura:set>
+        </aura:if>
+    </lightning:card>
+</aura:component>

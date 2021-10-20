@@ -1,0 +1,36 @@
+<apex:page lightningStylesheets="true" StandardController="Order_Item__c" extensions="createAttachPaymentConfirmation" recordSetVar="ids" >
+    <apex:includeScript value="/lightning/lightning.out.js"/>  
+    <apex:slds />
+    <div id="loading" class="slds-spinner_container" style="display:block;">
+        <div class="slds-spinner slds-spinner--medium slds-spinner_brand" aria-hidden="false" role="alert">
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+    <apex:includeLightning />
+   
+    <div id="LcDisplayId"></div> 
+    
+    <script>
+        if({!openCmp})
+        {
+            $Lightning.use("c:appPaymentConfirmation", function() {
+                $Lightning.createComponent("c:cmpPaymentConfirmationForm",
+                { 
+                    // Set Lightning Component Attributes Property before creating Lightning Component In Visualforce page 
+                    recordids : '{!selectedids}',
+                    isModalOpen : 'true',
+                    recentListview:'{!listviewURL}'
+                },
+                "LcDisplayId",
+                function(component) {
+                    // create component Callback, Lightning Component has been Created,
+                    // Now you can set more lightning Component attributes here,
+                    // and do more cool stuff here
+                    document.getElementById('loading').style.display = 'none';
+                    component.set("v.recordids" , '{!selectedids}');
+                });
+            });
+        }
+    </script>
+</apex:page>

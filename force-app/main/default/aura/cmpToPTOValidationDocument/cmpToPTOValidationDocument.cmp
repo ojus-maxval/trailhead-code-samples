@@ -1,0 +1,35 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" 
+                controller="cmpToPTOValicationDocumentHelperCls">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="recordData" type="object" />
+    <aura:attribute name="showSpinner" type="boolean" default="true"/>
+    <aura:attribute name="disabled" type="Boolean" default="true" />    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:card>
+        <aura:set attribute="title">
+            <lightning:icon iconName="standard:orders" size="medium"/>
+            PTO Validation Document
+        </aura:set>        
+        <aura:if isTrue="{!v.showSpinner}">
+            <div class="slds-p-around--xx-large" style="position: relative;">
+                <lightning:spinner alternativeText="Loading" size="medium" variant="brand"/>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-p-left_medium">                    
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_2-of-3">
+                            {!v.recordData.fileName}
+                        </div>
+                        <div class="slds-grid slds-size_1-of-3">
+                            <div class="slds-col slds-no-flex slds-p-right_x-small">
+                                <a href="{!'/sfc/servlet.shepherd/version/download/' + v.recordData.fileId}" target="_blank">
+                                    <lightning:buttonIcon iconName="utility:download" variant="bare" size="small" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aura:set>
+        </aura:if>
+    </lightning:card>
+</aura:component>

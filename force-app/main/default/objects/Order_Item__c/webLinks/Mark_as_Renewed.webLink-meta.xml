@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mark_as_Renewed</fullName>
+    <availability>online</availability>
+    <displayType>massActionButton</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Mark as Renewed</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <requireRowSelection>true</requireRowSelection>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/13.0/connection.js&quot;)} 
+
+Order_Item__c.Id = &apos;{!Order_Item__c.Id}&apos;; 
+
+
+
+if(Order_Item__c.Is_it_renewed_in_PTO__c == &apos;true&apos;) 
+
+{  
+alert(&quot;You cannot close a change without the proper approvals&quot; );  
+
+}</url>
+</WebLink>

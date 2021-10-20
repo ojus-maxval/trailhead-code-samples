@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>API_Status__c</fullName>
+    <externalId>false</externalId>
+    <label>API Status</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Requested</fullName>
+                <default>false</default>
+                <label>Requested</label>
+            </value>
+            <value>
+                <fullName>Completed</fullName>
+                <default>false</default>
+                <label>Completed</label>
+            </value>
+            <value>
+                <fullName>Failed</fullName>
+                <default>false</default>
+                <label>Failed</label>
+            </value>
+            <value>
+                <fullName>ToBeRequested</fullName>
+                <default>false</default>
+                <label>ToBeRequested</label>
+            </value>
+            <value>
+                <fullName>NotRequested</fullName>
+                <default>false</default>
+                <label>NotRequested</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

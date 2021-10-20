@@ -1,0 +1,13 @@
+<!--Sample.cmp-->
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable" access="global">
+     
+    <aura:attribute name="recordId" type="string" default="0019000001DEV5z"/>
+     
+    <div class="slds-m-around--xx-large">
+       
+        <!--Open URL in New Browser Tab-->
+        <lightning:button label="Open in New Window" variant="brand" onclick="{!c.handleOpenInNewWindow}"/>
+        <!--Open URL in New Browser Tab With Record Id-->
+        <!--<lightning:button label="Open in New Window With RecordId" variant="brand" onclick="{!c.handleOpenNewWindowWithRecordId}"/>-->
+    </div>
+</aura:component>

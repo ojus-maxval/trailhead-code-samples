@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Upadate_Payment_status_As_Cancelled</fullName>
+        <field>Payment_Status__c</field>
+        <literalValue>Cancelled</literalValue>
+        <name>Upadate Payment status As Cancelled</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+        <targetObject>Order__c</targetObject>
+    </fieldUpdates>
+    <rules>
+        <fullName>Update Payment status cancellation</fullName>
+        <actions>
+            <name>Upadate_Payment_status_As_Cancelled</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Order_Item__c.Cancellation_Approval__c</field>
+            <operation>equals</operation>
+            <value>Approved</value>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

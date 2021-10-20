@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>send_a_mail_with_generate_invoice1</fullName>
+        <description>send a mail with generate invoice1</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>mars-qat@maxval.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Notifying_Generated_Invoices</template>
+    </alerts>
+    <rules>
+        <fullName>Send a mail with invoice</fullName>
+        <active>true</active>
+        <formula>TRUE</formula>
+        <triggerType>onCreateOnly</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>send_a_mail_with_generate_invoice1</name>
+                <type>Alert</type>
+            </actions>
+            <offsetFromField>Invoice__c.H_Trigger_Time_05__c</offsetFromField>
+            <timeLength>1</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+</Workflow>

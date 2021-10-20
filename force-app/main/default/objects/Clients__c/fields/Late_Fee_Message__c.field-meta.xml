@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Late_Fee_Message__c</fullName>
+    <externalId>false</externalId>
+    <formula>&apos;The late fee for this client is &apos; +  TEXT(Billing_Currency__c) + &apos; &apos; +  Text( Late_fee_per_asset__c) + &apos; per asset, with a &apos; + TEXT(Billing_Currency__c) + &apos; &apos; +  TEXT( Late_Fee_Minimum__c ) + &apos; minimum per order and &apos; + TEXT(Billing_Currency__c) + &apos; &apos; + TEXT( Late_Fee_Maximum__c)  + &apos; maximum per order.&apos;</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Late Fee Message</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

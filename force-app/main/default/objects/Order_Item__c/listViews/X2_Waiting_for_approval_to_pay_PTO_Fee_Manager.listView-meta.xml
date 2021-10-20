@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>X2_Waiting_for_approval_to_pay_PTO_Fee_Manager</fullName>
+    <columns>NAME</columns>
+    <columns>Client__c</columns>
+    <columns>Order__c</columns>
+    <columns>Order_Date__c</columns>
+    <columns>Application_No__c</columns>
+    <columns>Patent_No__c</columns>
+    <columns>Billing_Currency__c</columns>
+    <columns>Invoice_Amount_When_Instruct__c</columns>
+    <columns>Renewal_Instruction__c</columns>
+    <columns>Payment_Status__c</columns>
+    <columns>Invoice__c</columns>
+    <columns>Payment_Approval_Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Payment_Status__c</field>
+        <operation>equals</operation>
+        <value>Payment Requested</value>
+    </filters>
+    <filters>
+        <field>Send_for_approval_to_pay_PTO_fee__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>Payment_Approval_Status__c</field>
+        <operation>equals</operation>
+        <value>Requested to Approve</value>
+    </filters>
+    <label>#2 - Approve/Decline to pay PTO Fee</label>
+    <sharedTo>
+        <group>ADU_Managers</group>
+    </sharedTo>
+</ListView>

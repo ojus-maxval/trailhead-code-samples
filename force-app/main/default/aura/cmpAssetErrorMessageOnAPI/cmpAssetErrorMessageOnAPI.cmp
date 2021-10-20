@@ -1,0 +1,25 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="String" />
+    <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Order_Item__c">
+        <lightning:card>
+            <aura:set attribute="title">
+                <lightning:icon iconName="standard:search" size="medium"/>
+                PTO Validation Details
+            </aura:set>
+            <div class="slds-grid slds-p-left_medium">                
+                <div class="slds-col slds-size_2-of-3">
+                    <div class="errorClass">
+                        <lightning:outputField fieldName="PTO_Validation_Status__c"/>
+                        <lightning:outputField fieldName="PTO_Validation_Message__c" />
+                    </div>
+                </div>
+                <!--<div class="slds-col slds-size_2-of-3  slds-p-around_medium">
+                    <div class="errorClass">
+                        <lightning:outputField fieldName="PTO_Validation_Status__c" />
+                        <lightning:outputField fieldName="PTO_Validation_Message__c" variant="label-hidden"/>
+                    </div>
+                </div>-->
+            </div>
+        </lightning:card>
+    </lightning:recordViewForm>
+</aura:component>

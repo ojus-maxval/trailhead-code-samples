@@ -1,0 +1,101 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" controller="createAttachPaymentConfirmation">
+    <aura:dependency resource="markup://force:navigateToURL" type="EVENT"/>
+    <aura:attribute name="isLoaded" type="boolean" />
+    <aura:attribute name="showCard" type="boolean" />
+    <!--declare aura attributes-->	
+    <aura:attribute name="recordids" type="List"/>
+    <aura:attribute name="recentListview" type="string"/>
+    <aura:attribute name="OrderItemIds" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <!--<aura:attribute name="RefNo" type="string" default=""/>
+    <aura:attribute name="AmountforSelectAssets" type="Decimal" />
+    <aura:attribute name="PaymentCurrency" type="string" default=""/>
+	<aura:attribute name="TotalOfficialFeePaid" type="Decimal" default="0.0"/>
+    <aura:attribute name="ExchangeRate" type="Decimal" default="0.0"/>
+    <aura:attribute name="PaymentType" type="string" default=""/>
+	<aura:attribute name="BankAccount"  type="string" default=""/>
+    <aura:attribute name="CreditCardAccount"  type="string" default=""/>
+    <aura:attribute name="WireBankFee" type="string" default=""/>
+    <aura:attribute name="PaymentDate" type="Date"/>-->
+    <aura:attribute name="PaymentCurrencyOptions" type="List"/>
+    <aura:attribute name="PaymentTypeOptions" type="List" default="[{'label': '--Select--', 'value': ''},{'label': 'Bank', 'value': 'Bank'},{'label': 'Credit Card', 'value': 'Credit Card'}]"/>
+    <aura:attribute name="isBA" type="boolean" />
+    <aura:attribute name="BankAccountOptions" type="List" default=""/>
+    <aura:attribute name="isCCA" type="boolean" />
+    <aura:attribute name="CreditCardAccountOptions" type="List"/>
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="message" type="string" default=""/>
+    
+    
+    <div class="slds-size_1-of-2 slds-p-around_xx-large">
+        <aura:if isTrue="{!v.isLoaded}">
+            <aura:if isTrue="{!v.showCard}">
+                <lightning:card iconName="standard:record" title="Add a Payment Confirmation" >
+                    <aura:set attribute="actions">
+                        <lightning:button label="Back" onclick="{!c.gotoURL}"/>
+                    </aura:set>
+                    <div class="slds-p-around_medium">
+                        <lightning:layout>
+                            <lightning:layoutItem size="10" >
+                                <lightning:input label="Ref No." required="true"  value="{!v.data.Name}"/>
+                                <lightning:input type="number" step="0.01" label="Amount for Select Assets" value="{!v.data.AmtForSelected}" disabled="true"/>
+                                <lightning:select label="Payment Currency" value="{!v.data.payCurrency}">
+                                    <aura:iteration items="{!v.PaymentCurrencyOptions}" var="option">
+                                        <option text="{!option.label}" value="{!option.value}" />
+                                    </aura:iteration>
+                                </lightning:select>
+                                <lightning:input type="number" step="0.01" label="Total Official Fee Paid" value="{!v.data.AmtPaid}" onblur="{!c.calcExchange}"/>
+                                <!--MARS-749 Attach Payment Confirmation - Exchange Rate value should be shown based on Payment Currency
+									Modified by Saranyaa-->
+                                <lightning:input type="number" step="0.000001" label="Bank Rate" value="{!v.data.exgRate}" disabled="true"/>
+                                <lightning:select label="Payment Type" value="{!v.data.payType}" onchange="{!c.payTypeChange}">
+                                    <aura:iteration items="{!v.PaymentTypeOptions}" var="option">
+                                        <option text="{!option.label}" value="{!option.value}" />
+                                    </aura:iteration>
+                                </lightning:select>
+                                <aura:if isTrue="{!v.isBA}">
+                                    <lightning:select label="Bank Account" aura:id="BankList" value="{!v.data.BAcc}" onchange="{!c.optionChange}">
+                                        <aura:iteration items="{!v.BankAccountOptions}" var="option">
+                                            <option text="{!option.label}" value="{!option.value}" />
+                                        </aura:iteration>
+                                    </lightning:select>
+                                    <!--MARS-749 Create Bill UI - Wire/Bank Fee field is enabled when user selects Payment type as Credit card 
+									Added by Saranyaa-->
+                                    <lightning:input type="number" step="0.01" label="Wire/Bank Fee" value="{!v.data.WireBankFee}" fieldLevelHelp="Please enter the amount in Payment Currency"/>
+                                </aura:if>
+                                <aura:if isTrue="{!v.isCCA}">
+                                    <lightning:select label="Credit Card Account" aura:id="CCList" value="{!v.data.CCAcc}" onchange="{!c.optionChange}">
+                                        <aura:iteration items="{!v.CreditCardAccountOptions}" var="option">
+                                            <option text="{!option.label}" value="{!option.value}" />
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </aura:if>
+                                
+                                <lightning:input type="date" label="Payment Date" value="{!v.data.pdate}"/>
+                                <lightning:textarea label="Memo" value="{!v.data.pcMemo}"/>
+                            </lightning:layoutItem> 
+                        </lightning:layout>
+                        <aura:if isTrue="{!not(empty(v.message))}">
+                            <p class="slds-text-color_error">*{!v.message}</p>
+                        </aura:if>
+                    </div>
+                    <aura:set attribute="footer">
+                        <lightning:button label="Cancel" onclick="{!c.gotoURL}"/>
+                        <lightning:button variant="brand" label="Save" onclick="{!c.saveChange}"/>
+                    </aura:set>
+                </lightning:card>
+                <aura:set attribute="else">
+                    <p class="slds-text-color_error">*{!v.message}</p>
+                    <lightning:button label="Back to listview" onclick="{!c.gotoURL}"/>
+                </aura:set>                
+            </aura:if>
+            <aura:set attribute="else">
+                <lightning:spinner alternativeText="Loading" size="medium" variant="brand"/>
+            </aura:set>
+        </aura:if>
+        
+    </div>
+</aura:component>

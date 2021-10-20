@@ -1,0 +1,55 @@
+<aura:component controller="AttachmentController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:availableForFlowScreens" access="global">
+    <!-- Local Variables -->
+    <aura:attribute name="lstDocumentId" type="List[]"/>
+    <aura:attribute name="objAttachments" type="List[]"/>
+    <!-- Input Variables -->
+    <aura:attribute name="linkedEntityId" type="string" access="global"/>
+    <aura:attribute name="canUploadSingleFiles" type="boolean" default="false" access="global"/>
+    <aura:attribute name="canUploadMultipleFiles" type="boolean" default="false" access="global"/>
+    <aura:attribute name="canDeleteFiles" type="boolean" default="false" access="global"/>
+    <aura:attribute name="canViewAllFiles" type="boolean" default="true" access="global"/>
+    <aura:attribute name="canViewCurrentAttachedFiles" type="boolean" default="false" access="global"/>
+    
+    
+    <!-- Output Variables -->
+    <aura:attribute name="idAvailable" type="string" access="global"/>
+    <aura:attribute name="contentDocumentIds" type="string" access="global"/>
+    <!-- EVENTS -->
+    <aura:handler name="init" value="{!this}" action="{!c.getAttachedDocumentsController}"/>
+    
+    <aura:if isTrue="{!or(v.canUploadSingleFiles==true, v.canUploadMultipleFiles==true)}">
+        <p>
+             <aura:if isTrue="{!and(or(v.canUploadSingleFiles==false,v.canUploadSingleFiles==true), v.canUploadMultipleFiles==true)}">
+                <lightning:fileUpload label="Attachments"
+                                      name="fileUploader" 
+                                      multiple="true" 
+                                      recordId="{!v.linkedEntityId}" 
+                                      onuploadfinished="{!c.handleUploadFinished}" />
+             </aura:if>
+            <aura:if isTrue="{!and(v.canUploadSingleFiles==true, v.canUploadMultipleFiles==false)}">
+                <lightning:fileUpload label="Attachments"
+                                      name="fileUploader" 
+                                      recordId="{!v.linkedEntityId}" 
+                                      onuploadfinished="{!c.handleUploadFinished}" />
+            </aura:if>
+        </p>
+     </aura:if>
+    <aura:if isTrue="{!v.objAttachments!=null}">
+        <table cellspacing="10" cellpadding="10" class="maintable" style="width: 99%;" align="center" id="tblPending">
+            <tr>
+                <td colspan="3"><b>Uploaded Files</b></td>
+            </tr>
+            <aura:iteration items="{!v.objAttachments}" var="objAttachment">
+                <tr>
+                    <td><a href="{!'/sfc/servlet.shepherd/version/download/' + objAttachment.Id}" target="_blank"><lightning:buttonIcon iconName="utility:download" variant="bare" size="small" /></a></td>
+                    <td>{!objAttachment.Title}.{!objAttachment.FileExtension}</td>
+                    <td>
+                        <aura:if isTrue="{!v.canDeleteFiles==true}">
+                        	<lightning:buttonIcon iconName="utility:delete" variant="bare" size="small" value="{!objAttachment.Id}" onclick="{!c.deleteAttachmentsController}" />
+                        </aura:if>    
+                    </td>
+                </tr>
+            </aura:iteration>
+        </table>
+    </aura:if>    
+</aura:component>

@@ -1,0 +1,25 @@
+<aura:component >
+    <aura:attribute name="recordError" type="String"/>
+    <div>
+        <div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">                                        
+                <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+                    <span style="color:red;"><lightning:icon iconName="utility:warning" size="small" alternativeText="Indicates approval" variant="inverse"/></span>
+                </span>
+                <div class="slds-notify__content" style="width:400px; white-space: normal">
+                    
+                    <h2 class="slds-text-heading_small">Error!</h2>
+                </div>                    
+            </div>
+        </div>
+        
+        <div class="slds-notify_container slds-is-relative">                                    
+            <div class="slds-notify slds-notify_toast slds-theme_warning cusStyle" role="alert">                                    
+                <div class="slds-notify__content" style="width:400px; white-space: normal; overflow: auto" id="style-2">
+                    <h2 class="slds-text-heading_small">{!v.recordError}</h2>
+                </div>
+            </div>                                    
+        </div>
+        
+    </div>
+</aura:component>

@@ -1,0 +1,28 @@
+<apex:page lightningStylesheets="true" StandardController="Order_Item__c" extensions="UploadAgentInvoice" recordSetVar="ids" sidebar="true" showHeader="true">
+    <apex:includeScript value="/lightning/lightning.out.js"/>  
+    <apex:slds />
+    <div id="loading" class="slds-spinner_container" style="display:block;">
+        <div class="slds-spinner slds-spinner--medium slds-spinner_brand" aria-hidden="false" role="alert">
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+    <div id="LcDisplayId"></div> 
+    <script>
+    var OrderItemId="{!SelectedOrderItemIDs}";
+    var boolvar = true;
+    $Lightning.use("c:AppUploadAgentInvoice", function() 
+                   {
+                       $Lightning.createComponent("c:AppUploadAgentMultipleInvoice",
+                                                  { "listofids" : OrderItemId },
+                                                  "LcDisplayId",
+                                                  function(component) 
+                                                  {
+                                                      document.getElementById('loading').style.display = 'none';
+                                                      component.set("v.listofids" , '{!SelectedOrderItemIDs}');
+                                                      console.log('>>>>> App is hosted');
+                                                  });
+                   });
+    
+    </script>   
+</apex:page>

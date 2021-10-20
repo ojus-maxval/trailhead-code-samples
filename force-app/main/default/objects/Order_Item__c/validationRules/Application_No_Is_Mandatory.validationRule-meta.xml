@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Application_No_Is_Mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISNULL(Application_Date__c)), ISBLANK(Application_No__c))</errorConditionFormula>
+    <errorDisplayField>Application_No__c</errorDisplayField>
+    <errorMessage>Application No Is Mandatory</errorMessage>
+</ValidationRule>

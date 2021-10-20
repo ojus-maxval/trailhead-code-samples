@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Make_Payments_Recommended_Agent</fullName>
+    <columns>NAME</columns>
+    <columns>Jurisdiction__c</columns>
+    <columns>Patent_No__c</columns>
+    <columns>Application_No__c</columns>
+    <columns>Order__c</columns>
+    <columns>Client__c</columns>
+    <columns>Due_Date__c</columns>
+    <columns>Drop_Dead_Date__c</columns>
+    <columns>Fee__c</columns>
+    <columns>Agent_Fee_Amount_When_Pay__c</columns>
+    <columns>Fee_Amount_When_Instruct__c</columns>
+    <columns>Fee_Amount_When_Pay__c</columns>
+    <columns>Variance__c</columns>
+    <columns>Renewal_Instruction__c</columns>
+    <columns>Payment_Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Payment_Status__c</field>
+        <operation>equals</operation>
+        <value>Payment Received</value>
+    </filters>
+    <filters>
+        <field>Renewal_Instruction__c</field>
+        <operation>equals</operation>
+        <value>Renew</value>
+    </filters>
+    <filters>
+        <field>Suggested_Open_Date_To_Pay__c</field>
+        <operation>greaterOrEqual</operation>
+        <value>NEXT_N_DAYS:3</value>
+    </filters>
+    <filters>
+        <field>Payment_Mode__c</field>
+        <operation>equals</operation>
+        <value>Agent</value>
+    </filters>
+    <filters>
+        <field>Paid_Status__c</field>
+        <operation>equals</operation>
+    </filters>
+    <label>Make Payments - Recommended - Agent</label>
+    <sharedTo>
+        <group>ADU</group>
+        <group>ADU_Managers</group>
+    </sharedTo>
+</ListView>

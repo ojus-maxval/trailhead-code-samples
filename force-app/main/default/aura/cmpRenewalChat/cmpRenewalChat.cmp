@@ -1,0 +1,66 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" 
+                controller="RenewalChatController">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="mURL" type="String" />
+    <aura:attribute name="mReference" type="String" />
+    <aura:attribute name="mCID" type="String" />
+    <aura:attribute name="vComments" type="String" />
+    <aura:attribute name="vNewComments" type="String" />
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="showErrorMsg" type="boolean" default="false"/>
+    <aura:attribute name="Chats" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:card class="slds-p-left_x-small">
+        <aura:set attribute="title">
+            <lightning:icon iconName="standard:messaging_conversation" size="medium"/>
+            Communication with Renewals Team
+        </aura:set>
+        <aura:if isTrue="{!not(empty(v.Chats))}">
+            <aura:iteration items="{!v.Chats}" var="chat">  
+                <section role="log" class="slds-chat">
+                    <ul class="slds-chat-list">
+                        <aura:if isTrue="{!chat.From_Symphony__c}">
+                            <li class="slds-chat-listitem slds-chat-listitem_inbound">
+                                <div class="slds-chat-message">
+                                    <div class="slds-chat-message__body">
+                                        <div class="slds-chat-message__text slds-chat-message__text_inbound">                                    
+                                            <span>{!chat.Chat_Text__c}</span>
+                                        </div>
+                                        <div class="slds-chat-message__meta" >{!chat.From__c} • 
+                                            <lightning:formattedDateTime value="{!chat.CreatedDate}" year="2-digit" month="short" day="2-digit" hour="2-digit" minute="2-digit" weekday="short"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <aura:set attribute="else">
+                                <li class="slds-chat-listitem slds-chat-listitem_outbound">
+                                    <div class="slds-chat-message">
+                                        <div class="slds-chat-message__body">
+                                            <div class="slds-chat-message__text slds-chat-message__text_outbound">                                    
+                                                <span>{!chat.Chat_Text__c}</span>
+                                            </div>
+                                            <div class="slds-chat-message__meta" >{!chat.From__c} • 
+                                            	<lightning:formattedDateTime value="{!chat.CreatedDate}" year="2-digit" month="short" day="2-digit" hour="2-digit" minute="2-digit" weekday="short"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </aura:set>
+                        </aura:if>
+                    </ul>
+                </section>            
+            </aura:iteration>
+        </aura:if>
+        <aura:set attribute="footer">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="11">
+                    <lightning:input name="Comments" label="Comments" value="{!v.vNewComments}" variant="label-hidden" placeholder="Send a message..."/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="1">
+                    <lightning:buttonIcon size="large" iconName="utility:send" variant="bare" onclick="{! c.sendChat }" alternativeText="Send" title="Send" disabled ="{!empty(v.vNewComments)}"/>
+                </lightning:layoutItem>
+            </lightning:layout>            
+        </aura:set>
+    </lightning:card>
+</aura:component>

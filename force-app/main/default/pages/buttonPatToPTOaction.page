@@ -1,0 +1,28 @@
+<apex:page lightningStylesheets="true" StandardController="Order_Item__c" extensions="updateOrderItemsOnPayToPTO" recordSetVar="ids" >
+    
+    <apex:includeLightning />
+   
+    <div id="LcDisplayId"></div> 
+    
+    <script>
+        if({!openCmp})
+        {
+            $Lightning.use("c:appNonPaymentToPay", function() {
+                $Lightning.createComponent("c:cmpNonPaymentToPay",
+                { 
+                    // Set Lightning Component Attributes Property before creating Lightning Component In Visualforce page 
+                    recordids : '{!selectedids}',
+                    isModalOpen : 'true',
+                    recentListview:'{!listviewURL}'
+                },
+                "LcDisplayId",
+                function(component) {
+                    // create component Callback, Lightning Component has been Created,
+                    // Now you can set more lightning Component attributes here,
+                    // and do more cool stuff here
+                    component.set("v.get" , '{!$CurrentPage.parameters.}');
+                });
+            });
+        }
+    </script>
+</apex:page>

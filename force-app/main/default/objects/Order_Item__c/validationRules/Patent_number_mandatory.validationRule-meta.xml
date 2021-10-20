@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Patent_number_mandatory</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISBLANK(Patent_No__c),NOT(ISBLANK(Issue_Date__c)))</errorConditionFormula>
+    <errorDisplayField>Patent_No__c</errorDisplayField>
+    <errorMessage>Patent No Is Mandatory</errorMessage>
+</ValidationRule>

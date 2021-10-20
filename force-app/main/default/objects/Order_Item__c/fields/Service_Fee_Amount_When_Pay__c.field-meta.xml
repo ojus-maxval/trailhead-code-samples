@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Service_Fee_Amount_When_Pay__c</fullName>
+    <externalId>false</externalId>
+    <formula>if 
+(
+(TEXT( Service_Fee_Currency__c)==TEXT( Billing_Currency__c))
+, Service_Fee__c
+, ((Service_Fee__c/Service_Fee_Unit_Rate_When_Pay__c)/Billing_Currency_Unit_Rate_When_Pay__c)
++ (((Service_Fee__c/Service_Fee_Unit_Rate_When_Pay__c)/Billing_Currency_Unit_Rate_When_Pay__c)*(CE_Markup_Percentage__c /100))
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Service Fee Amount (When Pay)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

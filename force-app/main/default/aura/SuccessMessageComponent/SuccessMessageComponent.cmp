@@ -1,0 +1,12 @@
+<aura:component >
+    <aura:attribute name="successMsg" type="String"/>
+	<div class="slds-notify slds-notify_toast slds-theme_success" role="alert" style="margin-top:25px; margin-bottom:25px;">
+        <span class="slds-assistive-text">success</span>
+        <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+            <span style="color:white;"><lightning:icon iconName="utility:success" size="small" alternativeText="Indicates approval" variant="inverse"/></span>
+        </span>
+        <div class="slds-notify__content">
+            <h2 class="slds-text-heading_small ">{!v.successMsg}</h2>
+        </div>                            
+    </div>
+</aura:component>

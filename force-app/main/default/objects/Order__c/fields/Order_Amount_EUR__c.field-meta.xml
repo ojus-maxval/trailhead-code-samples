@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Order_Amount_EUR__c</fullName>
+    <externalId>false</externalId>
+    <label>Order Amount EUR</label>
+    <summarizedField>Order_Item__c.Invoice_Amount_When_Instruct__c</summarizedField>
+    <summaryFilterItems>
+        <field>Order_Item__c.Billing_Currency__c</field>
+        <operation>equals</operation>
+        <value>EUR</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>Order_Item__c.Renewal_Instruction__c</field>
+        <operation>equals</operation>
+        <value>Renew</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Order_Item__c.Order__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

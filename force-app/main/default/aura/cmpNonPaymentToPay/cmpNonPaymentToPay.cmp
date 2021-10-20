@@ -1,0 +1,116 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" controller="updateOrderItemsOnPayToPTO">
+    <aura:attribute name="isLoaded" type="boolean" />
+    <aura:attribute name="isMgr" type="boolean" />
+    <aura:attribute name="isPayToPTOSelected" type="boolean" />
+    <aura:attribute name="isReqToApproveSelected" type="boolean" />
+    <aura:attribute name="respOnPTO" type="string"/>
+    <aura:attribute name="respOnReq" type="string"/>
+    <!--declare aura attributes-->	
+    <aura:attribute name="recordids" type="List"/>
+    <aura:attribute name="recentListview" type="string"/>
+    <aura:attribute name="isPaymentItems" type="boolean" />
+    <aura:attribute name="PaymentReceivedItems" type="sObject[]"/>
+    <aura:attribute name="PaymentNotReceivedItems" type="sObject[]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <aura:if isTrue="{!v.isLoaded}">
+        <aura:if isTrue="{!and (empty(v.PaymentReceivedItems),empty(v.PaymentNotReceivedItems))}">
+            <div class="slds-text-heading_medium slds-text-color_error">Please select valid data</div>
+            <aura:set attribute="else">
+                <div class="slds-text-heading_medium">Please confirm the below details</div>
+            </aura:set>
+        </aura:if>        
+        <div class="slds-grid slds-gutters slds-p-around_medium" >
+            <aura:if isTrue="{!not(empty(v.PaymentReceivedItems))}">
+                <div class="slds-col slds-size_1-of-3">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div>
+                                <div class="slds-text-heading_large"><lightning:icon iconName="standard:expense_report_entry" alternativeText="Payment Received Items" title="Payment Received Items" /> Payment Received Items</div>
+                            </div>
+                        </aura:set>
+                        <div class="slds-card  slds-p-around_medium">
+                            <p>Payments recieved for below mentioned items.</p>
+                            <ol class="slds-list_ordered">
+                                <aura:iteration items="{!v.PaymentReceivedItems}" var="item">
+                                    <li>
+                                        {!item.Application_No__c}
+                                    </li>
+                                </aura:iteration >
+                            </ol>
+                        </div>
+                        <aura:set attribute="footer">
+                            <aura:if isTrue="{!not(v.isPayToPTOSelected)}">
+                                <lightning:button label="Pay To PTO/Agent" variant="brand" onclick="{!c.payToPTO}"/>
+                                <aura:set attribute="else">
+                                    <aura:if isTrue="{!v.respOnPTO == 'Success'}">
+                                        <div class="slds-text-color_success">Requested pay to PTO.</div>
+                                        <aura:set attribute="else">
+                                            <div class="slds-text-color_error">{!v.respOnPTO}</div>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:set>
+                            </aura:if>    
+                        </aura:set>
+                    </lightning:card>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!not(empty(v.PaymentNotReceivedItems))}">
+                <div class="slds-col slds-size_1-of-3">
+                    <lightning:card>
+                        <aura:set attribute="title">
+                            <div>
+                                <div class="slds-text-heading_large"><lightning:icon iconName="standard:expense_report" alternativeText="Non-Payment Received Items" title="Non-Payment Received Items" /> Non-Payment Received Items</div>
+                            </div>
+                        </aura:set>
+                        <div class="slds-card slds-p-around_medium">
+                            <p>Payments are not recieved for below mentioned items.</p>
+                            <ol class="slds-list_ordered">
+                                <aura:iteration items="{!v.PaymentNotReceivedItems}" var="item">
+                                    <li>
+                                        {!item.Application_No__c}
+                                    </li>
+                                </aura:iteration >
+                            </ol>
+                        </div>
+                        <!--<aura:set attribute="footer">
+                            <lightning:button label="Request to Manager" variant="brand" onclick="{!c.reqToMngr}"/>
+                        </aura:set>-->
+                        <aura:set attribute="footer">
+                            <aura:if isTrue="{!not(v.isReqToApproveSelected)}">
+                                <aura:if isTrue="{!v.isMgr}">
+                                    <lightning:button label="Approve to Pay" variant="brand" onclick="{!c.reqToMngr}"/>
+                                    <aura:set attribute="else">
+                                        <lightning:button label="Request to Manager" variant="brand" onclick="{!c.reqToMngr}"/>
+                                    </aura:set>
+                                </aura:if>
+                                <aura:set attribute="else">
+                                    <aura:if isTrue="{!v.respOnReq == 'Success'}">
+                                        <div class="slds-text-color_success">
+                                            <aura:if isTrue="{!v.isMgr}">
+                                                Approved.
+                                                <aura:set attribute="else">
+                                                    Requested to Manager.
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                        <aura:set attribute="else">
+                                            <div class="slds-text-color_error">{!v.respOnReq}</div>
+                                        </aura:set>
+                                    </aura:if>
+                                </aura:set>
+                            </aura:if>    
+                        </aura:set>
+                    </lightning:card>
+                </div>
+            </aura:if>
+        </div>
+        
+        <aura:set attribute="else">
+            <lightning:spinner alternativeText="Loading" size="medium" variant="brand"/>
+        </aura:set>
+    </aura:if>
+    Please select <a href="{!v.recentListview}">here</a> to go back to listview.    
+</aura:component>

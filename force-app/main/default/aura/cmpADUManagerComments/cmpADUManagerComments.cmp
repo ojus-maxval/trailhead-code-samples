@@ -1,0 +1,61 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global" controller="cmpADUManagerComponentsCtrl">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="vComments" type="String" />
+    <aura:attribute name="vNewComments" type="String" />
+    <aura:attribute name="isOpen" type="boolean" default="false"/>
+    <aura:attribute name="showErrorMsg" type="boolean" default="false"/>
+    
+    <aura:dependency resource="markup://force:editRecord" type="EVENT" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <lightning:card>
+        <aura:set attribute="title">
+            <lightning:icon iconName="standard:feedback" size="medium"/>
+            Comments
+        </aura:set>
+        <aura:set attribute="actions">
+            <lightning:button variant="brand" label="Add" title="Add" onclick="{! c.editCtrl }" />
+        </aura:set>
+        <div class="slds-p-around_medium">
+            <lightning:textarea name="Comments" readonly="true" value="{!v.vComments}" label="Comments" />
+        </div>
+    </lightning:card>
+    <aura:if isTrue="{!v.isOpen}">
+        <!--###### MODAL BOX Start######--> 
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" >
+                <!-- ###### MODAL BOX HEADER Start ######-->
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add Comments</h2>
+                </header>
+                <div style="background-color:white" class="slds-p-around_medium" >
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <lightning:textarea required="true"  name="Comments" label="Comments" value="{!v.vNewComments}" messageWhenValueMissing="This field is required"/>
+                    <aura:if isTrue="{!v.showErrorMsg}">
+                        <div class="slds-text-color_error">Please provide requested details</div>
+                    </aura:if>
+                    <!--###### MODAL BOX FOOTER Part Start ######-->
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="neutral" 
+                                      label="Cancel"
+                                      title="Cancel"
+                                      onclick="{! c.closeModel }"/>
+                    <lightning:button variant="brand" 
+                                      label="Submit"
+                                      title="Submit"
+                                      onclick="{! c.SaveRec }"/>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        <!--###### MODAL BOX Part END Here ######-->
+        
+    </aura:if>
+</aura:component>

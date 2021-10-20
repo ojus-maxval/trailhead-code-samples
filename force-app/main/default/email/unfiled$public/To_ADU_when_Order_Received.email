@@ -1,0 +1,16 @@
+Hi Team,<br/>
+<br/>
+We have received a new order from {!Order__c.Client__c}. <br/>
+<br/>
+Order Details:<br/>
+<br/>
+Order Name:{!Order__c.Name}<br/>
+<br/>
+Order No: {!Order__c.Order_Number__c}<br/>
+<br/>
+Order Date: {!Order__c.Order_Date__c} <br/>
+<br/>
+No. Of Assets: {!Order__c.Total_Renewals__c} <br/>
+ <br/>
+
+<a href="{!Order__c.Link}"> Click here</a> to access the order details.

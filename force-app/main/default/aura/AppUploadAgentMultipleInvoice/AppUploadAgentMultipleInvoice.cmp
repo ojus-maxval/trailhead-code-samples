@@ -1,0 +1,58 @@
+<aura:component controller="UploadAgentInvoice" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <!--Record Id of current object where this component will be added. -->
+     <aura:attribute name="fileList" type="Attachment[]"/>
+    <aura:attribute type="String" name="listofids"/>
+    <aura:attribute type="Boolean" name="ErrorScreen" default="false"/>
+    <aura:attribute name="ErrorText" type="String" default="Please select atleast one or more Asset(s)."/>
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="FileCountAtt" type="Integer" />
+    <aura:attribute name="FileCount" type="Integer" default ='0'/>
+    <aura:attribute type="String" name="ListViewName"/>
+    <!--<aura:attribute name="ValidationError" type="boolean" default="false" />
+    Showing spinner while uploading -->
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+    
+    <aura:attribute name="fileName" type="String" default="" />
+    <!--List of file which are uploaded -->
+    <aura:attribute name="FilesUploaded" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.onload}"/>
+    <div  style="height:60%;width:50%; margin:20px; margin-bottom:150px;" class="slds-m-left--xx-large"> 
+    
+         <aura:if isTrue="{!v.ErrorScreen}"><div style="color:red;">{!v.ErrorText}</div>  
+         <aura:set attribute="else">
+            <lightning:card >
+             <!--   {!v.listofids}-->
+         <aura:set attribute="title">
+             <lightning:icon iconName="action:upload" size="x-small"/>
+             &nbsp;&nbsp;Upload Agent Invoice
+         </aura:set>
+               
+    <div class="row">
+        <div class="slds-grid slds-gutters">
+            <div class="slds-col">
+                <lightning:input aura:id="fileId" onchange="{!c.handleFilesChange}" type="file" name="file" label="" multiple="true"/>
+                <br/> <div class="slds-text-body_medium slds-text-color_default">&nbsp;&nbsp;{!v.fileName} </div>
+                <!--use aura:if for show-hide the loading spinner image--> 
+                <aura:if isTrue="{!v.showLoadingSpinner}">
+                    <div class="slds-text-body_small slds-text-color_success">Uploading... 
+                        <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+                    </div>
+                </aura:if>
+            </div>
+            <div class="slds-col">
+               
+            </div>
+        </div>
+    </div>
+         <aura:set attribute="footer">
+             <button class="slds-button slds-button_brand" onclick="{!c.uploadFiles}">Upload Attachment</button>
+             
+             <button class="slds-button slds-button_brand" onclick="{!c.doCancel}">Cancel</button>
+         </aura:set>
+                </lightning:card>
+          </aura:set>
+         </aura:if>  
+              
+         
+    </div>
+</aura:component>

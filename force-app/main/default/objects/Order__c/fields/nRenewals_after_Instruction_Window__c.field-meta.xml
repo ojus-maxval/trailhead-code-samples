@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>nRenewals_after_Instruction_Window__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>No. of instructed renewals after instruction due date</inlineHelpText>
+    <label>No. of Renewals (Late Fee Applicable)</label>
+    <summaryFilterItems>
+        <field>Order_Item__c.Is_Instructed_After_Instruction_Window__c</field>
+        <operation>equals</operation>
+        <value>True</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>Order_Item__c.Renewal_Instruction__c</field>
+        <operation>equals</operation>
+        <value>Renew</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Order_Item__c.Order__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

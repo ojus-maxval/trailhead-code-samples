@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>H_Asset_Payment_Status__c</fullName>
+    <externalId>false</externalId>
+    <label>H Asset Payment Status</label>
+    <summaryFilterItems>
+        <field>Order_Item__c.Payment_Status__c</field>
+        <operation>equals</operation>
+        <value>Payment Requested</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Order_Item__c.Order__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

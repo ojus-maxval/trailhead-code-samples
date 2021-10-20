@@ -1,0 +1,33 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global">
+    <!-- VARIABLES -->	
+	<aura:attribute name="recordId" type="Id"/>
+    <!-- EVENTS -->
+    <aura:handler name="init" value="{!this}" action="{!c.loadFilingReceiptController}"/>
+    <!-- LAYOUT -->
+    <div class="slds-card slds-card_boundary forceBaseCard flexipageCard" data-aura-class="forceBaseCard flexipageCard">
+        <!-- Upload the documents -->
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="header-title-container" id="header_1310:0" >
+                        <span class="slds-text-heading--small slds-truncate" title="Pending Renewals">Filing Receipt</span>
+                    </h2>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body--inner">
+            <div class="slds-form slds-form_compound">
+                <fieldset class="slds-form-element">
+                    <div class="slds-form-element__group">
+                        <div class="slds-form-element__row">
+                            <div class="slds-form-element slds-size_1-of-1">
+                                <c:cmpFileUploader linkedEntityId="{!v.recordId}" canDeleteFiles="true" canUploadSingleFiles="true" canUploadMultipleFiles="false"></c:cmpFileUploader>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

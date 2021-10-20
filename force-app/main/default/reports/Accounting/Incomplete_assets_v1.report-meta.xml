@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Clients__c.Orders__r$Order_Number__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c$Client_Name__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Patent_No__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Jurisdiction__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Due_Date__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Drop_Dead_Date__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Payment_Mode__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Renewal_Status__c</field>
+    </columns>
+    <description>This report displays list of Assets which are past the Due Date and not marked as Renewed</description>
+    <filter>
+        <criteriaItems>
+            <column>Clients__c.Orders__r.Order_Items__r$Due_Date__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>lessThan</operator>
+            <value>TODAY</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Clients__c.Orders__r.Order_Items__r$Payment_Status__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>notEqual</operator>
+            <value>Asset Renewed</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Incomplete assets</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Orders_with_Client_Assets__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>Clients__c.Orders__r.Order_Items__r$Due_Date__c</sortColumn>
+    <sortOrder>Desc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>Clients__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CURRENT</interval>
+    </timeFrameFilter>
+</Report>

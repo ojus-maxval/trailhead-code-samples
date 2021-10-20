@@ -1,0 +1,12 @@
+<aura:component controller="OrderController" implements="force:appHostable,force:lightningQuickAction" access="global" >
+	<!-- Local Variables -->
+    <aura:attribute name="strSelectedOrderId" type="string"/>
+    <aura:attribute name="lstSelectedOrderIds" type="List"/>
+    <aura:attribute name="nOrders" type="Integer"/>
+    <!-- EVENTS -->
+    <aura:handler name="init" value="{!this}" action="{!c.GenerateInvoiceController}"/>
+    {!v.strSelectedOrderId} - {!v.nOrders}
+    <aura:iteration items="{!v.lstSelectedOrderIds}" var="item">
+        <force:recordView recordId="{!item}" />
+    </aura:iteration>
+</aura:component>

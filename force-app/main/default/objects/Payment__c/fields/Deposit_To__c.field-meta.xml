@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Deposit_To__c</fullName>
+    <externalId>false</externalId>
+    <label>Deposit To</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>JPMorgan Chase &amp; Co</fullName>
+                <default>false</default>
+                <label>JPMorgan Chase &amp; Co</label>
+            </value>
+            <value>
+                <fullName>Bank of America</fullName>
+                <default>false</default>
+                <label>Bank of America</label>
+            </value>
+            <value>
+                <fullName>Citigroup Inc</fullName>
+                <default>false</default>
+                <label>Citigroup Inc</label>
+            </value>
+            <value>
+                <fullName>Wells Fargo &amp; Co</fullName>
+                <default>false</default>
+                <label>Wells Fargo &amp; Co</label>
+            </value>
+            <value>
+                <fullName>Goldman Sachs</fullName>
+                <default>false</default>
+                <label>Goldman Sachs</label>
+            </value>
+            <value>
+                <fullName>Morgan Stanley</fullName>
+                <default>false</default>
+                <label>Morgan Stanley</label>
+            </value>
+            <value>
+                <fullName>U.S. Bancorp</fullName>
+                <default>false</default>
+                <label>U.S. Bancorp</label>
+            </value>
+            <value>
+                <fullName>Jaya</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Jaya</label>
+            </value>
+            <value>
+                <fullName>Kavithamani</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Kavithamani</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

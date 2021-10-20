@@ -1,0 +1,18 @@
+Hi Team,
+
+Please find the updated Order Details 
+
+Order Name :{!Order__c.Name}
+
+Order Date   :{!Order__c.Order_Date__c}
+
+Client           :{!Order__c.Client__c}
+
+Rush Fee     :{!Order__c.Late_Fee__c}
+
+Late Fee       :{!Order__c.Rush_Fee__c}
+
+
+Regards
+MaRS Team
+MaxVal

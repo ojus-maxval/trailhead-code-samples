@@ -1,0 +1,13 @@
+<design:component>
+    <!--Input Fields-->
+    <design:attribute name="linkedEntityId" label="Linked Entity Id" description="Id of the object" />
+    <design:attribute name="canUploadSingleFiles" label="Upload Files - Single" description="Upload Files - Single" />
+    <design:attribute name="canUploadMultipleFiles" label="Upload Files - Multiple" description="Upload Files - Multiple" />
+    <design:attribute name="canDeleteFiles" label="Can delete files" description="Can delete files" />
+    <design:attribute name="canViewAllFiles" label="View Files - All" description="View Files - All" />
+    <design:attribute name="canViewCurrentAttachedFiles" label="View Files - Current" description="View Files - Current" />
+    
+    <!--Output Fields-->
+    <design:attribute name="idAvailable" label="id Available"/>
+    <design:attribute name="contentDocumentIds" label="Uploaded content document ids" description="Uploaded content document ids" />
+</design:component>

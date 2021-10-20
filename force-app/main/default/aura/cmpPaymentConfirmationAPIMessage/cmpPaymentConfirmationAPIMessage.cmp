@@ -1,0 +1,19 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="String" />
+    <lightning:recordViewForm recordId="{!v.recordId}" objectApiName="Payment_Confirmation__c">
+        <lightning:card>
+            <aura:set attribute="title">
+                <lightning:icon iconName="standard:search" size="medium"/>
+                Bill API Details
+            </aura:set>
+            <div class="slds-grid slds-p-left_medium">                
+                <div class="slds-col slds-size_2-of-3">
+                    <div class="errorClass">
+                        <lightning:outputField fieldName="Status__c"/>
+                        <lightning:outputField fieldName="Payment_API_Message__c" />
+                    </div>
+                </div>
+            </div>
+        </lightning:card>
+    </lightning:recordViewForm>
+</aura:component>

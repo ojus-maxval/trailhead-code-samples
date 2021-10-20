@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>To_be_Invoiced_validation_For_ADU</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND($Profile.Name == &quot;ADU&quot;,
+ISPICKVAL( Payment_Status__c , &quot;To be Invoiced&quot;), ISCHANGED(Payment_Status__c ) )</errorConditionFormula>
+    <errorMessage>ADU should not be allowed to update payment status as To be Invoiced</errorMessage>
+</ValidationRule>

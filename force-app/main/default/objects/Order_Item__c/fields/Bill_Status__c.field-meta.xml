@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bill_Status__c</fullName>
+    <externalId>false</externalId>
+    <label>Bill Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Created</fullName>
+                <default>false</default>
+                <label>Created</label>
+            </value>
+            <value>
+                <fullName>NotCreated</fullName>
+                <default>false</default>
+                <label>NotCreated</label>
+            </value>
+            <value>
+                <fullName>NotApplicable</fullName>
+                <default>false</default>
+                <label>NotApplicable</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

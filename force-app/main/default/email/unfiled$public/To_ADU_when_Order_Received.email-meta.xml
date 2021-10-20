@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>To ADU when Order Received</name>
+    <style>none</style>
+    <subject>New Order Received from Symphony</subject>
+    <textOnly>Hi Team,
+
+We have received a new order from {!Order__c.Client__c}.
+
+Order Details:
+Order No: {!Order__c.Order_Number__c}
+
+Order Date: {!Order__c.Order_Date__c}
+
+No. Of Assets: {!Order__c.Total_Renewals__c}
+
+Click here  to access the order details.</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

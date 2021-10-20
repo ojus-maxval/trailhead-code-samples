@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Clients__c.Orders__r$Order_Number__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c$Client_Name__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Patent_No__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Jurisdiction__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Fee_Currency__c</field>
+    </columns>
+    <columns>
+        <field>Clients__c.Orders__r.Order_Items__r$Due_Date__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Clients__c.Orders__r.Order_Items__r$Fee__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Clients__c.Orders__r.Order_Items__r$Fee_Amount_When_Pay__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Clients__c.Orders__r.Order_Items__r$PTO_Payment_Amount__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Clients__c.Orders__r.Order_Items__r$Bank_Rate__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Clients__c.Orders__r.Order_Items__r$Variance_Amount__c</field>
+    </columns>
+    <description>This report displays list of assets for which PTO payment date was made in last 30 days</description>
+    <format>Tabular</format>
+    <name>Currency fluctuation Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Orders_with_Client_Assets__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Clients__c.Orders__r.Order_Items__r$Paid_On__c</dateColumn>
+        <interval>INTERVAL_LAST30</interval>
+    </timeFrameFilter>
+</Report>

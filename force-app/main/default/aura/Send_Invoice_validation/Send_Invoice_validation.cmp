@@ -1,0 +1,15 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome,force:hasRecordId" controller="Send_invoice_asset">
+	<aura:handler name="init" value="{!this}" action="{!c.Send_invoice_js}"/>
+    <aura:attribute name="recordError" type="String"/>
+    <aura:attribute name="SaveMsg" type="String"/>
+    <div>
+        <aura:if isTrue="{!not(empty(v.recordError))}">
+             <c:ErrorMessageComponent recordError="{!v.recordError}"/>
+                <aura:set attribute="else">
+                    <aura:if isTrue="{!not(empty(v.SaveMsg))}">                                
+                        <c:SuccessMessageComponent successMsg="{!v.SaveMsg}"/>
+                    </aura:if>
+                </aura:set>
+        </aura:if>
+   </div>
+</aura:component>

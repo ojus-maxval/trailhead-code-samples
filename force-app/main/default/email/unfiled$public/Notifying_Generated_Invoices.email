@@ -1,0 +1,16 @@
+Hi Team,
+
+Please  find the generated Invoice details below 
+
+Invoice Name :{!Invoice__c.Name}
+
+Invoice Date:{!Invoice__c.Invoice_Date__c}
+
+Invoice Currency :{!Invoice__c.Invoice_Currency__c}
+
+Invoice Amount:{!Invoice__c.Invoice_Amount__c}
+
+
+Regards
+MaRS Team
+MaxVal

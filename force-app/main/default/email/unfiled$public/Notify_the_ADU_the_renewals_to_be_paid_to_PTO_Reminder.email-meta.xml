@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>false</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Notify the ADU the renewals to be paid to PTO Reminder</name>
+    <style>none</style>
+    <subject>Reminder milestone that the renewals to be paid to PTO</subject>
+    <textOnly>Hi {ADU},
+
+Please find the details of that the renewals to be paid to PTO
+
+mailTableStartmailTableRowsmailTableEnd
+
+Regards,
+MaRS</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validate_for_renewed_assets</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(Is_it_renewed_in_PTO__c ==true, ISPICKVAL(Payment_Status__c , &quot;Asset Renewed&quot;))</errorConditionFormula>
+    <errorMessage>Can not perform renew it is  already renewed</errorMessage>
+</ValidationRule>

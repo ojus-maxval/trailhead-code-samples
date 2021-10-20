@@ -1,0 +1,72 @@
+<!-- Copyright © 2021 MaxVal Group. All Rights Reserved.
+  Unauthorized copying of this file, via any medium is strictly prohibited
+  Proprietary and confidential
+  Written by Saranyaa C, August 2021 -->
+<apex:page lightningStylesheets="true" StandardController="Order_Item__c" title="Create Credit Memo" extensions="CreditMemoDatatable" recordSetVar="ids" id="creditMemoPage">
+   <p id="pErrorMessage" style="color:red;font-size: large;margin:25px" >* {!errorMessage}</p>
+   <button id="btnBacktoListView" style="margin:20px;font:message-box;color:black" onclick="window.location = '{!listviewURL}'; return false;" >Back to listview</button> 
+   <apex:form id="creditMemoForm"> 
+       <apex:pageBlock id="creditMemoPageBlock">  
+           <h1>Create Credit Memo</h1>
+           <Apex:pagemessages id="message" escape="false"></Apex:pagemessages>
+           <apex:pageBlockButtons id="creditMemoPageButtons" location="bottom">
+              <apex:commandButton id="btnSubmit" value="Submit" action="{!Submit}" rerender="message" oncomplete="{!disableSubmit}" />
+              <apex:commandButton value="Cancel" oncomplete="window.location = '{!listviewURL}'; return false;" />
+           </apex:pageBlockButtons> 
+           <apex:pageBlockTable value="{!assets}" var="asset" id="theTable" rowClasses="odd,even" styleClass="tableClass">
+               <apex:column >
+                   <apex:facet name="header">Application No.</apex:facet>
+                   <apex:outputText id="labelApplicationNo" value="{!asset.Application_No__c}"/>
+               </apex:column>
+               
+               <apex:column >
+                   <apex:facet name="header">Patent No.</apex:facet>
+                   <apex:outputText id="labelPatentNo" value="{!asset.Patent_No__c}"/>
+               </apex:column>
+               
+               <apex:column >
+                   <apex:facet name="header">Order No.</apex:facet>
+                   <apex:outputText id="labelOrderNo" value="{!asset.Order__r.Name}"/>
+               </apex:column>
+               
+               <apex:column >
+                   <apex:facet name="header">Payment Status</apex:facet>
+                   <apex:outputText id="labelPaymentStatus" value="{!asset.Payment_Status__c}"/>
+               </apex:column>
+               
+               <apex:column >
+                   <apex:facet name="header">Amount</apex:facet>
+                   <apex:inputField value="{!asset.CreditMemo_Amount__c}"  style="width: 100px;"/>
+               </apex:column>
+               
+               <apex:column >
+                   <apex:facet name="header">Comments</apex:facet>
+                   <apex:inputField value="{!asset.CreditMemo_Comments__c}" style="width: 100%;"/>
+               </apex:column>
+           </apex:pageBlockTable>
+       </apex:pageBlock>
+   </apex:form>
+   <p id="note" style="font-size: small;margin: 20px;" >Note:<br/>Amount column displays, <br/>1. PTO Fee(Invoiced) - Service Fee Amount (When Instruct) for Cancelled assets. <br/>2. PTO Fee (Invoiced) - PTO Payment Amount for PTO/Agent Payments Completed and Asset Renewed assets.</p>
+   <script type="text/javascript">
+       //If the selected records have error, display error message and BacktoListview button and hide the pageBlockButtons and grid. 
+       //Else hide error message and BacktoListview button and display grid and pageBlockButtons.
+       if({!isInvalid} == false)
+       {   
+           //hide BackToListview button
+           document.getElementById('btnBacktoListView').style.display = 'none';
+           //hide Error message label
+           document.getElementById('pErrorMessage').style.display = 'none';
+       }
+       else
+       {  
+           //hide all pageBlockButtons
+           var x = document.getElementsByClassName('btn');
+           for (var i = 0; i < x.length; i++) {
+              x[i].style.display = "none";
+           }
+           //hide grid
+           document.getElementsByClassName('apexp')[0].style.display = 'none';
+           document.getElementById('note').style.display = 'none';
+        }      
+    </script>
+</apex:page>

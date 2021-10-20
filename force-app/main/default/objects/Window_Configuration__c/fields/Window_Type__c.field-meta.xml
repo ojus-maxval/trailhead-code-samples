@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Window_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Window Type</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Instruction Window</fullName>
+                <default>false</default>
+                <label>Instruction Window</label>
+            </value>
+            <value>
+                <fullName>Invoicing Window</fullName>
+                <default>false</default>
+                <label>Invoicing Window</label>
+            </value>
+            <value>
+                <fullName>Payment Window</fullName>
+                <default>false</default>
+                <label>Payment Window</label>
+            </value>
+            <value>
+                <fullName>Renewal Window</fullName>
+                <default>false</default>
+                <label>Renewal Window</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

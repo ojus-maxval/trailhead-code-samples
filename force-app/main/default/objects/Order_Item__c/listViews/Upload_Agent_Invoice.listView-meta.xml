@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Upload_Agent_Invoice</fullName>
+    <columns>NAME</columns>
+    <columns>Client__c</columns>
+    <columns>Order_Number__c</columns>
+    <columns>Order_Date__c</columns>
+    <columns>Application_No__c</columns>
+    <columns>Billing_Amount__c</columns>
+    <columns>Patent_No__c</columns>
+    <columns>Agent_Status__c</columns>
+    <columns>Renewal_Instruction__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Agent_Status__c</field>
+        <operation>equals</operation>
+        <value>Awaiting Agent Invoice</value>
+    </filters>
+    <label>Waiting for Invoice from Agents</label>
+</ListView>
