@@ -28,6 +28,7 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
                     If(objNewOrder.Client__c !=null){
                         clientids.add(objNewOrder.Client__c);
                     }
+                    
                 }
                 if(clientids.size()>0)
                 {
@@ -123,6 +124,14 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
                                 system.debug('yesentered');
                                 strAuditText += ' (objOldOrder.Is_Sent_Invoice__c == false && objNewOrder.Is_Sent_Invoice__c==true) > ';                            
                                 lstOrderIdsToGenerateInvoice.add(objNewOrder.Id);
+                            }
+                            List<Order_Item__c> orderItems = [select id,name,Cancellation_Approval__c from Order_Item__c where Order__c=:objNewOrder.Id];
+                            for(Order_Item__c oi : orderItems){
+                                if(oi.Cancellation_Approval__c == 'Approved')
+                                {
+                               		lstOrderIdsToGenerateInvoice.add(objNewOrder.Id);
+									break;                                    
+                                }
                             }
                         }
                     }
