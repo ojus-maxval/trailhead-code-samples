@@ -262,7 +262,15 @@ global with sharing class InvoiceForMaxval
                     gen.writeStringField('Amount',OrderItems.Billing_Amount__c!=null?string.valueof(OrderItems.Billing_Amount__c):'');
                     gen.writeEndObject();    
                 }
-                gen.writeEndArray(); 
+                gen.writeEndArray();
+                gen.writeFieldName('LEDES');
+                gen.writeStartObject();
+                gen.writeStringField('InvoiceDate','');
+                gen.writeStringField('ClientID','');
+                gen.writeStringField('LawFirmMatterID','');
+                gen.writeStringField('LineItemExpenseCode','');
+                gen.writeStringField('ClientMatterID','');
+                gen.writeEndObject();
                 gen.writeFieldName('Fee');
                 //for(Order_Item__c OrderItems: ListOfOItems)
                 // {
