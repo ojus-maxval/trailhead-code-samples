@@ -55,6 +55,12 @@ public with sharing class CreateInvoiceWithVarianceController {
              }else{
                  //Get all asset details
                 assets = [SELECT Name,Application_No__c,Patent_No__c,Order__r.Name,Order__r.Client__c,Fee_Amount_When_Instruct__c,PTO_Payment_Amount__c,Service_Fee_Amount_When_Instruct__c,Variance_Amount__c,Payment_Status__c,Billing_Amount__c,Variance__c FROM Order_Item__c WHERE Order__c IN: selectedOrderIds AND Variance__c > 0];                
+                selectedOrderIds = new list<Id>();
+                 for(Order_Item__c asset : assets){
+                     selectedOrderIds.add(asset.Order__c);
+                 }
+                 selectedOrders = new List<Order__c>();
+                 selectedOrders = [SELECT Id FROM Order__c WHERE Id IN: selectedOrderIds];
                 if(assets.size() > 0)
                 {            
                     client = assets[0].Order__r.Client__c;
@@ -78,21 +84,23 @@ public with sharing class CreateInvoiceWithVarianceController {
         }
         catch(Exception e)
         {
-            strAuditText += 'Exception: ' + e.getMessage() + e.getLineNumber();
+            AuditTrailHelper.UpdateAudit('CreateInvoiceWithVarianceController','Exception: ' + e.getMessage() + e.getLineNumber(),'None');
         }
         return assets;
     }
     
     Public PageReference Submit() {
         for(Order__c order : selectedOrders){
-            order.Payment_Status__c = 'Invoice to be modified';
+            order.Payment_Status__c = 'Invoiced Variance Amount';
         }  
         update selectedOrders;
+        AuditTrailHelper.UpdateAudit('CreateInvoiceWithVarianceController','updated','None');
         if (selectedOrderIds != null && selectedOrderIds.size() > 0)
         {
-            strAuditText += ' Invoices to be modified for the order(s):' + selectedOrderIds;
+            AuditTrailHelper.UpdateAudit('CreateInvoiceWithVarianceController',' Invoices to be modified for the order(s):' + selectedOrderIds,'None');
             BatchQueueHelper.CreateBatchQueueForInvoiceGeneration(selectedOrderIds);
         }
+        ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,'Request to generate Invoice has been placed!'));
         return null;
     }
 }
