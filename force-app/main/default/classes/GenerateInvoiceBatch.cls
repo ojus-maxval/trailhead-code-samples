@@ -79,8 +79,6 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
         decimal LateFeePerOrder= 0;
         try
         {
-            strAuditText+='SelectedOrderIds-'+SelectedOrderIds;
-            strAuditText+='idSelectedOrderId-'+idSelectedOrderId;
             Map<string, Currency__c> mapCurrency = new Map<string, Currency__c>();
             List<Currency__c> objCurrencyList = [SELECT Id, Name, Exchange_Rate__c FROM Currency__c];
             for(Currency__c objCurrency : objCurrencyList)
@@ -98,7 +96,7 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
             
             //Reading existing invoices and order items
             List<Invoice__c> objInvoiceList = [SELECT Id, Order__c, Invoice_Date__c, Invoice_Status__c, Is_Active__c, Invoice_Currency__c, Invoice_Amount__c, Invoice_No__c, Invoice_Type_Name__c,Invoice_Config_Type__c, Is_Late_Rush_Fee_Included__c, API_Status__c FROM Invoice__c WHERE Order__c = :objOrder.Id];
-            List<Order_Item__c> objOrderItemList = [SELECT Id, Order__c, Order__r.Payment_Status__c,Order__r.nRush_Renewals__c,CE_Markup_Percentage__c, Is_Instructed_during_Rush__c, Order__r.Client__r.Rush_Fee_per_Order__c,Invoice_Type_Name__c,Order__r.Client__c,Order__r.Client__r.QB_Customer__r.Currency_Reference__c, Invoice_Type_Name_Value__c, Billing_Currency__c, Billing_Amount__c, Invoice__c, Invoice_Amount_When_Pay__c, Payment_Status__c,Client__c,Fee_Amount_When_Instruct__c, PTO_Payment_Amount__c FROM Order_Item__c WHERE Order__c = :objOrder.Id AND Payment_Status__c!='Cancelled'];
+            List<Order_Item__c> objOrderItemList = [SELECT Id, Variance_Amount__c,Order__r.Payment_status__c,Order__c, Order__r.nRush_Renewals__c,CE_Markup_Percentage__c, Is_Instructed_during_Rush__c, Order__r.Client__r.Rush_Fee_per_Order__c,Invoice_Type_Name__c,Order__r.Client__c,Order__r.Client__r.QB_Customer__r.Currency_Reference__c, Invoice_Type_Name_Value__c, Billing_Currency__c, Billing_Amount__c, Invoice__c, Invoice_Amount_When_Pay__c, Payment_Status__c,Client__c FROM Order_Item__c WHERE Order__c = :objOrder.Id AND Payment_Status__c!='Cancelled'];
             
           	if(objOrderItemList.size()>0)
           	{
@@ -125,12 +123,15 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
             Map<string, Invoice__c> mapInvoicesToInsert = new Map<string, Invoice__c>();
             for(Order_Item__c objOrderItem : objOrderItemList)
             {
+                strAuditText += 'check status here: '+objOrderItem.Order__r.Payment_status__c;
                 Invoice__c objInvoice = null;
-                if (mapExistingInvoices.containsKey(objOrderItem.Invoice_Type_Name_Value__c)==true && objOrderItem.Order__r.Payment_Status__c != 'Invoiced Variance Amount')         
+                  if (mapExistingInvoices.containsKey(objOrderItem.Invoice_Type_Name_Value__c)==true && objOrderItem.Order__r.Payment_status__c != 'Invoiced Variance Amount')       
+                //if (mapExistingInvoices.containsKey(objOrderItem.Invoice_Type_Name__c)==true)     
                 {       
-                    strAuditText += 'Updating Invoice..';
-                    strAuditText += ' objOrderItemInvoicetypename:' + objOrderItem.id + ' > ';   
-                    objInvoice = mapExistingInvoices.get(objOrderItem.Invoice_Type_Name_Value__c);       
+                	strAuditText += 'updating invoice..';
+                      strAuditText += ' objOrderItemInvoicetypename:' + objOrderItem.id + ' > ';   
+                    objInvoice = mapExistingInvoices.get(objOrderItem.Invoice_Type_Name_Value__c);      
+                   // objInvoice = mapExistingInvoices.get(objOrderItem.Invoice_Type_Name__c);  
                     objInvoice.Order__c = objOrderItem.Order__c;    
                     objInvoice.Invoice_Date__c = DateTime.Now();    
                     objInvoice.Invoice_Status__c = 'Created';   
@@ -151,20 +152,24 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
                     }
                     
                     objInvoice.Invoice_Currency__c = objOrderItem.Billing_Currency__c;  
+                    //invoice currency should be Invoice configuration's QB customer currency i.e,[Invoice_Type_Configuration__r.QB_Customer__r.Currency_Reference__c]  
+                    ////invoice type configuration currency == QB_Customer__r.Currency_Reference__c [if matches then get QB_Customer__r.Currency_Reference__c and assign to objInvoice.Invoice_Currency__c ]    
+                    //objInvoice.Invoice_Currency__c = objOrderItem.Order__r.Client__r.QB_Customer__r.Currency_Reference__c; 
                     objInvoice.Invoice_Amount__c = 0;
                     objInvoice.Invoice_No__c = '-'; 
                     objInvoice.Is_Late_Rush_Fee_Included__c = false;
                     objInvoice.API_Status__c = 'Send Update Request';
+                    //ClientIDSForUpdate.add(objOrderItem.Client__c);
                     ClientIDSForUpdate.add(objOrderItem.Order__r.Client__c);
+                    //strAuditText += ' objOrderItem:' + objOrderItem.id + ' > ';
                     strAuditText += ' objOrderItem.Order__r:' + objOrderItem.Order__c + ' > ';
                     strAuditText += ' objOrderItem.Order__r.Client__c:' + objOrderItem.Order__r.Client__c + ' > ';
                     if (mapInvoicesToUpdate.containsKey(objOrderItem.Invoice_Type_Name_Value__c)==false)
                         mapInvoicesToUpdate.put(objOrderItem.Invoice_Type_Name_Value__c, objInvoice);
-                    
                 }
                 else
                 {
-                    strAuditText += 'Creating Invoice..';
+                    strAuditText += 'creating invoice..';
                     objInvoice =  new Invoice__c();
                     objInvoice.Order__c = objOrderItem.Order__c;
                     objInvoice.Invoice_Date__c = DateTime.Now();
@@ -185,34 +190,33 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
                          objInvoice.Invoice_Config_Type__c ='Currency';
                     }
                     objInvoice.Invoice_Currency__c = objOrderItem.Billing_Currency__c;  
+                    //objInvoice.Invoice_Currency__c = objOrderItem.Order__r.Client__r.QB_Customer__r.Currency_Reference__c;  
                     objInvoice.Invoice_Amount__c = 0;
                     objInvoice.Invoice_No__c = '-'; 
                     objInvoice.Is_Late_Rush_Fee_Included__c = false;
                     objInvoice.API_Status__c = 'Send Create Request';
-                    
-                    if(objOrderItem.Order__r.Payment_Status__c == 'Invoiced Variance Amount')
-                    {
-                        objInvoice.Invoice_Amount__c = objOrderItem.Fee_Amount_When_Instruct__c - objOrderItem.PTO_Payment_Amount__c;
-                        objInvoice.API_Status__c = 'Send Update Request';
+                    if(objOrderItem.Order__r.Payment_status__c == 'Invoiced Variance Amount'){
+                        strAuditText += 'creating invoice with variance..: '+ objInvoice.Invoice_Amount__c;
+                        objInvoice.Invoice_Amount__c = objOrderItem.Variance_Amount__c;
                     }
-                    
+                    //ClientIDSForCreate.add(objOrderItem.Client__c);
                     ClientIDSForCreate.add(objOrderItem.Order__r.Client__c);
-                    strAuditText += ' objInvoice.Invoice_Amount__c:' + objInvoice.Invoice_Amount__c + ' > ';
+                    //strAuditText += ' objOrderItem:' + objOrderItem + ' > ';
                     strAuditText += ' objOrderItem.Order__r:' + objOrderItem.Order__c + ' > ';
                     strAuditText += ' objOrderItem.Order__r.Client__c:' + objOrderItem.Order__r.Client__c + ' > ';
+                    //ClientIDSForCreate.add(objOrderItem.Order__r.Client__c);
                     if (mapInvoicesToInsert.containsKey(objOrderItem.Invoice_Type_Name_Value__c)==false)
                         mapInvoicesToInsert.put(objOrderItem.Invoice_Type_Name_Value__c, objInvoice);
                 }
             }
             
-            
+            //AuditTrailHelper.UpdateAudit('GenerateInvoiceBatch-Start','Inserting mapInvoicesToInsert', 'None');
             INSERT mapInvoicesToInsert.values();
-            strAuditText +='ClientIdsCreate-'+ClientIDSForCreate+'>';
-            strAuditText +='ClientIdsUpdate-'+ClientIDSForUpdate+'>';
+            //AuditTrailHelper.UpdateAudit('GenerateInvoiceBatch-Start','Inserted mapInvoicesToInsert', 'None');
             
-            
+            //AuditTrailHelper.UpdateAudit('GenerateInvoiceBatch-Start','Updating mapInvoicesToUpdate', 'None');
             UPDATE mapInvoicesToUpdate.values();
-            
+            //AuditTrailHelper.UpdateAudit('GenerateInvoiceBatch-Start','Updated mapInvoicesToUpdate', 'None');
             
             //Read the Invoices after inserted and updated
             Map<string, Invoice__c> mapUpdatedInvoices = new Map<string, Invoice__c>();
@@ -252,18 +256,17 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
                             objInvoice.Invoice_Amount__c +=RushFeePerAsset;
                         }
                        
-                          
+                          strAuditText += '  objInvoice.Invoice_Amount__c:' +  objInvoice.Invoice_Amount__c+ ' > ';
                     }
                     if(objOrderItem.Billing_Currency__c == 'USD')
                     {
-                    	USDAsset = true;
+                    USDAsset =true;
                     }   
                     objOrderItem.Invoice__c = objInvoice.Id;
                     InvoicedAssets.add(objInvoice.Id);
                     objOrderItem.Payment_Status__c ='Payment Requested';
                     objInvoice.Invoice_Amount__c += objOrderItem.Billing_Amount__c;
-                    strAuditText += '  objInvoice.Invoice_Amount__c:' +  objInvoice.Invoice_Amount__c+ ' > ';
-                    update objInvoice;
+                    //objInvoice.Invoice_Amount__c += objOrderItem.Invoice_Amount_When_Pay__c;
                 }
             }
             UPDATE objOrderItemList;
@@ -273,6 +276,7 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
             strAuditText += ' ClientIDSForCreate:'+ClientIDSForCreate.size() + ' > ';
             strAuditText += ' mapUpdatedInvoices:' + mapUpdatedInvoices.size() + ' > ';
             
+            //if (objOrder.Late_Fee__c>0 || objOrder.Rush_Fee__c>0)
             if (objOrder.Late_Fee__c>0 )
             {
                 strAuditText += ' LateRush:true > ';
@@ -286,6 +290,20 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
                     UPDATE objLRFeeInvoice;
                     strAuditText += ' objLRFeeInvoice1:' + objLRFeeInvoice.Id +' > ';
                 }
+                
+              /*  if (IsLateRushFeeIncluded == false)
+                {
+                    objInvoiceList = [SELECT Id, Invoice_Amount__c FROM Invoice__c WHERE Order__c = :objOrder.Id AND Invoice_Currency__c = 'USD' ORDER BY Invoice_Amount__c ASC];
+                    if (objInvoiceList != null && objInvoiceList.size()>0)
+                    {
+                        Invoice__c objLRFeeInvoice = objInvoiceList[0];
+                        objLRFeeInvoice.Invoice_Amount__c += objOrder.Late_Fee__c + objOrder.Rush_Fee__c;
+                        objLRFeeInvoice.Is_Late_Rush_Fee_Included__c = true;
+                        IsLateRushFeeIncluded = true;
+                        UPDATE objLRFeeInvoice;
+                        strAuditText += ' objLRFeeInvoice2:' + objLRFeeInvoice +' > ';
+                    }                   
+                }*/
                 if (USDAsset == true)
                 {
                     objInvoiceList = [SELECT Id, Invoice_Amount__c,Invoice_Currency__c FROM Invoice__c WHERE Order__c = :objOrder.Id AND Invoice_Currency__c = 'USD' ORDER BY Invoice_Amount__c ASC];
@@ -296,8 +314,7 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
                         objLRFeeInvoice.Is_Late_Rush_Fee_Included__c = true;
                         IsLateRushFeeIncluded = true;
                         UPDATE objLRFeeInvoice;
-                        //strAuditText += ' objLRFeeInvoice2:' + objLRFeeInvoice.Id +' > ';
-                        strAuditText += ' Checking Invoice :' + objLRFeeInvoice +' > ';
+                        strAuditText += ' objLRFeeInvoice2:' + objLRFeeInvoice.Id +' > ';
                     } 
                 }
                 else if(USDAsset == false)
@@ -320,11 +337,29 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
                         strAuditText += ' objLRFeeInvoice2:' + objLRFeeInvoice.Id +' > ';
                     } 
                 }
+                
+               /* if (IsLateRushFeeIncluded == false)
+                {
+                    Invoice__c objLRFeeInvoice =  new Invoice__c();
+                    objLRFeeInvoice.Order__c = objOrder.Id;
+                    objLRFeeInvoice.Invoice_Date__c = DateTime.Now();
+                    objLRFeeInvoice.Invoice_Status__c = 'Created'; 
+                    objLRFeeInvoice.Is_Active__c = true; 
+                    objLRFeeInvoice.Invoice_Type_Name__c = ''; 
+                    objLRFeeInvoice.Invoice_Currency__c = 'USD'; 
+
+objLRFeeInvoice.Invoice_Amount__c = objOrder.Late_Fee__c + objOrder.Rush_Fee__c;
+                    objLRFeeInvoice.Is_Late_Rush_Fee_Included__c = true;
+                    objLRFeeInvoice.Invoice_No__c = '-'; 
+                    INSERT objLRFeeInvoice;
+                    strAuditText += ' objLRFeeInvoice3:' + objLRFeeInvoice +' > ';
+                }*/
             }
             
             //Update Order
             objOrder.Payment_Status__c = 'Invoiced';
             objOrder.Order_Status__c = 'In Progress';
+            //objOrder.Is_Sent_Invoice__c = false;
             UPDATE objOrder;
             
             List<Batch_Queue__c> objBatchQueueList = [SELECT Id, Status__c FROM Batch_Queue__c WHERE Parent_Id__c = :objOrder.Id AND Name = 'Generate Invoice'];

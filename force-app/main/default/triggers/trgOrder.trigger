@@ -165,4 +165,4 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
     {
         AuditTrailHelper.UpdateAudit('trgOrder', strAuditText, 'None');
     }
-}
+}   
