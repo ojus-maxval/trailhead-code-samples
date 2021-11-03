@@ -1,10 +1,11 @@
 @RestResource(urlMapping = '/renewal/invoice/*')
 global with sharing class InvoiceForMaxval 
 {
+    //Modified by Sneha B - MARS-343,MARS-1016
     @HttpGet
     global static void doget() 
     {
-        Boolean status =True;
+        string status ='';
         Boolean CCInfoIsAvailable = false;
         Boolean AccIncomeIsAvailable = false;
         Boolean QBCustomerIsAvailable = false;
@@ -13,42 +14,30 @@ global with sharing class InvoiceForMaxval
         string strAuditTrail = '';
         try
         {
-            //RestRequest req = RestContext.request;
-            // RestResponse res = RestContext.response;
             string InvItemDetails='';
-            //set<id> ObjOrderIds = new set<id>();
-            // string Inv= RestContext.request.params.get('InvoiceRef'); 
-            //string q1 = 'SELECT Name,Id,order_C,Invoice_Currencyc,Po_Numberc,Invoice_Items_c,Client__r.name,Order__r.name,Invoice_Amount_c FROM Invoice_c WHERE name =:Inv limit 1'; 
-            // Invoice__c ObjInvoiceList[0] = Database.query(q1); 
             String UniqueName = '';
             String strLeadSource = '';
             RestRequest restReq = RestContext.request;
             RestResponse restRes = RestContext.response;
             // Reading parametrs from URL
-            system.debug('Req URL: '+restReq.requestURI);
+            strAuditTrail+='InvoiceDetails endpoint invoked - '+restReq.requestURI+'|';
             string req =  restReq.requestURI;
             integer li= req.lastIndexOf('/details');
             string s = req.substring(0, li);
             UniqueName =s.substring(s.lastIndexOf('/') + 1);
-            system.debug('1 : '+UniqueName);
+            strAuditTrail+='UniqueName - '+UniqueName+'|';
             strLeadSource = restReq.requestURI.substring(restReq.requestURI.lastIndexOf('&') + 1);
-            // string Inv= RestContext.request.params.get('UniqueName '); 
             
-            string q1 = 'SELECT Name,Id,order__c,Invoice_Type_Name__c,Order__r.Client__r.QB_Customer__c,Order__r.Client__r.QB_Customer__r.Currency_Reference__c,Order__r.Client__r.QB_Customer__r.Name,Order__r.Client__r.QB_Customer__r.QB_Customer_Id__c,Invoice_Currency__c,order__r.PO_Number__c,Order__r.Client__r.name,Order__r.Client__r.Billing_Address__c,Order__r.name,Invoice_Amount__c,Order__r.Late_Fee__c,order__r.Rush_Fee__c,Invoice_Type__c FROM Invoice__c WHERE name =:UniqueName limit 1'; 
+            string q1 = 'SELECT Name,Id,Invoice_Date__c,order__c,Invoice_Type_Name__c,Order__r.Payment_Status__c,Order__r.Client__r.QB_Customer__c,Order__r.Client__r.QB_Customer__r.Currency_Reference__c,Order__r.Client__r.QB_Customer__r.Name,Order__r.Client__r.QB_Customer__r.QB_Customer_Id__c,Invoice_Currency__c,order__r.PO_Number__c,Order__r.Client__r.name,Order__r.Client__r.Billing_Address__c,Order__r.name,Invoice_Amount__c,Order__r.Late_Fee__c,order__r.Rush_Fee__c,Invoice_Type__c FROM Invoice__c WHERE name =:UniqueName limit 1'; 
             list<Invoice__c> ObjInvoiceList = Database.query(q1);
             
-            //list<Client_Contact_Info__c> ListOfCCI =[SELECT Id,Name,Address_Type__c FROM Client_Contact_Info__c WHERE Client__c = : ObjInvoiceList[0].Order__r.Client__c AND Is_Default__c =TRUE AND Address_Type__c = 'Billing Address' LIMIT 1];
+            strAuditTrail+='InvoiceList Size-'+ObjInvoiceList.size()+'|';
+            if(ObjInvoiceList.size()>0)
+            {
+                List<Clients__c> clientConfig =[SELECT 	Client_ID__c,Client_Matter_ID__c,Client_Name__c,Client_Type__c,Is_LEDES_Required__c,Line_Item_Expense_Code__c FROM Clients__c WHERE id=: ObjInvoiceList[0].Order__r.Client__c];
             list<QB_Account__c> ListOfIA =[SELECT Id,Name,QB_Account_Id__c, Client__c FROM QB_Account__c WHERE Client__c = : ObjInvoiceList[0].Order__r.Client__c  AND Account_Type__c IN ('Income', 'Other Current Liability') LIMIT 1];   
               list<QB_Customer__c> CustomerName =[SELECT Id,Name,QB_Customer_Id__c, Client__c FROM QB_Customer__c WHERE Client__c = : ObjInvoiceList[0].Order__r.Client__c AND Currency_Reference__c=:ObjInvoiceList[0].Invoice_Currency__c  LIMIT 1];               //boolean values to handle index out of bound exception in ternary syntax
-            /*if(ListOfCCI.size() > 0)
-            {
-                CCInfoIsAvailable =true;
-                System.debug('CCInfoIsAvailable????'+CCInfoIsAvailable);
-            }
-            if(CustomerName.size() > 0)
-            {
-                QBCustomerIsAvailable=true;
-            }*/
+                
             if(ListOfIA.size() > 0)
             {
                 AccIncomeIsAvailable = true; 
@@ -63,12 +52,6 @@ global with sharing class InvoiceForMaxval
                     DefaultInvoiceType ='USD currency patents - Annuity Payments -';
                 }
             }
-            
-            //Query modified by Sneha B on 25/05/2021
-            if(ObjInvoiceList.size()>0)
-            {
-                //list<string> OrderItem=(ObjInvoiceList[0].Invoice_Items__c).split(',');
-                //system.debug('OrderItem'+OrderItem);
                 list<Order_Item__c > ListOfOItems=
                     [select Due_Date__c
                      ,Term_Name__c
@@ -80,14 +63,10 @@ global with sharing class InvoiceForMaxval
                      ,Jurisdiction__c
                      ,Renewal_Instruction__c
                      ,Billing_Amount__c
-                     //,PoNumber__c
-                     //,Order_r.Late_Fee_c
-                     // ,Order_r.Rush_Fee_c
                      ,Filing_Receipt_File_Id__c
                      ,Billing_Currency_Unit_Rate_When_Pay__c
                      ,Invoice__c
                      ,Payment_Status__c
-                     //,Order_r.Currency_c
                      FROM Order_Item__c WHERE Invoice__c=:ObjInvoiceList[0].id and Payment_Status__c !=: 'Cancelled' and Cancellation_Approval__c !=: 'Approved'];
                 	
                 
@@ -142,16 +121,9 @@ global with sharing class InvoiceForMaxval
                 gen.writeEndObject();
                 gen.writeFieldName('BillTo');
                 gen.writeStartObject();
-                // gen.writeStringField('BillToRef',ObjInvoiceList[0].Order__r.Client__r.Billing_Address__c!=null?ObjInvoiceList[0].Order__r.Client__r.Billing_Address__c:'');                     
-                 gen.writeStringField('BillToRef',CustomerName[0].QB_Customer_Id__c !=null?CustomerName[0].QB_Customer_Id__c:'');	
-                //gen.writeStringField('BillToRef',ObjInvoiceList[0].Order__r.Client__r.QB_Customer__r.QB_Customer_Id__c !=null?ObjInvoiceList[0].Order__r.Client__r.QB_Customer__r.QB_Customer_Id__c:'');	
-                //gen.writeStringField('CompanyName',ObjInvoiceList[0].Order__r.Client__r.QB_Customer__r.Name !=null?ObjInvoiceList[0].Order__r.Client__r.QB_Customer__r.Name:'');	
+                gen.writeStringField('BillToRef',CustomerName[0].QB_Customer_Id__c !=null?CustomerName[0].QB_Customer_Id__c:'');	
                 gen.writeStringField('CompanyName',CustomerName[0].Name !=null?CustomerName[0].Name:'');
                 gen.writeEndObject();
-                //gen.writeStringField('Message','');        
-                //gen.writeEndObject();
-                
-                //gen.writeStringField('BillToRef',ObjInvoiceList[0].Order__r.Client__r.Billing_Address__c!=null?ObjInvoiceList[0].Order__r.Client__r.Billing_Address__c:'');                     
                 
                 gen.writeStringField('SendEmail','SENDLATER');
                 gen.writeStringField('Message',''); 
@@ -190,16 +162,7 @@ global with sharing class InvoiceForMaxval
                 }
                 TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Late_Fee__c;
                 TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Rush_Fee__c ;
-                /* gen.writeStartObject();
-                if(ObjInvoiceList[0].order__r.PO_Number__c == null)
-                strItem=DefaultInvoiceType+' Order  '+ObjInvoiceList[0].Order__r.name;
-                else
-                strItem= DefaultInvoiceType+' '+StrPONum+' Order  '+ObjInvoiceList[0].Order__r.name;
-                gen.writeStringField('ItemName', strItem);
-                gen.writeStringField('Description','Late Fee');
-                gen.writeStringField('Class','Maxval Group 10.100 - Services:126 - AP');
-                gen.writeStringField('Amount',ObjInvoiceList[0].Order__r.Late_Fee__c!=null?string.valueof(ObjInvoiceList[0].Order__r.Late_Fee__c):'');                                                                       
-                gen.writeEndObject(); */
+                
                 
                 gen.writeStartObject();
                 if(ObjInvoiceList[0].order__r.PO_Number__c == null)
@@ -208,17 +171,14 @@ global with sharing class InvoiceForMaxval
                     strItem= DefaultInvoiceType+' '+StrPONum+' Order- '+ObjInvoiceList[0].Order__r.name;
                 string strItemName='AP Deposits AP-'+ObjInvoiceList[0].Order__r.Client__r.name;
                 gen.writeStringField('ItemName', strItemName);
-               // gen.writeStringField('Description',(ObjInvoiceList[0].Invoice_Currency__c!=null?string.valueof(ObjInvoiceList[0].Invoice_Currency__c):''));
                 gen.writeStringField('Description',strItem);
                 gen.writeStringField('Class','Maxval Group 10.100 - Services:126 - AP');
-                // gen.writeStringField('Amount',ObjInvoiceList[0].Order__r.Rush_Fee__c !=null?string.valueof(ObjInvoiceList[0].Order__r.Rush_Fee__c ):'');                                                                       
                 gen.writeStringField('Amount',string.valueof(TotalAmount));
                 gen.writeEndObject(); 
                 
                 gen.writeEndArray();            
-                //gen.writeEndObject();
+                }
                 gen.writeStringField('Currency',ObjInvoiceList[0].Invoice_Currency__c);
-                //gen.writeStringField('Currency',ObjInvoiceList[0].Order__r.Client__r.QB_Customer__r.Currency_Reference__c);
                 gen.writeStringField('Total',string.valueof(TotalAmount));
                 gen.writeStringField('Message','Please make check payable to MaxVal and mail it to the above address.' );
                 gen.writeEndObject();
@@ -248,12 +208,12 @@ global with sharing class InvoiceForMaxval
                     patentId = OrderItems.Patent_No__c!=null && OrderItems.Patent_No__c!='-' ?OrderItems.Patent_No__c:OrderItems.Publication_No__c!=null && OrderItems.Publication_No__c!='-' ?OrderItems.Publication_No__c:'-';
                     if(patentId!='-' && !patentId.startsWith(jurisdiction))
                         patentId = jurisdiction + patentId;
-                    string applicatioNo = '-';
-                    applicatioNo = OrderItems.Application_No__c!=null?OrderItems.Application_No__c:'';
-                    if(applicatioNo!='-' && !applicatioNo.startsWith(jurisdiction))
-                        applicatioNo = jurisdiction + applicatioNo;
+                    string applicationNo = '-';
+                    applicationNo = orderItem.Application_No__c!=null?orderItem.Application_No__c:'';
+                    if(applicationNo!='-' && !applicationNo.startsWith(jurisdiction))
+                        applicationNo = jurisdiction + applicationNo;
                     gen.writeStringField('PatentID',patentId);
-                    gen.writeStringField('ApplicationNo',applicatioNo);
+                    gen.writeStringField('ApplicationNo',applicationNo);
                     gen.writeStringField('DocketID',OrderItems.Docket_No__c!=null?OrderItems.Docket_No__c:'');
                     gen.writeStringField('Jurisdiction',jurisdiction);
                     gen.writeStringField('RenewalTerm',OrderItems.Term_Name__c!=null?OrderItems.Term_Name__c:'');
@@ -263,24 +223,23 @@ global with sharing class InvoiceForMaxval
                     gen.writeEndObject();    
                 }
                 gen.writeEndArray();
-                gen.writeFieldName('LEDES');
-                gen.writeStartObject();
-                gen.writeStringField('InvoiceDate','');
-                gen.writeStringField('ClientID','');
-                gen.writeStringField('LawFirmMatterID','');
-                gen.writeStringField('LineItemExpenseCode','');
-                gen.writeStringField('ClientMatterID','');
-                gen.writeEndObject();
+                if(clientConfig.size()>0 && clientConfig[0].Is_LEDES_Required__c)
+                {
+                    gen.writeFieldName('LEDES');
+                    gen.writeStartObject();
+                    gen.writeStringField('InvoiceDate',ObjInvoiceList[0].Invoice_Date__c!=null?string.valueOf(ObjInvoiceList[0].Invoice_Date__c):'');
+                    gen.writeStringField('ClientID','');
+                    gen.writeStringField('LawFirmMatterID','');
+                    gen.writeStringField('LineItemExpenseCode','');
+                    gen.writeStringField('ClientMatterID','');
+                    gen.writeEndObject();
+                }
                 gen.writeFieldName('Fee');
-                //for(Order_Item__c OrderItems: ListOfOItems)
-                // {
-                //TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Late_Fee__c;
-                //TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Rush_Fee__c ;
                 gen.writeStartObject();
                 gen.writeStringField('LateFees',ObjInvoiceList[0].Order__r.Late_Fee__c!=null?string.valueof(ObjInvoiceList[0].Order__r.Late_Fee__c):'');
                 gen.writeStringField('RushFees',ObjInvoiceList[0].Order__r.Rush_Fee__c !=null?string.valueof(ObjInvoiceList[0].Order__r.Rush_Fee__c ):'');
                 gen.writeEndObject();
-                // }           
+                          
                 gen.writeStringField('InvoiceTotal',string.valueof(TotalAmount));
                 gen.writeEndObject();
                 gen.writeEndArray(); 
@@ -288,8 +247,9 @@ global with sharing class InvoiceForMaxval
                 gen.writeEndObject(); 
                 
                 InvItemDetails = gen.getAsString();
-            }else{
-                
+            }
+            else
+            { 
                 JSONGenerator gen = JSON.createGenerator(true);
                 gen.writeStartObject();
                 gen.writebooleanfield('Status', false);
@@ -303,7 +263,8 @@ global with sharing class InvoiceForMaxval
             }
             RestContext.response.addHeader('Content-Type', 'application/json');
             RestContext.response.responseBody = Blob.valueOf(InvItemDetails); 
-            system.debug('pretty'+RestContext.response.responseBody);
+            strAuditTrail+='ResponseBody - '+RestContext.response.responseBody;
+            status='Success';
         }
         catch(Exception e)
         {
@@ -320,12 +281,12 @@ global with sharing class InvoiceForMaxval
             system.debug('pretty'+RestContext.response.responseBody);
             
             strAuditTrail += ' || Error :'+e.getMessage();
-            status = False;
+            status = 'Fail';
         }
-        //finally
-        //{
-        //    system.debug(strAuditTrail);
-        //   AuditTrailHelper.UpdateAudit('InvoiceForMaxval',strAuditTrail,status);
-        // }
+        finally
+        {
+           system.debug(strAuditTrail);
+           AuditTrailHelper.UpdateAudit('InvoiceForMaxval',strAuditTrail,status);
+        }
     }
 }
