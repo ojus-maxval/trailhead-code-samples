@@ -64,9 +64,7 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
                 if(clientLEDESMap.containsKey(keyOI))
                     woi.IsLEDESRequired=clientLEDESMap.get(keyOI);
                 string jsonbody = JSON.serialize(woi);
-                //jsonbody ='{"ClientRequestHandle":"8bd2ee6c-ab07-4793-8078-56e338614025","Items":[{"InvoiceRef":"63463"},{"InvoiceRef":"34666"}]}';
-                
-                system.debug('Request Body :'+jsonbody);
+                strAuditTrail+='Request Body :'+jsonbody+'|';
                 Http http = new Http();
                 HttpRequest req = new HttpRequest();
                 req.setMethod('POST');
