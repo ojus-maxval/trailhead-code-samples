@@ -14,7 +14,7 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
         system.debug(lstCIds);
         credentials = [SELECT Id,Name,URL__c,Username__c,Password__c FROM API_Credentials__c WHERE Name=: 'Renewal Invoice Update'];
         ApiHandleRefId =[SELECT Name FROM API_Auth_Detail__c  WHERE Type_Of_Credential__c ='QB Credential' LIMIT 1].Name;
-        query = 'select id from clients__c where id in: lstCIds';
+        query = 'select id,Is_LEDES_Required__c from clients__c where id in: lstCIds';
     }
     public Database.QueryLocator start(Database.BatchableContext BC)
     {
@@ -30,8 +30,7 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
             strAuditTrail += 'Renewal Invoice Update : ';
             List<Clients__c> clients = scope;
             List<Invoice__c> clientInvoices = [Select id,Name,Order__r.Client__c,API_Request_ID__c,API_Status__c from Invoice__c where API_Status__c='Send Update Request' AND Order__r.Client__c=:clients[0].id];
-            //List<Order_Item__c> ois = NEW List<Order_Item__c>();
-            //String AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
+            Map<String,Boolean> clientLEDESMap=new Map<String,Boolean>();
             Map<String,List<Invoice__c>> ClientInvoiceMap = new Map<String,List<Invoice__c>>();
             for(Invoice__c ci : clientInvoices)
             {
@@ -44,6 +43,10 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
                 {
                     ClientInvoiceMap.put(ci.Order__r.Client__c, new List<Invoice__c>{ci});
                 }
+            }
+            for(Clients__c client:clients)
+            {
+                clientLEDESMap.put(client.Id,client.Is_LEDES_Required__c);
             }
             for(string keyOI : ClientInvoiceMap.keyset())
             {
@@ -58,6 +61,8 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
                 woi.ClientRequestHandle = keyOI;
                 woi.ApiHandleRef = ApiHandleRefId;
                 woi.Items = Items;
+                if(clientLEDESMap.containsKey(keyOI))
+                    woi.IsLEDESRequired=clientLEDESMap.get(keyOI);
                 string jsonbody = JSON.serialize(woi);
                 //jsonbody ='{"ClientRequestHandle":"8bd2ee6c-ab07-4793-8078-56e338614025","Items":[{"InvoiceRef":"63463"},{"InvoiceRef":"34666"}]}';
                 
@@ -111,6 +116,7 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
         public string ClientRequestHandle{get;set;}
         public string ApiHandleRef{get;set;}
         public List<objectitem> Items{get;set;}
+        public boolean IsLEDESRequired{get;set;}
     }
     public class objectitem
     {
