@@ -34,12 +34,12 @@ global with sharing class InvoiceForMaxval
             strLeadSource = restReq.requestURI.substring(restReq.requestURI.lastIndexOf('&') + 1);
             // string Inv= RestContext.request.params.get('UniqueName '); 
             
-            string q1 = 'SELECT Name,Id,order__c,Invoice_Type_Name__c,Order__r.Client__r.QB_Customer__c,Order__r.Client__r.QB_Customer__r.Currency_Reference__c,Order__r.Client__r.QB_Customer__r.Name,Order__r.Client__r.QB_Customer__r.QB_Customer_Id__c,Invoice_Currency__c,order__r.PO_Number__c,Order__r.Client__r.name,Order__r.Client__r.Billing_Address__c,Order__r.name,Invoice_Amount__c,Order__r.Late_Fee__c,order__r.Rush_Fee__c,Invoice_Type__c FROM Invoice__c WHERE name =:UniqueName limit 1'; 
+            string q1 = 'SELECT Name,Id,Is_Variance__c,Invoice_Date__c,order__c,Invoice_Type_Name__c,Order__r.Payment_Status__c,Order__r.Client__r.QB_Customer__c,Order__r.Client__r.QB_Customer__r.Currency_Reference__c,Order__r.Client__r.QB_Customer__r.Name,Order__r.Client__r.QB_Customer__r.QB_Customer_Id__c,Invoice_Currency__c,order__r.PO_Number__c,Order__r.Client__r.name,Order__r.Client__r.Billing_Address__c,Order__r.name,Invoice_Amount__c,Order__r.Late_Fee__c,order__r.Rush_Fee__c,Invoice_Type__c FROM Invoice__c WHERE name =:UniqueName limit 1'; 
             list<Invoice__c> ObjInvoiceList = Database.query(q1);
             
             //list<Client_Contact_Info__c> ListOfCCI =[SELECT Id,Name,Address_Type__c FROM Client_Contact_Info__c WHERE Client__c = : ObjInvoiceList[0].Order__r.Client__c AND Is_Default__c =TRUE AND Address_Type__c = 'Billing Address' LIMIT 1];
-            list<QB_Account__c> ListOfIA =[SELECT Id,Name,QB_Account_Id__c, Client__c FROM QB_Account__c WHERE Client__c = : ObjInvoiceList[0].Order__r.Client__c  AND Account_Type__c IN ('Income', 'Other Current Liability') LIMIT 1];   
-              list<QB_Customer__c> CustomerName =[SELECT Id,Name,QB_Customer_Id__c, Client__c FROM QB_Customer__c WHERE Client__c = : ObjInvoiceList[0].Order__r.Client__c AND Currency_Reference__c=:ObjInvoiceList[0].Invoice_Currency__c  LIMIT 1];               //boolean values to handle index out of bound exception in ternary syntax
+                list<QB_Account__c> ListOfIA =[SELECT Id,Name,QB_Account_Id__c, Client__c FROM QB_Account__c WHERE Client__c = : ObjInvoiceList[0].Order__r.Client__c  AND Account_Type__c IN ('Income', 'Other Current Liability') LIMIT 1];   
+                list<QB_Customer__c> CustomerName =[SELECT Id,Name,QB_Customer_Id__c, Client__c FROM QB_Customer__c WHERE Client__c = : ObjInvoiceList[0].Order__r.Client__c AND Currency_Reference__c=:ObjInvoiceList[0].Invoice_Currency__c  LIMIT 1];               //boolean values to handle index out of bound exception in ternary syntax
             /*if(ListOfCCI.size() > 0)
             {
                 CCInfoIsAvailable =true;
@@ -49,21 +49,20 @@ global with sharing class InvoiceForMaxval
             {
                 QBCustomerIsAvailable=true;
             }*/
-            if(ListOfIA.size() > 0)
-            {
-                AccIncomeIsAvailable = true; 
-            }
-            if(ObjInvoiceList[0].Invoice_Type_Name__c != null)
-            {
-                if(ObjInvoiceList[0].Invoice_Type_Name__c.endsWith('_'))
+                if(ListOfIA.size() > 0)
                 {
-                    DefaultInvoiceType ='Business Unit: Onset Medical/Teruma Medical Corporation  -  Annuity Payments -';
+                    AccIncomeIsAvailable = true; 
                 }
-                else if(ObjInvoiceList[0].Invoice_Type_Name__c.startsWith('_')){
-                    DefaultInvoiceType ='USD currency patents - Annuity Payments -';
+                if(ObjInvoiceList[0].Invoice_Type_Name__c != null)
+                {
+                    if(ObjInvoiceList[0].Invoice_Type_Name__c.endsWith('_'))
+                    {
+                        DefaultInvoiceType ='Business Unit: Onset Medical/Teruma Medical Corporation  -  Annuity Payments -';
+                    }
+                    else if(ObjInvoiceList[0].Invoice_Type_Name__c.startsWith('_')){
+                        DefaultInvoiceType ='USD currency patents - Annuity Payments -';
+                    }
                 }
-            }
-            
             //Query modified by Sneha B on 25/05/2021
             if(ObjInvoiceList.size()>0)
             {
@@ -107,10 +106,10 @@ global with sharing class InvoiceForMaxval
                 }
                 if(InvoiceCurrency == false && BU ==false)
                 { 
-                for(Order_Item__c OrderItems: ListOfOItems)
+                for(Order_Item__c orderItem: ListOfOItems)
                 {
                 
-                if(ConfigObj.Countries__c.Contains(OrderItems.Jurisdiction__c))
+                if(ConfigObj.Countries__c.Contains(orderItem.Jurisdiction__c))
                 {
                 CustomerCurrency =ConfigObj.QB_Customer__r.Currency_Reference__c;
                 InvoiceCurrency= true;
@@ -140,6 +139,7 @@ global with sharing class InvoiceForMaxval
                 gen.writeStartObject();
                 gen.writeStringField('AccountToRef',AccIncomeIsAvailable ==true?ListOfIA[0].QB_Account_Id__c:'');
                 gen.writeEndObject();
+                
                 gen.writeFieldName('BillTo');
                 gen.writeStartObject();
                 // gen.writeStringField('BillToRef',ObjInvoiceList[0].Order__r.Client__r.Billing_Address__c!=null?ObjInvoiceList[0].Order__r.Client__r.Billing_Address__c:'');                     
@@ -156,67 +156,86 @@ global with sharing class InvoiceForMaxval
                 gen.writeStringField('SendEmail','SENDLATER');
                 gen.writeStringField('Message',''); 
                 gen.writeEndObject();
+                
                 gen.writeFieldName('Details');
                 gen.writeStartObject();
                 gen.writeStringField('PONumber',ObjInvoiceList[0].order__r.PO_Number__c!=null?ObjInvoiceList[0].order__r.PO_Number__c:'');
                 gen.writeStringField('OrderNum',ObjInvoiceList[0].Order__r.name);
-                gen.writeFieldName('LineItems');
-                gen.writeStartArray();
                 
-                
-                if(ObjInvoiceList[0].order__r.PO_Number__c !=null)
-                {
-                    StrPONum ='PO- '+ObjInvoiceList[0].order__r.PO_Number__c+' under';
+                decimal TotalAmount=0;
+                string jurisdiction = '';
+                if(ObjInvoiceList[0].Is_Variance__c){
+                    gen.writeFieldName('LineItems');
+                    gen.writeStartArray();
+                    if(ObjInvoiceList[0].order__r.PO_Number__c !=null)
+                    {
+                        StrPONum ='PO- '+ObjInvoiceList[0].order__r.PO_Number__c+' under';
+                    }
+                    else{
+                         StrPONum ='PO- NA under';
+                    }
+                    string strItem;
+                    TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Late_Fee__c;
+                    TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Rush_Fee__c ;                    
+                    string strItemName='AP Deposits AP-'+ObjInvoiceList[0].Order__r.Client__r.name;    
+                    string invoiceDate = ObjInvoiceList[0].Invoice_Date__c != null ? string.valueOf(ObjInvoiceList[0].Invoice_Date__c) : '';
+                    string patentId = '-';
+                    strAuditTrail+='outside for';
+                	for(Order_Item__c orderItem: ListOfOItems){
+                        strAuditTrail+='inside for';
+                    	gen.writeStartObject();
+                        gen.writeStringField('ItemName', strItemName);  
+                    	jurisdiction = orderItem.Jurisdiction__c!=null?orderItem.Jurisdiction__c:'';
+                        patentId = '-';
+                        patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:orderItem.Publication_No__c!=null && orderItem.Publication_No__c!='-' ?orderItem.Publication_No__c:'';
+                        if(patentId!='-' && !patentId.startsWith(jurisdiction))
+                            patentId = jurisdiction + patentId;                        
+                        gen.writeStringField('Description','Currency fluctuation for Patent# - '+ patentId +' Order# - '+ ObjInvoiceList[0].Order__r.name +' Invoice date - '+ invoiceDate);
+                        gen.writeStringField('Class','Maxval Group 10.100 - Services:126 - AP');                                                                       
+                        gen.writeStringField('Amount',string.valueof(orderItem.Billing_Amount__c));
+                        TotalAmount=TotalAmount + orderItem.Billing_Amount__c;
+                        gen.writeEndObject(); 
+                    }                    
+                    TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Late_Fee__c;
+                    TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Rush_Fee__c ;
+                    gen.writeEndArray(); 
                 }
                 else{
-                     StrPONum ='PO- NA under';
-                }
-                decimal TotalAmount=0;
-                string strItem;
-                for(Order_Item__c OrderItems: ListOfOItems){
-                    //Decimal AmountWithRushAndLateFee =0;
-                    TotalAmount=TotalAmount + OrderItems.Billing_Amount__c;
-                    /*  gen.writeStartObject();
-                    //string strItem='AP Deposits:AP-'+ObjInvoiceList[0].Order__r.Client__r.name;
+                    gen.writeFieldName('LineItems');
+                    gen.writeStartArray();
+                    
+                    
+                    if(ObjInvoiceList[0].order__r.PO_Number__c !=null)
+                    {
+                        StrPONum ='PO- '+ObjInvoiceList[0].order__r.PO_Number__c+' under';
+                    }
+                    else{
+                         StrPONum ='PO- NA under';
+                    }
+                    string strItem;
+                    for(Order_Item__c orderItem: ListOfOItems){
+                        TotalAmount=TotalAmount + orderItem.Billing_Amount__c;
+                    }
+                    TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Late_Fee__c;
+                    TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Rush_Fee__c ;
+                    
+                    gen.writeStartObject();
                     if(ObjInvoiceList[0].order__r.PO_Number__c == null)
-                    strItem=DefaultInvoiceType+' Order  '+ObjInvoiceList[0].Order__r.name;
+                        strItem=DefaultInvoiceType+' '+StrPONum+' Order- '+ObjInvoiceList[0].Order__r.name;
                     else
-                    strItem= DefaultInvoiceType+' '+StrPONum+' Order  '+ObjInvoiceList[0].Order__r.name;
-                    gen.writeStringField('ItemName', strItem);
-                    gen.writeStringField('Description',  (ObjInvoiceList[0].Invoice_Currency__c!=null?string.valueof(ObjInvoiceList[0].Invoice_Currency__c):'')+''+OrderItems.Docket_No__c+''+OrderItems.Renewal_Instruction__c);
-                    gen.writeStringField('Class','Maxval Group 10.100 - Services:126 - AP');
-                    gen.writeStringField('Amount',OrderItems.Billing_Amount__c!=null?string.valueof(OrderItems.Billing_Amount__c):'');                                                                       
-                    gen.writeEndObject();  */
-                }
-                TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Late_Fee__c;
-                TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Rush_Fee__c ;
-                /* gen.writeStartObject();
-                if(ObjInvoiceList[0].order__r.PO_Number__c == null)
-                strItem=DefaultInvoiceType+' Order  '+ObjInvoiceList[0].Order__r.name;
-                else
-                strItem= DefaultInvoiceType+' '+StrPONum+' Order  '+ObjInvoiceList[0].Order__r.name;
-                gen.writeStringField('ItemName', strItem);
-                gen.writeStringField('Description','Late Fee');
-                gen.writeStringField('Class','Maxval Group 10.100 - Services:126 - AP');
-                gen.writeStringField('Amount',ObjInvoiceList[0].Order__r.Late_Fee__c!=null?string.valueof(ObjInvoiceList[0].Order__r.Late_Fee__c):'');                                                                       
-                gen.writeEndObject(); */
-                
-                gen.writeStartObject();
-                if(ObjInvoiceList[0].order__r.PO_Number__c == null)
-                    strItem=DefaultInvoiceType+' '+StrPONum+' Order- '+ObjInvoiceList[0].Order__r.name;
-                else
-                    strItem= DefaultInvoiceType+' '+StrPONum+' Order- '+ObjInvoiceList[0].Order__r.name;
-                string strItemName='AP Deposits AP-'+ObjInvoiceList[0].Order__r.Client__r.name;
-                gen.writeStringField('ItemName', strItemName);
+                        strItem= DefaultInvoiceType+' '+StrPONum+' Order- '+ObjInvoiceList[0].Order__r.name;
+                    string strItemName='AP Deposits AP-'+ObjInvoiceList[0].Order__r.Client__r.name;
+                    gen.writeStringField('ItemName', strItemName);
                // gen.writeStringField('Description',(ObjInvoiceList[0].Invoice_Currency__c!=null?string.valueof(ObjInvoiceList[0].Invoice_Currency__c):''));
-                gen.writeStringField('Description',strItem);
-                gen.writeStringField('Class','Maxval Group 10.100 - Services:126 - AP');
+                    gen.writeStringField('Description',strItem);
+                    gen.writeStringField('Class','Maxval Group 10.100 - Services:126 - AP');                                                                       
                 // gen.writeStringField('Amount',ObjInvoiceList[0].Order__r.Rush_Fee__c !=null?string.valueof(ObjInvoiceList[0].Order__r.Rush_Fee__c ):'');                                                                       
-                gen.writeStringField('Amount',string.valueof(TotalAmount));
-                gen.writeEndObject(); 
-                
-                gen.writeEndArray();            
+                    gen.writeStringField('Amount',string.valueof(TotalAmount));
+                    gen.writeEndObject(); 
+                    
+                    gen.writeEndArray();
                 //gen.writeEndObject();
+                
                 gen.writeStringField('Currency',ObjInvoiceList[0].Invoice_Currency__c);
                 //gen.writeStringField('Currency',ObjInvoiceList[0].Order__r.Client__r.QB_Customer__r.Currency_Reference__c);
                 gen.writeStringField('Total',string.valueof(TotalAmount));
@@ -236,30 +255,29 @@ global with sharing class InvoiceForMaxval
                 gen.writeFieldName('Items');                                        
                 gen.writeStartArray();
                 
-                for(Order_Item__c OrderItems: ListOfOItems)
+                for(Order_Item__c orderItem: ListOfOItems)
                 {
                     
                     gen.writeStartObject();
                     /*MARS-729 Publication number not available in the Invoice Attachment file (xlsx) for Renewal assets*/
                     /*Condition added by Saranyaa*/
-                    string jurisdiction = '';
-                    jurisdiction = OrderItems.Jurisdiction__c!=null?OrderItems.Jurisdiction__c:'';
+                    jurisdiction = orderItem.Jurisdiction__c!=null?orderItem.Jurisdiction__c:'';
                     string patentId = '-';
-                    patentId = OrderItems.Patent_No__c!=null && OrderItems.Patent_No__c!='-' ?OrderItems.Patent_No__c:OrderItems.Publication_No__c!=null && OrderItems.Publication_No__c!='-' ?OrderItems.Publication_No__c:'-';
+                    patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:orderItem.Publication_No__c!=null && orderItem.Publication_No__c!='-' ?orderItem.Publication_No__c:'';
                     if(patentId!='-' && !patentId.startsWith(jurisdiction))
                         patentId = jurisdiction + patentId;
-                    string applicatioNo = '-';
-                    applicatioNo = OrderItems.Application_No__c!=null?OrderItems.Application_No__c:'';
-                    if(applicatioNo!='-' && !applicatioNo.startsWith(jurisdiction))
-                        applicatioNo = jurisdiction + applicatioNo;
+                    string applicationNo = '-';
+                    applicationNo = orderItem.Application_No__c!=null?orderItem.Application_No__c:'';
+                    if(applicationNo!='-' && !applicationNo.startsWith(jurisdiction))
+                        applicationNo = jurisdiction + applicationNo;
                     gen.writeStringField('PatentID',patentId);
-                    gen.writeStringField('ApplicationNo',applicatioNo);
-                    gen.writeStringField('DocketID',OrderItems.Docket_No__c!=null?OrderItems.Docket_No__c:'');
+                    gen.writeStringField('ApplicationNo',applicationNo);
+                    gen.writeStringField('DocketID',orderItem.Docket_No__c!=null?orderItem.Docket_No__c:'');
                     gen.writeStringField('Jurisdiction',jurisdiction);
-                    gen.writeStringField('RenewalTerm',OrderItems.Term_Name__c!=null?OrderItems.Term_Name__c:'');
-                    gen.writeStringField('RenewalDueDate',OrderItems.Due_Date__c!=null?string.valueof(OrderItems.Due_Date__c):'');
+                    gen.writeStringField('RenewalTerm',orderItem.Term_Name__c!=null?orderItem.Term_Name__c:'');
+                    gen.writeStringField('RenewalDueDate',orderItem.Due_Date__c!=null?string.valueof(orderItem.Due_Date__c):'');
                     
-                    gen.writeStringField('Amount',OrderItems.Billing_Amount__c!=null?string.valueof(OrderItems.Billing_Amount__c):'');
+                    gen.writeStringField('Amount',orderItem.Billing_Amount__c!=null?string.valueof(orderItem.Billing_Amount__c):'');
                     gen.writeEndObject();    
                 }
                 gen.writeEndArray(); 
