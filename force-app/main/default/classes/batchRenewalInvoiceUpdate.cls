@@ -50,7 +50,8 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
             }
             for(string keyOI : ClientInvoiceMap.keyset())
             {
-                ReqData woi = NEW ReqData();               
+                ReqData woi = NEW ReqData();
+                Options option=new Options();
                 List<objectitem> Items = NEW List<objectitem>();                
                 for(Invoice__c ci : ClientInvoiceMap.get(keyOI))
                 {
@@ -62,7 +63,13 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
                 woi.ApiHandleRef = ApiHandleRefId;
                 woi.Items = Items;
                 if(clientLEDESMap.containsKey(keyOI))
-                    woi.IsLEDESRequired=clientLEDESMap.get(keyOI);
+                {
+                    if(clientLEDESMap.get(keyOI))
+                        option.IsLEDESQBORequired=clientLEDESMap.get(keyOI);
+                    else
+                        option.IsQBORequired=true;
+                }
+                woi.Options=option;
                 string jsonbody = JSON.serialize(woi);
                 strAuditTrail+='Request Body :'+jsonbody+'|';
                 Http http = new Http();
@@ -114,7 +121,13 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
         public string ClientRequestHandle{get;set;}
         public string ApiHandleRef{get;set;}
         public List<objectitem> Items{get;set;}
-        public boolean IsLEDESRequired{get;set;}
+        public Options Options{get;set;}
+    }
+    public class Options
+    {
+		public boolean IsLEDESRequired{get;set;}
+        public boolean IsQBORequired{get;set;}
+        public boolean IsLEDESQBORequired{get;set;}        
     }
     public class objectitem
     {
