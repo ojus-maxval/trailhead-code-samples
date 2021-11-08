@@ -13,6 +13,9 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
                     mapOldOrders.put(objOrder.Id, objOrder);
             }
         }
+        strAuditText += 'Read old records successfully > ';
+        
+        
         //EVENT: Before
         if (Trigger.isBefore)
         {
@@ -25,6 +28,7 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
                     If(objNewOrder.Client__c !=null){
                         clientids.add(objNewOrder.Client__c);
                     }
+                    
                 }
                 if(clientids.size()>0)
                 {
@@ -70,14 +74,14 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
             strAuditText += ' trigger.isafter > ';
             if (Trigger.isUpdate)
             {
-                string invoiceDetails='';
-                List<Id> lstOrderIdsToGenerateInvoice = new List<Id>();
+                string inoicedetails='';
                 for (Order__c objNewOrders : Trigger.New )
                 {
                     if(trigger.oldmap.get(objNewOrders.id).Is_Sent_Invoice__c==true)
                     {
-                        invoiceDetails=invoiceDetails+'Name'+objNewOrders.name+'number'+objNewOrders.Is_Sent_Invoice__c;
-                        if(invoiceDetails!=Null)
+                        inoicedetails=inoicedetails+'Name'+objNewOrders.name+'number'+objNewOrders.Is_Sent_Invoice__c;
+                        
+                        if(inoicedetails!=Null)
                         {
                             List<Invoice_Type_Configuration__c> ObjInvoicetypeconfig=[select id,name,Contact_Persons__c from Invoice_Type_Configuration__c ];
                             Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
@@ -100,33 +104,59 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
                         }
                     }
                     strAuditText += ' trigger.isupdate > ';
-                    
-                    Order__c objOldOrder = null;
-                    if (mapOldOrders.containsKey(objNewOrders.Id)==true)
-                        objOldOrder = mapOldOrders.get(objNewOrders.Id);
-                    if (objOldOrder != null)
+                    List<Id> lstOrderIdsToGenerateInvoice = new List<Id>();
+                    for (Order__c objNewOrder : Trigger.New )
                     {
-                        //ACTION:Assign renewals team for un-inoviced order 
-                        if(objNewOrders.Payment_Status__c== 'To be Invoiced' && (objOldOrder.Renewal_Team__c == null && objNewOrders.Renewal_Team__c != null))
+                        Order__c objOldOrder = null;
+                       
+                        if (mapOldOrders.containsKey(objNewOrder.Id)==true)
+                            objOldOrder = mapOldOrders.get(objNewOrder.Id);
+                        if (objOldOrder != null)
                         {
-                            objNewOrders.addError('Renewal team can be assigned to orders which invoiced');
-                        }
-                        //ACTION:Send Invoices
-                        if (objOldOrder.Is_Sent_Invoice__c == false && objNewOrders.Is_Sent_Invoice__c==true)
-                        {
-                            strAuditText += 'Create Invoice>';                            
-                            lstOrderIdsToGenerateInvoice.add(objNewOrders.Id);
+                            //ACTION:Assign renewals team for un-inoviced order 
+                            if(objNewOrder.Payment_Status__c== 'To be Invoiced' && (objOldOrder.Renewal_Team__c == null && objNewOrder.Renewal_Team__c != null))
+                            {
+                                objNewOrder.addError('Renewal team can be assigned to orders which invoiced');
+                            }
+                            //ACTION:Send Invoices
+                            if (objOldOrder.Is_Sent_Invoice__c == false && objNewOrder.Is_Sent_Invoice__c==true)
+                            {
+                                system.debug('yesentered');
+                                strAuditText += ' (objOldOrder.Is_Sent_Invoice__c == false && objNewOrder.Is_Sent_Invoice__c==true) > ';                            
+                                lstOrderIdsToGenerateInvoice.add(objNewOrder.Id);
+                            }
+                            List<Order_Item__c> orderItems = [select id,name,Cancellation_Approval__c from Order_Item__c where Order__c=:objNewOrder.Id];
+                            for(Order_Item__c oi : orderItems){
+                                if(oi.Cancellation_Approval__c == 'Approved')
+                                {
+                               		lstOrderIdsToGenerateInvoice.add(objNewOrder.Id);
+									break;                                    
+                                }
+                            }
                         }
                     }
-                    
+                    if (lstOrderIdsToGenerateInvoice!=null && lstOrderIdsToGenerateInvoice.size()>0)
+                    {
+                        strAuditText += ' Invoices to be generated for the order:' + lstOrderIdsToGenerateInvoice + ' > ';
+                        BatchQueueHelper.CreateBatchQueueForInvoiceGeneration(lstOrderIdsToGenerateInvoice);
+                        //GenerateInvoiceBatch objGenerateInvoiceBatch = new GenerateInvoiceBatch(lstOrderIdsToGenerateInvoice);
+                        // ID batchprocessid = Database.executeBatch(objGenerateInvoiceBatch,1);
+                        system.debug('lstOrderIdsToGenerateInvoice'+lstOrderIdsToGenerateInvoice);
+                        list<string> assetids=new list<string>();
+                        for(Order_Item__c aids : [select id,name from Order_Item__c where Order__c=:lstOrderIdsToGenerateInvoice]){
+                            assetids.add(aids.id);
+                        }  
+                        //if(assetids.size()>0){                
+                            //batchInstructionStatusUpdate CA = NEW batchInstructionStatusUpdate(assetids, 'Invoiced');
+                            //database.executebatch(CA, 1);
+                        //}
+                        
+                    }
+                    else
+                    {
+                        strAuditText += ' No invoices to be generated > ';
+                    }
                 }
-                if (lstOrderIdsToGenerateInvoice!=null && lstOrderIdsToGenerateInvoice.size()>0)
-                {
-                    strAuditText += ' Invoices to be generated for the order:' + lstOrderIdsToGenerateInvoice + ' > ';
-                    BatchQueueHelper.CreateBatchQueueForInvoiceGeneration(lstOrderIdsToGenerateInvoice);
-                }
-                else
-                	strAuditText += ' No invoices to be generated > ';
                 if(Trigger.isInsert)
                 {
                     strAuditText += ' trigger.isinsert > ';
@@ -165,4 +195,4 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
     {
         AuditTrailHelper.UpdateAudit('trgOrder', strAuditText, 'None');
     }
-}   
+}
