@@ -196,8 +196,8 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
                     objInvoice.Is_Late_Rush_Fee_Included__c = false;
                     objInvoice.API_Status__c = 'Send Create Request';
                     if(objOrderItem.Order__r.Payment_status__c == 'Invoiced Variance Amount'){
-                        strAuditText += 'creating invoice with variance..: '+ objInvoice.Invoice_Amount__c;
-                        objInvoice.Invoice_Amount__c = objOrderItem.Variance_Amount__c;
+                        strAuditText += 'creating invoice with variance..: '+ objOrderItem.Variance_Amount__c;
+                        objInvoice.Invoice_Amount__c = objOrderItem.Variance_Amount__c == null ? 0 : objOrderItem.Variance_Amount__c;
                     }
                     //ClientIDSForCreate.add(objOrderItem.Client__c);
                     ClientIDSForCreate.add(objOrderItem.Order__r.Client__c);
@@ -316,7 +316,10 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
                     if (objInvoiceList != null && objInvoiceList.size()>0)
                     {
                         Invoice__c objLRFeeInvoice = objInvoiceList[0];
+                        if(objLRFeeInvoice.Invoice_Amount__c == null)
+                            objLRFeeInvoice.Invoice_Amount__c = 0;
                         objLRFeeInvoice.Invoice_Amount__c += objOrder.Late_Fee__c ;
+                        strAuditText += 'end';
                         objLRFeeInvoice.Is_Late_Rush_Fee_Included__c = true;
                         IsLateRushFeeIncluded = true;
                         UPDATE objLRFeeInvoice;
