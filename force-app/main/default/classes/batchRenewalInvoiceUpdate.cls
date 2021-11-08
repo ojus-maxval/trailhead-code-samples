@@ -65,9 +65,17 @@ public class batchRenewalInvoiceUpdate implements Database.AllowsCallouts,Databa
                 if(clientLEDESMap.containsKey(keyOI))
                 {
                     if(clientLEDESMap.get(keyOI))
+                    {
                         option.IsLEDESQBORequired=clientLEDESMap.get(keyOI);
+                        option.IsLEDESRequired=false;
+                        option.IsQBORequired=false; 
+                    }  
                     else
+                    {
                         option.IsQBORequired=true;
+                    	option.IsLEDESQBORequired=false;
+                        option.IsLEDESRequired=false; 
+                    }  
                 }
                 woi.Options=option;
                 string jsonbody = JSON.serialize(woi);
