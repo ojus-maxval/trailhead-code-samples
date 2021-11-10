@@ -253,11 +253,17 @@ global with sharing class InvoiceForMaxval
                         gen.writeStringField('ClientMatterID',clientConfig[0].Client_Matter_ID__c!=null?clientConfig[0].Client_Matter_ID__c:'');
                         if(clientConfig[0].Client_Name__c.contains('Dropbox'))
                             gen.writeStringField('MatterName','MaxVal Patent Annuities (Rest of the World)');
-                    }  
+                    }
+                    	
+                    
+                        
                     gen.writeStringField('LawFirmMatterID','');
                     gen.writeStringField('BillingStartDate',invoiceDate!=null?string.valueOf(invoiceDate.toStartOfMonth()):'');
 					gen.writeStringField('BillingEndDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
-                    gen.writeStringField('InvoiceDescription','Annuity payment for '+currentDate.format('MMM')+' '+currentDate.year());
+                    if(clientConfig[0].Client_Type__c=='Monthly')
+                    	gen.writeStringField('InvoiceDescription','Annuity payment for '+currentDate.format('MMM')+' '+currentDate.year());
+                    else if(clientConfig[0].Client_Type__c=='Quarterly')
+                    	gen.writeStringField('InvoiceDescription','Annuity payment for ' +currentDate.year()+' ');//have to add q1,q2,q3,q4
                     gen.writeStringField('LineItemExpenseCode','');
                     gen.writeStringField('ClientMatterID','');
                     gen.writeStringField('Exp/Fee/InvAdjType','E');
@@ -315,10 +321,11 @@ global with sharing class InvoiceForMaxval
                         applicationNo = orderItem.Application_No__c!=null?orderItem.Application_No__c:'';
                         if(applicationNo!='-' && !applicationNo.startsWith(jurisdiction))
                             applicationNo = jurisdiction + applicationNo;
+                    	Datetime dueDate = orderItem.Due_Date__c;
                         gen.writeStringField('PatentID',patentId);
                         gen.writeStringField('ApplicationNo',applicationNo);
                         gen.writeNumberField('LineItemNumber',lineItemNumber);
-                        gen.writeStringField('LineItemDescription','Annuity Payment for '+jurisdiction+' '+orderItem.Docket_No__c+' '+orderItem.Patent_No__c+' '+orderItem.Term_Name__c+' '+orderItem.Due_Date__c);
+                        gen.writeStringField('LineItemDescription','Annuity Payment for '+jurisdiction+' '+orderItem.Docket_No__c+' '+orderItem.Patent_No__c+' '+orderItem.Term_Name__c+' '+dueDate.format('MMM-dd-yyyy'));
                         gen.writeStringField('LineItemUnitCost',orderItem.Billing_Amount__c!=null?string.valueof(orderItem.Billing_Amount__c):'');
                         gen.writeStringField('LineItemTotal',orderItem.Billing_Amount__c!=null?string.valueof(orderItem.Billing_Amount__c):'');
                         gen.writeEndObject(); 
@@ -363,7 +370,7 @@ global with sharing class InvoiceForMaxval
             RestContext.response.responseBody = Blob.valueOf(InvItemDetails1); 
             system.debug('pretty'+RestContext.response.responseBody);
             
-            strAuditTrail += ' || Error :'+e.getMessage();
+            strAuditTrail += ' || Error :'+e.getMessage()+'|Stacktrace:'+e.getStackTraceString()+'|Linenumber:'+e.getLineNumber();
             status = 'Fail';
         }
         finally
