@@ -195,7 +195,6 @@ global with sharing class InvoiceForMaxval
                 gen.writeStringField('Title','List of Assets'); 
                 gen.writeFieldName('Items');                                        
                 gen.writeStartArray();
-                Integer lineItemNumber=1;
                 for(Order_Item__c OrderItems: ListOfOItems)
                 {
                     
@@ -218,19 +217,27 @@ global with sharing class InvoiceForMaxval
                     gen.writeStringField('Jurisdiction',jurisdiction);
                     gen.writeStringField('RenewalTerm',OrderItems.Term_Name__c!=null?OrderItems.Term_Name__c:'');
                     gen.writeStringField('RenewalDueDate',OrderItems.Due_Date__c!=null?string.valueof(OrderItems.Due_Date__c):'');
-                    gen.writeStringField('LineItemNumber',lineItemNumber);
-                    gen.writeStringField('LineItemDescription','Annuity Payment for '+jurisdiction+' '+orderItem.Docket_No__c+' '+orderItem.Patent_No__c+' '+orderItem.Term_Name__c+' '+orderItem.Due_Date__c);
-                    gen.writeStringField('LineItemUnitCost',orderItem.Billing_Amount__c!=null?string.valueof(orderItem.Billing_Amount__c):'');
-                    gen.writeStringField('LineItemTotal',orderItem.Billing_Amount__c!=null?string.valueof(orderItem.Billing_Amount__c):'');
                     gen.writeStringField('Amount',OrderItems.Billing_Amount__c!=null?string.valueof(OrderItems.Billing_Amount__c):'');
                     gen.writeEndObject();    
-                    lineItemNumber+=1;
                 }
+                gen.writeEndArray();
+                
+                gen.writeFieldName('Fee');
+                gen.writeStartObject();
+                gen.writeStringField('LateFees',ObjInvoiceList[0].Order__r.Late_Fee__c!=null?string.valueof(ObjInvoiceList[0].Order__r.Late_Fee__c):'');
+                gen.writeStringField('RushFees',ObjInvoiceList[0].Order__r.Rush_Fee__c !=null?string.valueof(ObjInvoiceList[0].Order__r.Rush_Fee__c ):'');
+                gen.writeEndObject();
+                          
+                gen.writeStringField('InvoiceTotal',string.valueof(TotalAmount));
+                gen.writeEndObject();
                 gen.writeEndArray();
                 if(clientConfig.size()>0 && clientConfig[0].Is_LEDES_Required__c)
                 {
                     DateTime currentDate=datetime.now();
-                    gen.writeFieldName('LEDES');
+                    Date invoiceDate = date.newinstance(ObjInvoiceList[0].Invoice_Date__c.year(), ObjInvoiceList[0].Invoice_Date__c.month(), ObjInvoiceList[0].Invoice_Date__c.day());
+                    gen.writeFieldName('LEDESDetails');
+                    gen.writeStartObject();
+                    gen.writeFieldName('Header');
                     gen.writeStartObject();
                     gen.writeStringField('InvoiceDate',ObjInvoiceList[0].Invoice_Date__c!=null?string.valueOf(ObjInvoiceList[0].Invoice_Date__c):'');
                     
@@ -251,16 +258,15 @@ global with sharing class InvoiceForMaxval
                     
                         
                     gen.writeStringField('LawFirmMatterID','');
-                    
-                    gen.writeDateField('BillingStartDate',ObjInvoiceList[0].Invoice_Date__c!=null?ObjInvoiceList[0].Invoice_Date__c.toStartOfMonth():'');
-                    gen.writeStringField('BillingEndDate',ObjInvoiceList[0].Invoice_Date__c!=null?string.valueOf(ObjInvoiceList[0].Invoice_Date__c):'');
+                    gen.writeStringField('BillingStartDate',invoiceDate!=null?string.valueOf(invoiceDate.toStartOfMonth()):'');
+					gen.writeStringField('BillingEndDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
                     gen.writeStringField('InvoiceDescription','Annuity payment for '+currentDate.format('MMMM')+' '+currentDate.year());
                     gen.writeStringField('LineItemExpenseCode','');
                     gen.writeStringField('ClientMatterID','');
                     gen.writeStringField('Exp/Fee/InvAdjType','E');
                     gen.writeNumberField('LineItemNumberofUnits',1);
                     gen.writeNumberField('LineItemAdjustmentAmount',0);
-                    gen.writeStringField('LineItemDate',ObjInvoiceList[0].Invoice_Date__c!=null?string.valueOf(ObjInvoiceList[0].Invoice_Date__c):'');
+                    gen.writeStringField('LineItemDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
                     gen.writeStringField('LineItemTaskCode','');
                     gen.writeStringField('LineItemExpenseCode','E117');
                     gen.writeStringField('LineItemActivityCode','');
@@ -295,21 +301,37 @@ global with sharing class InvoiceForMaxval
                     gen.writeNumberField('LineItemTaxTotal',0);
                     gen.writeStringField('LineItemTaxType','GST');
                     gen.writeStringField('InvoiceReportedTaxTotal','GST');
-                    gen.writeStringField('InvoiceTaxCurrency[]','USD[]');
+                    gen.writeStringField('InvoiceTaxCurrency','USD');
                     gen.writeEndObject();
+                    gen.writeFieldName('LineItems');
+                    gen.writeStartArray();
+                	Integer lineItemNumber=1;
+                    for(Order_Item__c orderItem: ListOfOItems)
+                    {  
+                        gen.writeStartObject();
+                        jurisdiction = orderItem.Jurisdiction__c!=null?orderItem.Jurisdiction__c:'';
+                        string patentId = '-';
+                        patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:orderItem.Publication_No__c!=null && orderItem.Publication_No__c!='-' ?orderItem.Publication_No__c:'';
+                        if(patentId!='-' && !patentId.startsWith(jurisdiction))
+                            patentId = jurisdiction + patentId;
+                        string applicationNo = '-';
+                        applicationNo = orderItem.Application_No__c!=null?orderItem.Application_No__c:'';
+                        if(applicationNo!='-' && !applicationNo.startsWith(jurisdiction))
+                            applicationNo = jurisdiction + applicationNo;
+                        gen.writeStringField('PatentID',patentId);
+                        gen.writeStringField('ApplicationNo',applicationNo);
+                        gen.writeNumberField('LineItemNumber',lineItemNumber);
+                        gen.writeStringField('LineItemDescription','Annuity Payment for '+jurisdiction+' '+orderItem.Docket_No__c+' '+orderItem.Patent_No__c+' '+orderItem.Term_Name__c+' '+orderItem.Due_Date__c);
+                        gen.writeStringField('LineItemUnitCost',orderItem.Billing_Amount__c!=null?string.valueof(orderItem.Billing_Amount__c):'');
+                        gen.writeStringField('LineItemTotal',orderItem.Billing_Amount__c!=null?string.valueof(orderItem.Billing_Amount__c):'');
+                        gen.writeEndObject(); 
+                        lineItemNumber+=1;
+                    }
+                    gen.writeEndArray();
+                    gen.writeEndObject();
+                    gen.writeEndObject();
+                	gen.writeEndObject(); 
                 }
-                gen.writeFieldName('Fee');
-                gen.writeStartObject();
-                gen.writeStringField('LateFees',ObjInvoiceList[0].Order__r.Late_Fee__c!=null?string.valueof(ObjInvoiceList[0].Order__r.Late_Fee__c):'');
-                gen.writeStringField('RushFees',ObjInvoiceList[0].Order__r.Rush_Fee__c !=null?string.valueof(ObjInvoiceList[0].Order__r.Rush_Fee__c ):'');
-                gen.writeEndObject();
-                          
-                gen.writeStringField('InvoiceTotal',string.valueof(TotalAmount));
-                gen.writeEndObject();
-                gen.writeEndArray(); 
-                gen.writeEndObject();
-                gen.writeEndObject(); 
-                
                 InvItemDetails = gen.getAsString();
             }
             else
