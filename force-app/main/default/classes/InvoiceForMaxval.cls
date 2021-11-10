@@ -239,7 +239,7 @@ global with sharing class InvoiceForMaxval
                     gen.writeStartObject();
                     gen.writeFieldName('Header');
                     gen.writeStartObject();
-                    gen.writeStringField('InvoiceDate',ObjInvoiceList[0].Invoice_Date__c!=null?string.valueOf(ObjInvoiceList[0].Invoice_Date__c):'');
+                    gen.writeStringField('InvoiceDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
                     
                     if(clientConfig[0].Client_Name__c.contains('Dropbox') && (jurisdiction=='US' || jurisdiction=='CA'))
                     {
@@ -253,10 +253,7 @@ global with sharing class InvoiceForMaxval
                         gen.writeStringField('ClientMatterID',clientConfig[0].Client_Matter_ID__c!=null?clientConfig[0].Client_Matter_ID__c:'');
                         if(clientConfig[0].Client_Name__c.contains('Dropbox'))
                             gen.writeStringField('MatterName','MaxVal Patent Annuities (Rest of the World)');
-                    }
-                    	
-                    
-                        
+                    }  
                     gen.writeStringField('LawFirmMatterID','');
                     gen.writeStringField('BillingStartDate',invoiceDate!=null?string.valueOf(invoiceDate.toStartOfMonth()):'');
 					gen.writeStringField('BillingEndDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
