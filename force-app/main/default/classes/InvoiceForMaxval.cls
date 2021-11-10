@@ -257,7 +257,7 @@ global with sharing class InvoiceForMaxval
                     gen.writeStringField('LawFirmMatterID','');
                     gen.writeStringField('BillingStartDate',invoiceDate!=null?string.valueOf(invoiceDate.toStartOfMonth()):'');
 					gen.writeStringField('BillingEndDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
-                    gen.writeStringField('InvoiceDescription','Annuity payment for '+currentDate.format('MMMM')+' '+currentDate.year());
+                    gen.writeStringField('InvoiceDescription','Annuity payment for '+currentDate.format('MMM')+' '+currentDate.year());
                     gen.writeStringField('LineItemExpenseCode','');
                     gen.writeStringField('ClientMatterID','');
                     gen.writeStringField('Exp/Fee/InvAdjType','E');
