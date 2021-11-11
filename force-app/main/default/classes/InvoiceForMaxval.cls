@@ -178,7 +178,7 @@ global with sharing class InvoiceForMaxval
                     TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Late_Fee__c;
                     TotalAmount=TotalAmount+ ObjInvoiceList[0].Order__r.Rush_Fee__c ;                    
                     string strItemName='AP Deposits AP-'+ObjInvoiceList[0].Order__r.Client__r.name;    
-                    string invoiceDate = ObjInvoiceList[0].Invoice_Date__c != null ? string.valueOf(ObjInvoiceList[0].Invoice_Date__c) : '';
+                    Date invoiceDate = date.newinstance(ObjInvoiceList[0].Invoice_Date__c.year(), ObjInvoiceList[0].Invoice_Date__c.month(), ObjInvoiceList[0].Invoice_Date__c.day());
                     string patentId = '-';
                     strAuditTrail+='outside for';
                 	for(Order_Item__c orderItem: ListOfOItems){
@@ -190,7 +190,7 @@ global with sharing class InvoiceForMaxval
                         patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:orderItem.Publication_No__c!=null && orderItem.Publication_No__c!='-' ?orderItem.Publication_No__c:'';
                         if(patentId!='-' && !patentId.startsWith(jurisdiction))
                             patentId = jurisdiction + patentId;                        
-                        gen.writeStringField('Description','Currency fluctuation for Patent# - '+ patentId +' Order# - '+ ObjInvoiceList[0].Order__r.name +' Invoice date - '+ invoiceDate);
+                        gen.writeStringField('Description','Currency fluctuation for Patent# - '+ patentId +' Order# - '+ ObjInvoiceList[0].Order__r.name +' Invoice date - '+ string.valueOf(invoiceDate) );
                         gen.writeStringField('Class','Maxval Group 10.100 - Services:126 - AP');                                                                       
                         gen.writeStringField('Amount',string.valueof(orderItem.Billing_Amount__c));
                         TotalAmount=TotalAmount + orderItem.Billing_Amount__c;
