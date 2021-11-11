@@ -221,13 +221,11 @@ global with sharing class InvoiceForMaxval
                     gen.writeEndObject();    
                 }
                 gen.writeEndArray();
-                
                 gen.writeFieldName('Fee');
                 gen.writeStartObject();
                 gen.writeStringField('LateFees',ObjInvoiceList[0].Order__r.Late_Fee__c!=null?string.valueof(ObjInvoiceList[0].Order__r.Late_Fee__c):'');
                 gen.writeStringField('RushFees',ObjInvoiceList[0].Order__r.Rush_Fee__c !=null?string.valueof(ObjInvoiceList[0].Order__r.Rush_Fee__c ):'');
                 gen.writeEndObject();
-                          
                 gen.writeStringField('InvoiceTotal',string.valueof(TotalAmount));
                 gen.writeEndObject();
                 gen.writeEndArray();
@@ -240,7 +238,6 @@ global with sharing class InvoiceForMaxval
                     gen.writeFieldName('Header');
                     gen.writeStartObject();
                     gen.writeStringField('InvoiceDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
-                    
                     if(clientConfig[0].Client_Name__c.contains('Dropbox') && (jurisdiction=='US' || jurisdiction=='CA'))
                     {
                         gen.writeStringField('ClientID','');
@@ -254,9 +251,6 @@ global with sharing class InvoiceForMaxval
                         if(clientConfig[0].Client_Name__c.contains('Dropbox'))
                             gen.writeStringField('MatterName','MaxVal Patent Annuities (Rest of the World)');
                     }
-                    	
-                    
-                        
                     gen.writeStringField('LawFirmMatterID','');
                     gen.writeStringField('BillingStartDate',invoiceDate!=null?string.valueOf(invoiceDate.toStartOfMonth()):'');
 					gen.writeStringField('BillingEndDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
@@ -333,9 +327,9 @@ global with sharing class InvoiceForMaxval
                     }
                     gen.writeEndArray();
                     gen.writeEndObject();
-                    gen.writeEndObject();
-                	gen.writeEndObject(); 
                 }
+                gen.writeEndObject();
+                gen.writeEndObject(); 
                 InvItemDetails = gen.getAsString();
             }
             else
