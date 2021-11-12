@@ -524,6 +524,30 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                 batchInstructionStatusUpdate CA= NEW batchInstructionStatusUpdate(ExternallyRenewedAssets,'Renewed Externally');
                 database.executebatch(CA, 1);
             }
+        //MARS-976 MaRS - Rush Fee should be calculated based on the client
+        //Added by Saranyaa        
+        //**Begin**     
+        String auditTrail='';
+        List<Id> orderItemsWithRushFee = new List<Id>();
+        List<Order_Item__c> orderItemList = [SELECT Id, Order__r.Client__r.RushFee_Days__c,Due_Date__c,Instructed_Date__c,Is_Instructed_during_Rush__c FROM Order_Item__c WHERE id IN: trigger.new];                
+        for(Order_Item__c orderItem:orderItemList){
+            Date startDate = Date.newInstance(orderItem.Due_Date__c.year(), orderItem.Due_Date__c.month(), orderItem.Due_Date__c.day());
+            Date dueDate = Date.newInstance(orderItem.Instructed_Date__c.year(), orderItem.Instructed_Date__c.month(), orderItem.Instructed_Date__c.day());
+            Integer numberDaysDue = dueDate.daysBetween(startDate);
+            auditTrail += 'Rush Fee calculation: '+numberDaysDue +'>'+ orderItem.Order__r.Client__r.RushFee_Days__c + '=' + string.valueof(numberDaysDue > orderItem.Order__r.Client__r.RushFee_Days__c);
+            if(numberDaysDue > orderItem.Order__r.Client__r.RushFee_Days__c){
+                orderItemsWithRushFee.add(orderItem.Id);
+            }
+        }
+        for(Order_Item__c orderItem:Trigger.new){     
+            if(orderItemsWithRushFee.contains(orderItem.Id))
+            {
+                orderItem.Is_Instructed_during_Rush__c = True;
+                auditTrail+=' | Rush fee applicable for the asset: '+ orderItem.Name;      
+            }
+        }
+        AuditTrailHelper.UpdateAudit('Trigger Order Item', auditTrail, '');      
+        //**End**
         }   
     }    
     
