@@ -240,18 +240,27 @@ global with sharing class InvoiceForMaxval
                     gen.writeStringField('InvoiceDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
                     if(clientConfig[0].Client_Name__c.contains('Dropbox') && (jurisdiction=='US' || jurisdiction=='CA'))
                     {
-                        gen.writeStringField('ClientID','');
-                        gen.writeStringField('ClientMatterID','BF_M#48539');
+                        gen.writeStringField('ClientId','');
+                        gen.writeStringField('ClientMatterId','BF_M#48539');
                         gen.writeStringField('MatterName','MaxVal Patent Annuities (North America)');
                     }
                     else
                     {
-                        gen.writeStringField('ClientID',clientConfig[0].Client_ID__c!=null?clientConfig[0].Client_ID__c:'');
-                        gen.writeStringField('ClientMatterID',clientConfig[0].Client_Matter_ID__c!=null?clientConfig[0].Client_Matter_ID__c:'');
+                        gen.writeStringField('ClientId',clientConfig[0].Client_ID__c!=null?clientConfig[0].Client_ID__c:'');
+                        gen.writeStringField('ClientMatterId',clientConfig[0].Client_Matter_ID__c!=null?clientConfig[0].Client_Matter_ID__c:'');
                         if(clientConfig[0].Client_Name__c.contains('Dropbox'))
+                        { 
+                    		gen.writeStringField('ClientName',clientConfig[0].Client_Name__c!=null?clientConfig[0].Client_Name__c:'');
                             gen.writeStringField('MatterName','MaxVal Patent Annuities (Rest of the World)');
+                        else
+                        {
+                            gen.writeStringField('ClientName','');
+                            gen.writeStringField('MatterName','');
+                        }
+                            
                     }
-                    gen.writeStringField('LawFirmMatterID','');
+                    gen.writeStringField('LawFirmMatterId','');
+                    gen.writeStringField('InvoiceTotal',string.valueof(TotalAmount));
                     gen.writeStringField('BillingStartDate',invoiceDate!=null?string.valueOf(invoiceDate.toStartOfMonth()):'');
 					gen.writeStringField('BillingEndDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
                     if(clientConfig[0].Client_Type__c=='Monthly')
@@ -259,20 +268,19 @@ global with sharing class InvoiceForMaxval
                     else if(clientConfig[0].Client_Type__c=='Quarterly')
                     	gen.writeStringField('InvoiceDescription','Annuity payment for ' +currentDate.year()+' ');//have to add q1,q2,q3,q4
                     gen.writeStringField('LineItemExpenseCode','');
-                    gen.writeStringField('ClientMatterID','');
+                    gen.writeStringField('ClientMatterId','');
                     gen.writeStringField('Exp/Fee/InvAdjType','E');
-                    gen.writeNumberField('LineItemNumberofUnits',1);
+                    gen.writeNumberField('LineItemNumberOfUnits',1);
                     gen.writeNumberField('LineItemAdjustmentAmount',0);
                     gen.writeStringField('LineItemDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
                     gen.writeStringField('LineItemTaskCode','');
                     gen.writeStringField('LineItemExpenseCode','E117');
                     gen.writeStringField('LineItemActivityCode','');
-                    gen.writeStringField('TimekeeperID','JB');
-                    gen.writeStringField('LineItemTaskCode','');
-                    gen.writeStringField('LawFirmID','20-0674603');
+                    gen.writeStringField('TimekeeperId','JB');
+                    gen.writeStringField('LawFirmId','20-0674603');
                     gen.writeStringField('TimekeeperName','');
                     gen.writeStringField('TimekeeperClassification','');
-                    gen.writeStringField('ClientTaxID','');
+                    gen.writeStringField('ClientTaxId','');
                     gen.writeStringField('TimekeeperClassification','');
                     gen.writeStringField('InvoiceTaxTotal','');
                     gen.writeStringField('InvoiceNetTotal',string.valueof(TotalAmount));
@@ -284,14 +292,13 @@ global with sharing class InvoiceForMaxval
                     gen.writeStringField('LawFirmAddress_1','2251 Grant Road');
                     gen.writeStringField('LawFirmAddress_2','Suite B');
                     gen.writeStringField('LawFirmCity','Los Altos');
-                    gen.writeStringField('LawFirmStateorRegion','CA');
+                    gen.writeStringField('LawFirmStateorregion','CA');
                     gen.writeStringField('LawFirmPostcode','94024');
 					gen.writeStringField('LawFirmCountry','US');
-                    gen.writeStringField('ClientName','');
                     gen.writeStringField('ClientAddress_1','');
                     gen.writeStringField('ClientAddress_2','');
                     gen.writeStringField('ClientCity','');
-                    gen.writeStringField('ClientStateorRegion','');
+                    gen.writeStringField('ClientStateorregion','');
                     gen.writeStringField('ClientPostcode','');
 					gen.writeStringField('ClientCountry','');
                     gen.writeNumberField('LineItemTaxRate',0);
