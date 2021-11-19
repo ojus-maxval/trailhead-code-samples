@@ -1,4 +1,4 @@
-//renewal/invoice/info/{invoiceref}/download
+//renewal/invoice/info/{invoiceref}/{type}/download
 public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database.Batchable<sObject>, Database.Stateful
 {
     public string query{set;get;}
@@ -27,6 +27,8 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
         try
         {
             strAuditTrail +='Renewal Invoice Info : ';
+            if(scope.size()>0)
+            	List<Clients__c> clientConfig =[SELECT 	Id,Is_LEDES_Required__c FROM Clients__c WHERE id=:scope[0].Order__r.Client__c ];
             for(Invoice__c ci : scope)
             {
                 Http http = new Http();
