@@ -252,6 +252,7 @@ global with sharing class InvoiceForMaxval
                         { 
                     		gen.writeStringField('ClientName',clientConfig[0].Client_Name__c!=null?clientConfig[0].Client_Name__c:'');
                             gen.writeStringField('MatterName','MaxVal Patent Annuities (Rest of the World)');
+                        }         
                         else
                         {
                             gen.writeStringField('ClientName','');
@@ -266,7 +267,10 @@ global with sharing class InvoiceForMaxval
                     if(clientConfig[0].Client_Type__c=='Monthly')
                     	gen.writeStringField('InvoiceDescription','Annuity payment for '+currentDate.format('MMM')+' '+currentDate.year());
                     else if(clientConfig[0].Client_Type__c=='Quarterly')
-                    	gen.writeStringField('InvoiceDescription','Annuity payment for ' +currentDate.year()+' ');//have to add q1,q2,q3,q4
+                    {
+                        Integer quarter=math.round((currentDate.month()+1)/3.0);
+                        gen.writeStringField('InvoiceDescription','Annuity payment for ' +currentDate.year()+' Q'+quarter);
+                    }	
                     gen.writeStringField('LineItemExpenseCode','');
                     gen.writeStringField('ClientMatterId','');
                     gen.writeStringField('Exp/Fee/InvAdjType','E');
@@ -313,6 +317,7 @@ global with sharing class InvoiceForMaxval
                     for(Order_Item__c orderItem: ListOfOItems)
                     {  
                         gen.writeStartObject();
+                    	Datetime dueDate = orderItem.Due_Date__c;
                         jurisdiction = orderItem.Jurisdiction__c!=null?orderItem.Jurisdiction__c:'';
                         string patentId = '-';
                         patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:orderItem.Publication_No__c!=null && orderItem.Publication_No__c!='-' ?orderItem.Publication_No__c:'';
@@ -322,7 +327,6 @@ global with sharing class InvoiceForMaxval
                         applicationNo = orderItem.Application_No__c!=null?orderItem.Application_No__c:'';
                         if(applicationNo!='-' && !applicationNo.startsWith(jurisdiction))
                             applicationNo = jurisdiction + applicationNo;
-                    	Datetime dueDate = orderItem.Due_Date__c;
                         gen.writeStringField('PatentID',patentId);
                         gen.writeStringField('ApplicationNo',applicationNo);
                         gen.writeNumberField('LineItemNumber',lineItemNumber);
