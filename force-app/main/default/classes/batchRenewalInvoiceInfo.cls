@@ -5,6 +5,7 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
     public boolean callAttachmentsBatch{set;get;}
     public string AccessToken{set;get;}
     public API_Credentials__c credentials{set;get;}
+    public string strAuditTrail = '';
     public batchRenewalInvoiceInfo()
     {
         //AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
@@ -22,7 +23,6 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
     {
         AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
         boolean saveAudit = false;
-        string strAuditTrail = '';
         string status = 'Success';
         try
         {
@@ -32,69 +32,25 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
             	clientConfig =[SELECT 	Id,Is_LEDES_Required__c FROM Clients__c WHERE id=:scope[0].Order__r.Client__c ];
             for(Invoice__c ci : scope)
             {
-                Http http = new Http();
-                HttpRequest req = new HttpRequest();
-                req.setMethod('GET');
-                string URL = credentials.URL__c;
+                HttpResponse res=new HttpResponse();
+                string URL = credentials.URL__c;                
+                string ledesURL=URL.replace('invoiceref',ci.Name).replace('type','ledes');
+                URL=URL.replace('invoiceref',ci.Name).replace('/type','');
+                res = CallAPI(URL,AccessToken);
                 if(clientConfig.size()>0 && clientConfig[0].Is_LEDES_Required__c)
                 {
-                	string ledesURL = URL.replaceAll('invoiceref',ci.Name).replaceAll('type','ledes');
+                    AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
                     strAuditTrail +='LEDES file download URL - '+ledesURL;
-                    req.setEndpoint(ledesURL);
-                    req.setHeader('Authorization', 'Bearer ' + AccessToken);
-                    req.setHeader('Content-Type','application/json;charset=UTF-8');
-                    req.setHeader('Content-Length', '0');
-                    req.setTimeout(120000);
-                    HttpResponse res = http.send(req);  
-                    strAuditTrail +=' |Res Status:'+res.getStatus()+' Code:'+res.getStatusCode();
-                    if(res.getstatusCode() == 200)
-                    {
-                        ContentVersion conVer = new ContentVersion();
-                        conVer.ContentLocation = 'S';
-                        conVer.PathOnClient ='LEDESInvoice-'+ ci.Name+' INFO.csv';
-                        conVer.Title ='LEDESInvoice-'+ ci.Name+' INFO'; // Display name of the files
-                        conVer.VersionData = res.getBodyAsBlob(); // converting your binary string to Blog
-                        insert conVer;
-                        System.debug(conVer.Id);
-                        Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;
-                        ContentDocumentLink cDe = new ContentDocumentLink();
-                        cDe.ContentDocumentId = conDoc;
-                        cDe.LinkedEntityId = ci.id; // you can use objectId,GroupId etc
-                        cDe.ShareType = 'I'; // Inferred permission, checkout description of ContentDocumentLink object for more details
-                        insert cDe;
-                        ci.API_Status__c = 'Downloaded Info';
-                    }
+                    HttpResponse ledesResponse = new HttpResponse();
+                    ledesResponse = CallAPI(URL,AccessToken);
+                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id);
                 }
-                URL = URL.replaceAll('invoiceref',ci.Name).replaceAll('/type','');
-                strAuditTrail +='URL-'+URL;
-                req.setEndpoint(URL);
-                req.setHeader('Authorization', 'Bearer ' + AccessToken);
-                req.setHeader('Content-Type','application/json;charset=UTF-8');
-                req.setHeader('Content-Length', '0');
-                req.setTimeout(120000);
-                HttpResponse res = http.send(req);  
-                strAuditTrail +=' |Res Status:'+res.getStatus()+' Code:'+res.getStatusCode();
-                if(res.getstatusCode() == 200)
-                {
-                    ContentVersion conVer = new ContentVersion();
-                    conVer.ContentLocation = 'S';
-                    conVer.PathOnClient ='Invoice-'+ ci.Name+' INFO.csv';
-                    conVer.Title ='Invoice-'+ ci.Name+' INFO'; // Display name of the files
-                    conVer.VersionData = res.getBodyAsBlob(); // converting your binary string to Blog
-                    insert conVer;
-                    System.debug(conVer.Id);
-                    Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;
-                    ContentDocumentLink cDe = new ContentDocumentLink();
-                    cDe.ContentDocumentId = conDoc;
-                    cDe.LinkedEntityId = ci.id; // you can use objectId,GroupId etc
-                    cDe.ShareType = 'I'; // Inferred permission, checkout description of ContentDocumentLink object for more details
-                    insert cDe;
-                    ci.API_Status__c = 'Downloaded Info';
-                    callAttachmentsBatch = true;
-                }
+                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id);
+                if(callAttachmentsBatch)
+                	ci.API_Status__c = 'Downloaded Info';
             }
             if(callAttachmentsBatch)
-                update scope;
+            	update scope;
         }
         catch(Exception e)
         {
@@ -107,6 +63,45 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
             AuditTrailHelper.UpdateAudit('batchRenewalInvoiceInfo-download',strAuditTrail,status);
         }
     }
+    
+    public HttpResponse CallAPI(string URL,string AccessToken)
+    {
+        Http http = new Http();
+        HttpRequest req = new HttpRequest();
+        req.setMethod('GET');
+        req.setEndpoint(URL);
+        req.setHeader('Authorization', 'Bearer ' + AccessToken);
+        req.setHeader('Content-Type','application/json;charset=UTF-8');
+        req.setHeader('Content-Length', '0');
+        req.setTimeout(120000);
+        HttpResponse res = http.send(req);
+        return res;
+    }
+    
+    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID)
+    {
+        boolean callAttachmentsBatch=false;
+        if(response.getstatusCode() == 200)
+        {
+            strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode();
+            ContentVersion conVer = new ContentVersion();
+            conVer.ContentLocation = 'S';
+            conVer.PathOnClient ='Invoice-'+ invoiceRef+' INFO.csv';
+            conVer.Title ='Invoice-'+ invoiceRef+' INFO'; // Display name of the files
+            conVer.VersionData = response.getBodyAsBlob(); // converting your binary string to Blog
+            insert conVer;
+            System.debug(conVer.Id);
+            Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;
+            ContentDocumentLink cDe = new ContentDocumentLink();
+            cDe.ContentDocumentId = conDoc;
+            cDe.LinkedEntityId = invoiceID; // you can use objectId,GroupId etc
+            cDe.ShareType = 'I'; // Inferred permission, checkout description of ContentDocumentLink object for more details
+            insert cDe;
+            callAttachmentsBatch = true;
+        }
+        return callAttachmentsBatch;
+    }
+    
     public void finish(Database.BatchableContext BC)
     {
         if(callAttachmentsBatch)
