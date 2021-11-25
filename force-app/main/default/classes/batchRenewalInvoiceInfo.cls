@@ -32,6 +32,7 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
             	clientConfig =[SELECT 	Id,Is_LEDES_Required__c FROM Clients__c WHERE id=:scope[0].Order__r.Client__c ];
             for(Invoice__c ci : scope)
             {
+                string fileName='';
                 HttpResponse res=new HttpResponse();
                 string URL = credentials.URL__c;                
                 string ledesURL=URL.replace('invoiceref',ci.Name).replace('type','ledes');
@@ -43,9 +44,11 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
                     strAuditTrail +='LEDES file download URL - '+ledesURL;
                     HttpResponse ledesResponse = new HttpResponse();
                     ledesResponse = CallAPI(URL,AccessToken);
-                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id);
+                    fileName='LEDESInvoice-'+ ci.Name+' INFO';
+                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id,fileName);
                 }
-                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id);
+                fileName='Invoice-'+ ci.Name+' INFO';
+                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id,fileName);
                 if(callAttachmentsBatch)
                 	ci.API_Status__c = 'Downloaded Info';
             }
@@ -64,6 +67,7 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
         }
     }
     
+    //Makes a call to the MaxvalAPI to get the csv file
     public HttpResponse CallAPI(string URL,string AccessToken)
     {
         Http http = new Http();
@@ -78,7 +82,8 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
         return res;
     }
     
-    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID)
+    //This function is used to upload the file against the particular order
+    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID,string fileName)
     {
         boolean callAttachmentsBatch=false;
         if(response.getstatusCode() == 200)
@@ -86,8 +91,8 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
             strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode();
             ContentVersion conVer = new ContentVersion();
             conVer.ContentLocation = 'S';
-            conVer.PathOnClient ='Invoice-'+ invoiceRef+' INFO.csv';
-            conVer.Title ='Invoice-'+ invoiceRef+' INFO'; // Display name of the files
+            conVer.PathOnClient =fileName+'.csv';
+            conVer.Title =fileName; // Display name of the files
             conVer.VersionData = response.getBodyAsBlob(); // converting your binary string to Blog
             insert conVer;
             System.debug(conVer.Id);
