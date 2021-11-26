@@ -5,7 +5,7 @@
  */
 public with sharing class CurrencyController
 {
-    //@future(callout=true)
+    @future(callout=true)
     public static void GetExchangeRate()
     {
         string strAuditText = '';
