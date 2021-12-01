@@ -524,6 +524,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                 batchInstructionStatusUpdate CA= NEW batchInstructionStatusUpdate(ExternallyRenewedAssets,'Renewed Externally');
                 database.executebatch(CA, 1);
             }
+        
         }   
     }    
     

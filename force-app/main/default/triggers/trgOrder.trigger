@@ -66,6 +66,19 @@ trigger trgOrder on Order__c (before update,before insert, after Insert, after u
                     }
                 }
             }
+
+            //MARS-976 MaRS - Rush Fee should be calculated based on the client
+            //Added by Saranyaa        
+            //**Begin** 
+            for(Order__c objNewOrder : Trigger.New)
+            {
+                if (objNewOrder.nRush_Renewals__c > 0)
+                {
+                    List<Clients__c> objClient = [select id,Rush_Fee_per_Order__c from Clients__c where Id=:objNewOrder.Client__c];
+                    objNewOrder.Rush_Fee__c= objNewOrder.nRush_Renewals__c * objClient[0].Rush_Fee_per_Order__c;
+                }
+            }
+            //**End**
         }
         
         //EVENT: After

@@ -54,7 +54,7 @@ public with sharing class CreateInvoiceWithVarianceController {
                  isInvalid = True;
              }else{
                  //Get all asset details
-                assets = [SELECT Name,Application_No__c,Patent_No__c,Order__r.Name,Order__r.Client__c,Fee_Amount_When_Instruct__c,PTO_Payment_Amount__c,Service_Fee_Amount_When_Instruct__c,Variance_Amount__c,Payment_Status__c,Billing_Amount__c,Variance__c FROM Order_Item__c WHERE Order__c IN: selectedOrderIds AND Variance__c > 0];                
+                assets = [SELECT Name,Invoice__c,Application_No__c,Patent_No__c,Order__r.Name,Order__r.Client__c,Fee_Amount_When_Instruct__c,Fee_Amount_When_Pay__c,Service_Fee_Amount_When_Instruct__c,Variance_Amount__c,Payment_Status__c,Billing_Amount__c,Variance__c FROM Order_Item__c WHERE Order__c IN: selectedOrderIds AND Variance__c > 0];                
                 selectedOrderIds = new list<Id>();
                  for(Order_Item__c asset : assets){
                      selectedOrderIds.add(asset.Order__c);
@@ -71,6 +71,12 @@ public with sharing class CreateInvoiceWithVarianceController {
                         {          
                             errorMessage = 'Orders of different clients cannot be selected';                    
                             isInvalid = True;
+                            break;
+                        }
+                        
+                        if(asset.Invoice__c == null || asset.Invoice__c == ''){
+                            errorMessage = 'Actual Invoice is not created for the asset - ' + asset.Name;
+                    		isInvalid = True; 
                             break;
                         }
                     }  
