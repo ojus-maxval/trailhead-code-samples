@@ -16,7 +16,7 @@ public class batchRenewalInvoiceCreate implements Database.AllowsCallouts,Databa
         system.debug(lstCIds);
         credentials = [SELECT Id,Name,URL__c,Username__c,Password__c FROM API_Credentials__c WHERE Name=: 'Renewal Invoice Create'];
         ApiHandleRefId =[SELECT Name FROM API_Auth_Detail__c  WHERE Type_Of_Credential__c ='QB Credential' LIMIT 1].Name;
-        query = 'select id from Clients__c where id IN: lstCIds';
+        query = 'select id,Is_LEDES_Required__c from Clients__c where id IN: lstCIds';
     }
     public Database.QueryLocator start(Database.BatchableContext BC)
     {
@@ -35,6 +35,7 @@ public class batchRenewalInvoiceCreate implements Database.AllowsCallouts,Databa
             List<Invoice__c> clientInvoices = [Select id,Name,Order__r.Client__c,API_Request_ID__c,API_Status__c from Invoice__c where API_Status__c='Send Create Request' AND Order__r.Client__c=:clients[0].id];
             System.debug('Records Count:'+clientInvoices.size());
             Map<String,List<Invoice__c>> ClientInvoiceMap = new Map<String,List<Invoice__c>>();
+            Map<String,Boolean> clientLEDESMap=new Map<String,Boolean>();
             for(Invoice__c ci : clientInvoices)
             {
                 List<Invoice__c> temp = ClientInvoiceMap.get(ci.Order__r.Client__c);
@@ -47,9 +48,14 @@ public class batchRenewalInvoiceCreate implements Database.AllowsCallouts,Databa
                     ClientInvoiceMap.put(ci.Order__r.Client__c, new List<Invoice__c>{ci});
                 }
             }
+            for(Clients__c client:clients)
+            {
+                clientLEDESMap.put(client.Id,client.Is_LEDES_Required__c);
+            }
             for(string keyOI : ClientInvoiceMap.keyset())
             {
-                ReqData woi = NEW ReqData();               
+                ReqData woi = NEW ReqData();
+                Options option=new Options();               
                 List<objectitem> Items = NEW List<objectitem>();                
                 for(Invoice__c ci : ClientInvoiceMap.get(keyOI))
                 {
@@ -60,6 +66,22 @@ public class batchRenewalInvoiceCreate implements Database.AllowsCallouts,Databa
                 woi.ClientRequestHandle = keyOI;
                 woi.ApiHandleRef = ApiHandleRefId;
                 woi.Items = Items;
+                if(clientLEDESMap.containsKey(keyOI))
+                {
+                    if(clientLEDESMap.get(keyOI))
+                    {
+                        option.IsLEDESQBORequired=clientLEDESMap.get(keyOI);
+                        option.IsLEDESRequired=false;
+                        option.IsQBORequired=false; 
+                    }  
+                    else
+                    {
+                        option.IsQBORequired=true;
+                    	option.IsLEDESQBORequired=false;
+                        option.IsLEDESRequired=false; 
+                    }  
+                }
+                woi.Options=option; 
                 string jsonbody = JSON.serialize(woi);
                 //jsonbody ='{"ClientRequestHandle":"8bd2ee6c-ab07-4793-8078-56e338614025","Items":[{"InvoiceRef":"63463"},{"InvoiceRef":"34666"}]}';
                 strAuditTrail +=' JSON>>>> '+jsonbody;
@@ -114,7 +136,14 @@ public class batchRenewalInvoiceCreate implements Database.AllowsCallouts,Databa
         public string ClientRequestHandle{get;set;}
         public string ApiHandleRef{get;set;}
         public List<objectitem> Items{get;set;}
+        public Options Options{get;set;}
     }
+    public class Options
+    {
+		public boolean IsLEDESRequired{get;set;}
+        public boolean IsQBORequired{get;set;}
+        public boolean IsLEDESQBORequired{get;set;}        
+    }   
     public class objectitem
     {
         public string InvoiceRef{get;set;}
