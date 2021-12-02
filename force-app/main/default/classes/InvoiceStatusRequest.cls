@@ -46,8 +46,7 @@ global class InvoiceStatusRequest
                     }
                 }
                 system.debug('mapitems'+mapitems);
-                list<Invoice__c> ObjInvoice= [SELECT id,Name,Order__r.name,LEDES_Message__c,LEDES_Status__c from Invoice__c WHERE name IN:InvRef];// and Order__r.Client__c=:strclintbody
-                
+                list<Invoice__c> ObjInvoice= [SELECT id,Name,Order__r.name,LEDES_Message__c,LEDES_Status__c from Invoice__c WHERE name IN:InvRef];                
                 if(ObjInvoice.size()>0)
                 {
                     List<string> assetId=new List<string>();
