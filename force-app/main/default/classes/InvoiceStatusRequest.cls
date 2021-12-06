@@ -26,7 +26,6 @@ global class InvoiceStatusRequest
             ReqID=res.RequestID;
             if(ReqID != '' && ReqID != null && ReqID != 'null')
             {
-                //set<string> INV=new set<string>();
                 if(res.Data!=null)
                 {
                     for(data itm : res.Data)
@@ -41,15 +40,13 @@ global class InvoiceStatusRequest
                             errors.add(er);
                             reslst.Error=errors;
                             return reslst;
-                            //INVDUP.add(itm.InvoiceRef);
                         }                            
                         else
                             mapitems.put(itm.InvoiceRef, itm); 
                     }
                 }
                 system.debug('mapitems'+mapitems);
-                list<Invoice__c> ObjInvoice= [SELECT id,Name,Order__r.name from Invoice__c WHERE name IN:InvRef];// and Order__r.Client__c=:strclintbody
-                
+                list<Invoice__c> ObjInvoice= [SELECT id,Name,Order__r.name,LEDES_Message__c,LEDES_Status__c from Invoice__c WHERE name IN:InvRef];                
                 if(ObjInvoice.size()>0)
                 {
                     List<string> assetId=new List<string>();
@@ -57,19 +54,11 @@ global class InvoiceStatusRequest
                         if(mapitems.containsKey(inv.Name))
                         {
                             data rItem = mapitems.get(inv.Name);
-                            
                             system.debug('rItem '+rItem );
                             if(rItem.Status =='1')
-                            {
                                 inv.Invoice_Status__c='To Do';
-                                
-                                
-                            }
                             if(rItem.Status =='2')
-                            {
                                 inv .Invoice_Status__c=' In Progress';
-                                
-                            }
                             if(rItem.Status =='3')
                             {
                                 inv .Invoice_Status__c='Completed';
@@ -84,19 +73,27 @@ global class InvoiceStatusRequest
                                 }
                             }
                             if(rItem.Status =='4')
-                            {
-                                
                                 inv .Invoice_Status__c='Completed and Posted';
-                            }
                             if(rItem.Status =='5')
-                            {
                                 inv .Invoice_Status__c='Posting Failed';
-                                
-                            }
                             if(rItem.Status =='6')
-                            {
                                 inv .Invoice_Status__c='Failed';
-                                
+                            LEDESResponse ledes=rItem.LEDESResponse;
+                            if(ledes!=null)
+                            {
+                                inv.LEDES_Status__c=ledes.LEDESStatus;
+                                string warningMessage='';
+                                if(ledes.warning.size()>0)
+                                {
+                                    for(resError ledesWarning :ledes.warning)
+                                    {
+                                        if(warningMessage == '')
+                                            warningMessage = ledesWarning.Code+'-'+ledesWarning.Description;
+                                        else
+                                            warningMessage += ', '+ledesWarning.Code+'-'+ledesWarning.Description;
+                                    }
+                                    inv.LEDES_Message__c=warningMessage;
+                                }  
                             }
                             inv .Invoice_No__c=rItem.InvoiceNo;
                             finalInvupdate.add(inv);
@@ -181,18 +178,20 @@ global class InvoiceStatusRequest
         global string RequestID{set;get;}
         global integer Status{set;get;}
         global List<data> Data{set;get;}
-        //obal List<error> Error{set;get;}
-        //global data Data{set;get;}
-        // global List<warning> Warning{set;get;}
     }
     global class data
     {
         global string InvoiceRef{set;get;}
         global string InvoiceNo{set;get;}
         global string Status{set;get;}
-        // global string data{set;get;}
         global List<error> Error{set;get;}
         global List<warning> warning{set;get;}
+        global LEDESResponse LEDESResponse{set;get;}
+    }
+    global class LEDESResponse
+    {
+        global string LEDESStatus{set;get;}
+        global List<resError> warning{set;get;}
     }
     global class errorbody
     {
@@ -217,6 +216,4 @@ global class InvoiceStatusRequest
         public string Code{set;get;}
         public string Description{set;get;}
     }
-    
-    
 }
