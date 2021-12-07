@@ -7,7 +7,7 @@ public class batchValidateWithPTO implements Database.AllowsCallouts,Database.Ba
     public Map<string,List<Order_Item__c>> mapOrderItem{set;get;}
     public string strAuditTrail{set;get;}
     public string status{set;get;}
-    public batchValidateWithPTO(List<string> recIds)
+    public batchValidateWithPTO()
     {
         query = '';
         mapData = NEW List<ptoValidationReqWrapper>();
@@ -19,6 +19,17 @@ public class batchValidateWithPTO implements Database.AllowsCallouts,Database.Ba
         {
             orderIds.add(order.Id);
         }
+        query = 'Select id,Name,Order__r.Client__c,PTO_Validation_Request_ID__c,Paid_Status__c,Surcharge__c,'+
+                    'Payment_Status__c,Order_Number__c,Client__c,Jurisdiction__c,Billing_Currency__c,Entity_Type_Name__c,'+
+                    'Fee_Amount_When_Pay__c,Fee__c,Application_No__c,Patent_No__c,Publication_No__c,MV_API_Ref_Id__c,Filing_Date__c,'+
+                    'Invoice_Type_Name_Value__c,Invoice__c,Invoice__r.Name,Term_Name__c FROM Order_Item__c '+
+                    'WHERE Order__c IN: orderIds';
+    }
+    public batchValidateWithPTO(List<string> orderIds)
+    {
+        query = '';
+        mapData = NEW List<ptoValidationReqWrapper>();
+        mapOrderItem = NEW Map<string,List<Order_Item__c>>();
         query = 'Select id,Name,Order__r.Client__c,PTO_Validation_Request_ID__c,Paid_Status__c,Surcharge__c,'+
                     'Payment_Status__c,Order_Number__c,Client__c,Jurisdiction__c,Billing_Currency__c,Entity_Type_Name__c,'+
                     'Fee_Amount_When_Pay__c,Fee__c,Application_No__c,Patent_No__c,Publication_No__c,MV_API_Ref_Id__c,Filing_Date__c,'+
