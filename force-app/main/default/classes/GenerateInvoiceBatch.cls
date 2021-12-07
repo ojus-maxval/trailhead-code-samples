@@ -5,7 +5,7 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
     public List<Id> ClientIDSForUpdate {get;set;}
     public Id idSelectedOrderId {get;set;}
     public List<ID>InvoicedAssets {get;set;}
-    public Set<Id> assetIdPtoValidation{get;set;}
+    //public Set<Id> assetIdPtoValidation{get;set;}
     global GenerateInvoiceBatch()
     {
         if(test.isRunningTest())
@@ -14,7 +14,7 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
             ClientIDSForCreate = new List<Id>();
             ClientIDSForUpdate = new List<Id>();
             InvoicedAssets = new List<Id>();
-        	assetIdPtoValidation =new Set<Id>();
+        	//assetIdPtoValidation =new Set<Id>();
         }
     }
     global GenerateInvoiceBatch(Id idSelectedOrderIds)
@@ -29,7 +29,7 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
         ClientIDSForCreate = new List<Id>();
         ClientIDSForUpdate = new List<Id>();
         InvoicedAssets = new List<Id>();
-        assetIdPtoValidation =new Set<Id>();
+        //assetIdPtoValidation =new Set<Id>();
         idSelectedOrderId = idSelectedOrderIds;
     }
     global GenerateInvoiceBatch(List<Id> lstSelectedOrderIds)
@@ -37,7 +37,7 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
         ClientIDSForCreate = new List<Id>();
         ClientIDSForUpdate = new List<Id>();
         InvoicedAssets = new List<Id>();
-        assetIdPtoValidation =new Set<Id>();
+        //assetIdPtoValidation =new Set<Id>();
         SelectedOrderIds = lstSelectedOrderIds;
     }
     global Database.QueryLocator start(Database.BatchableContext BC)
@@ -98,14 +98,14 @@ global with sharing class GenerateInvoiceBatch implements Database.Batchable<sOb
             List<Invoice__c> objInvoiceList = [SELECT Id, Order__c, Invoice_Date__c, Invoice_Status__c, Is_Active__c, Invoice_Currency__c, Invoice_Amount__c, Invoice_No__c, Invoice_Type_Name__c,Invoice_Config_Type__c, Is_Late_Rush_Fee_Included__c, API_Status__c FROM Invoice__c WHERE Order__c = :objOrder.Id];
             List<Order_Item__c> objOrderItemList = [SELECT Id, Variance__c,Variance_Amount__c,Order__r.Payment_status__c,Order__c, Order__r.nRush_Renewals__c,CE_Markup_Percentage__c, Is_Instructed_during_Rush__c, Order__r.Client__r.Rush_Fee_per_Order__c,Invoice_Type_Name__c,Order__r.Client__c,Order__r.Client__r.QB_Customer__r.Currency_Reference__c, Invoice_Type_Name_Value__c, Billing_Currency__c, Billing_Amount__c, Invoice__c, Invoice_Amount_When_Pay__c, Payment_Status__c,Client__c FROM Order_Item__c WHERE Order__c = :objOrder.Id AND Payment_Status__c!='Cancelled'];
             
-          	if(objOrderItemList.size()>0)
+          	/*if(objOrderItemList.size()>0)
           	{
               	for(Order_Item__c item:objOrderItemList)
               	{
                   	assetIdPtoValidation.add(item.Id);
               	}
               strAuditText+='assetId-'+assetIdPtoValidation;
-          	}
+          	}*/
                
             //Reading the existing Invoices for the selected orders
             Map<string, Invoice__c> mapExistingInvoices = new Map<string, Invoice__c>();
@@ -389,6 +389,7 @@ objLRFeeInvoice.Invoice_Amount__c = objOrder.Late_Fee__c + objOrder.Rush_Fee__c;
     }
     global void finish(Database.BatchableContext BC)
     {
+        try{
         System.debug(' GenerateInvoiceBatch Finish: | ClientIDSForCreate: '+ClientIDSForCreate+' |ClientIDSForUpdate:'+ClientIDSForUpdate);
         if(ClientIDSForCreate.size()>0)
         {
@@ -396,14 +397,21 @@ objLRFeeInvoice.Invoice_Amount__c = objOrder.Late_Fee__c + objOrder.Rush_Fee__c;
             batchRenewalInvoiceCreate createInvoiceReq = NEW batchRenewalInvoiceCreate(new List<ID>(setIDS));
             database.executeBatch(createInvoiceReq,1);
         }
-		if(assetIdPtoValidation.size() > 0)
-            BatchQueueHelper.BatchQueueForOrderItemForPTOvalidation(assetIdPtoValidation);
+            
         
         if(ClientIDSForUpdate.size()>0)
         {
             SEt<ID> setID = NEW SET<ID>(ClientIDSForUpdate);
             batchRenewalInvoiceUpdate updateInvoiceReq = NEW batchRenewalInvoiceUpdate(new List<ID>(setID));
             database.executeBatch(updateInvoiceReq,1);
+        }
+            //if(assetIdPtoValidation.size() > 0)
+                //BatchQueueHelper.BatchQueueForOrderItemForPTOvalidation(assetIdPtoValidation);
+        }
+        catch(Exception exp)
+        {
+            AuditTrailHelper.UpdateAudit('GenerateInvoiceBatch', exp.getMessage() + '|' + exp.getStackTraceString(), 'None');
+
         }
     }
 }
