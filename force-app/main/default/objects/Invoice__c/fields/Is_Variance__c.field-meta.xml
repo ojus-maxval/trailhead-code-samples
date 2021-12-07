@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Is_Instructed_during_Rush__c</fullName>
+    <fullName>Is_Variance__c</fullName>
     <defaultValue>false</defaultValue>
     <externalId>false</externalId>
-    <label>Is Instructed during Rush</label>
-    <trackHistory>false</trackHistory>
+    <label>Is Variance</label>
     <trackTrending>false</trackTrending>
     <type>Checkbox</type>
 </CustomField>
