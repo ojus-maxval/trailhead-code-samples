@@ -11,12 +11,16 @@ public class batchPtoPaymentValidate implements Database.AllowsCallouts,Database
     public Map<string,PTOFeeCode__c> countryPTOFeeCode{set;get;}
     public set<string> lstPersonEmails{set;get;}
     public List<string> disclosureIds{set;get;}
-    public batchPtoPaymentValidate(List<string> cIds)
+    public batchPtoPaymentValidate()
     {
         mapPTOValReqIDWWithOI =  NEW Map<string,id>();
-        lstCIds = NEW List<string>();
-        lstCIds = cIds;
-        countryAuth = NEW Map<string,string>();
+        List<Order__c> orderIds = [SELECT Id FROM Order__c WHERE Order_Status__c=:'Order Placed' AND Validation_Request_Status__c!='Success'];
+        List<string> lstCIds=new List<string>();
+        for(Order__c orderId:orderIds)
+        {
+            lstCIds.add(orderId.Id);
+        }
+       countryAuth = NEW Map<string,string>();
         List<PTO_Credentials__c> PTOCredentials = [Select id,Name, Country_Code__c FROM PTO_Credentials__c];
         for(PTO_Credentials__c pc : PTOCredentials)
         {
@@ -31,7 +35,7 @@ public class batchPtoPaymentValidate implements Database.AllowsCallouts,Database
         credentials = [SELECT Id,Name,URL__c,Username__c,Password__c FROM API_Credentials__c WHERE Name=: 'PTO Payment Validate'];
         query = 'select id from clients__c where id in: lstCIds';
     }
-    public batchPtoPaymentValidate()
+    /*public batchPtoPaymentValidate()
     {
         mapPTOValReqIDWWithOI =  NEW Map<string,id>();
         countryAuth = NEW Map<string,string>();
@@ -45,7 +49,7 @@ public class batchPtoPaymentValidate implements Database.AllowsCallouts,Database
         //query = 'SELECT id,Name,Paid_Status__c,Payment_Status__c,Order_Number__c,Client__c,Billing_Currency__c,Fee_Amount_When_Pay__c,Application_No__c,Patent_No__c,MV_API_Ref_Id__c FROM Order_Item__c where Paid_Status__c=\'Requesting to Pay PTO\' AND Payment_Status__c=\'Payment Received\'';
         query = 'select id from clients__c';// where id in:(SELECT Order__r.Client__c FROM Order_Item__c WHERE PTO_Validation_Status__c=\'Request to Validate\')
         system.debug(query);
-    }
+    }*/
     public Database.QueryLocator start(Database.BatchableContext BC)
     {
         system.debug(query);
@@ -173,8 +177,8 @@ public class batchPtoPaymentValidate implements Database.AllowsCallouts,Database
                     req.setBody(jsonbody);
                     req.setTimeout(120000);
                     HttpResponse res = http.send(req);  
-                    system.debug('Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody());          
-                    strAuditTrail += '| Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody()+' | ';
+                    //system.debug('Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody());          
+                    strAuditTrail += '| Response status code :' + res.getStatusCode() +' |Status :' + res.getStatus() +' | ';
                     List<Order_Item__c> oits = NEW List<Order_Item__c>();
                     List<Order_Item__c> alloits = NEW List<Order_Item__c>();
                     if(OrderItemMap.containskey(keyOI))
