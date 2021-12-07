@@ -37,13 +37,14 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
                 string URL = credentials.URL__c;                
                 string ledesURL=URL.replace('invoiceref',ci.Name).replace('type','ledes');
                 URL=URL.replace('invoiceref',ci.Name).replace('/type','');
+                strAuditTrail +='Invoice file download URL - '+URL;
                 res = CallAPI(URL,AccessToken);
                 if(clientConfig.size()>0 && clientConfig[0].Is_LEDES_Required__c)
                 {
                     AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
                     strAuditTrail +='LEDES file download URL - '+ledesURL;
                     HttpResponse ledesResponse = new HttpResponse();
-                    ledesResponse = CallAPI(URL,AccessToken);
+                    ledesResponse = CallAPI(ledesURL,AccessToken);
                     fileName='LEDESInvoice-'+ ci.Name+' INFO';
                     callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id,fileName);
                 }

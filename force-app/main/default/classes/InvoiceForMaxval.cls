@@ -292,6 +292,7 @@ global with sharing class InvoiceForMaxval
                         gen.writeStringField('ClientId','');
                         gen.writeStringField('ClientMatterId','BF_M#48539');
                         gen.writeStringField('MatterName','MaxVal Patent Annuities (North America)');
+                        gen.writeStringField('LawFirmMatterId','sampleID');//to be shared by kavithamani based on jurisdiction
                     }
                     else
                     {
@@ -301,15 +302,16 @@ global with sharing class InvoiceForMaxval
                         { 
                     		gen.writeStringField('ClientName',clientConfig[0].Client_Name__c!=null?clientConfig[0].Client_Name__c:'');
                             gen.writeStringField('MatterName','MaxVal Patent Annuities (Rest of the World)');
+                            gen.writeStringField('LawFirmMatterId','sampleID');//to be shared by kavithmani based on jurisdiction
                         }         
                         else
                         {
                             gen.writeStringField('ClientName','');
                             gen.writeStringField('MatterName','');
-                        }
-                            
+                            gen.writeStringField('LawFirmMatterId',clientConfig[0].Law_Firm_Matter_ID__c!=null?clientConfig[0].Law_Firm_Matter_ID__c:'');//to be shared by kavithmani based on jurisdiction
+                        }  
                     }
-                    gen.writeStringField('LawFirmMatterId','');
+                    
                     gen.writeStringField('InvoiceTotal',string.valueof(TotalAmount));
                     gen.writeStringField('BillingStartDate',invoiceDate!=null?string.valueOf(invoiceDate.toStartOfMonth()):'');
 					gen.writeStringField('BillingEndDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
@@ -321,7 +323,6 @@ global with sharing class InvoiceForMaxval
                         gen.writeStringField('InvoiceDescription','Annuity payment for ' +currentDate.year()+' Q'+quarter);
                     }	
                     gen.writeStringField('LineItemExpenseCode','');
-                    gen.writeStringField('ClientMatterId','');
                     gen.writeStringField('Exp/Fee/InvAdjType','E');
                     gen.writeNumberField('LineItemNumberOfUnits',1);
                     gen.writeNumberField('LineItemAdjustmentAmount',0);
