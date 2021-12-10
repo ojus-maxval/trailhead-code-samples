@@ -1,5 +1,6 @@
 /* Copyright © 2021 MaxVal Group. All Rights Reserved.
  * Unauthorized copying of this file, via any medium is strictly prohibited
+ * 
  * Proprietary and confidential
  * Written by Saranyaa C, October 2021
  */
@@ -19,6 +20,7 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
             if(scope.size()>0)
             {
                 list<Renewal_Configuration__c> objRenewalConfigurationList =  (List<Renewal_Configuration__c>)scope;
+                recipientList.add('saranyaa.c@maxval.com');
                 for(Renewal_Configuration__c objRenewalConfiguration : objRenewalConfigurationList)
                 {
                     recipientList.add(objRenewalConfiguration.Renewal_Admin_Email__c);
@@ -89,26 +91,28 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
                     }
                 }
                 
-                //Send Reminder after Drop Dead Date
-        		boolean mailStatus = false;
-	        	List<Annuity_Payment_v2__c> objRenewalListToUpdate = NEW List<Annuity_Payment_v2__c>();
+                //Send Reminder 4 - on or after drop dead date
+        		boolean reminder4MailStatus = false;
+	        	List<Annuity_Payment_v2__c> objRenewalListForReminder4ToUpdate = NEW List<Annuity_Payment_v2__c>();
                 //Get renewals list
-                List<Annuity_Payment_v2__c> objRenewalList = [select Id,Application_No__c,LastModifiedDate,Term__c,Patent_No__c,Patent__r.SymphonyIPM__Docket_No__c,Country_Code__c,Due_Date__c,Window_Close_Date__c,Hold_Date__c,Is_Reminder3_sent__c FROM Annuity_Payment_v2__c where Instruction__c = 'On Hold' AND Is_Reminder3_sent__c = false AND Window_Close_Date__c <= TODAY];                        
-                if(objRenewalList.size() > 0){  
+                List<Annuity_Payment_v2__c> objRenewalListForReminder4 = [select Id,Application_No__c,LastModifiedDate,Term__c,Patent_No__c,Patent__r.SymphonyIPM__Docket_No__c,Country_Code__c,Due_Date__c,Window_Close_Date__c,Hold_Date__c,Is_Reminder3_sent__c FROM Annuity_Payment_v2__c where Instruction__c = 'On Hold' AND Is_Reminder3_sent__c = false AND Window_Close_Date__c =: TODAY];                        
+                if(objRenewalListForReminder4.size() > 0){  
                     //Send mail
-                    mailStatus = SendReminderAfterDDD(objRenewalList,recipientList);
-                    if(mailStatus){                
-                        strAuditTrailLogText+='||Mail Sent successfully'; 
-                        for(Annuity_Payment_v2__c objRenewal: objRenewalList){
+                    reminder4MailStatus = SendReminderBeforeDDD(objRenewalListForReminder4,recipientList,reminder3);
+                    if(reminder4MailStatus){                
+                        strAuditTrailLogText+='||Reminder3 Sent successfully'; 
+                        for(Annuity_Payment_v2__c objRenewal: objRenewalListForReminder3){
                             //Update flag to avoid sending reminder again
-                            objRenewal.Is_Reminder3_sent__c = true;
-                            objRenewalListToUpdate.add(objRenewal);
+                            objRenewal.Is_Reminder4_sent__c = true;
+                            objRenewalListForReminder4ToUpdate.add(objRenewal);
                         }
-                        update objRenewalListToUpdate;
+                        update objRenewalListForReminder4ToUpdate;
                     }else{
-                        strAuditTrailLogText+='||Failed to send mail'; 
+                        strAuditTrailLogText+='||Failed to send Reminder4'; 
                     }
                 }
+                
+                
             }
             
         }
@@ -138,7 +142,7 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
             else if (reminderNo == 2)
                 emailBody += 'The following patent(s) that are On Hold, are approaching the renewal Due Date:';
             else if (reminderNo == 3)
-                emailBody += 'The following patent(s)  that  are On Hold, are approaching the renewal Grace Period End Date:';
+                emailBody += 'The following patent(s) that  are On Hold, are approaching the renewal Grace Period End Date:';
             emailBody +='<table border="0" cellpadding="0" cellspacing="0" width="287" style="border-collapse: collapse; width: 215pt;">';
             emailBody +='<colgroup><col width="100" style="width: 75pt;">';
             emailBody +='<col width="69" style="width: 52pt;">';
