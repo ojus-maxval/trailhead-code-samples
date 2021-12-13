@@ -8,17 +8,20 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
 {
     global Database.QueryLocator start(Database.BatchableContext BC)
     {
+        system.debug('step1');
        return Database.getQueryLocator([select Renewal_Admin_Email__c from Renewal_Configuration__c where  name = 'RenewalConfiguration']);
     }
     global void execute(Database.BatchableContext BC, List<sObject> scope)
 	{ 
         string strAuditTrailLogText = 'Started > ';
         list<string> recipientList = new list<string>();
-        integer reminder1 = 1, reminder2 = 2, reminder3 = 3;
+        integer reminder1 = 1, reminder2 = 2, reminder3 = 3;            
+        WindowConfigurationWrapper objWindowConfigurationWrapper=new WindowConfigurationWrapper();
         try
-        {            
+        {         
             if(scope.size()>0)
             {
+                objWindowConfigurationWrapper = WindowConfigurationController.GetOnHoldReminderDates();
                 list<Renewal_Configuration__c> objRenewalConfigurationList =  (List<Renewal_Configuration__c>)scope;
                 recipientList.add('saranyaa.c@maxval.com');
                 for(Renewal_Configuration__c objRenewalConfiguration : objRenewalConfigurationList)
@@ -26,7 +29,7 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
                     recipientList.add(objRenewalConfiguration.Renewal_Admin_Email__c);
                 }  
                 //Send Reminder 1 - X days before On Hold date
-                Date reminder1Date = date.today().adddays(-5);
+                Date reminder1Date = date.today().adddays(Integer.valueOf(objWindowConfigurationWrapper.OnHoldReminder1));
         		boolean reminder1MailStatus = false;
 	        	List<Annuity_Payment_v2__c> objRenewalListForReminder1ToUpdate = NEW List<Annuity_Payment_v2__c>();
                 //Get renewals list
@@ -48,7 +51,7 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
                 }
                 
                 //Send Reminder 2 - X days before Due date
-                Date reminder2Date = date.today().adddays(-5);
+                Date reminder2Date = date.today().adddays(Integer.valueOf(objWindowConfigurationWrapper.OnHoldReminder2));
         		boolean reminder2MailStatus = false;
 	        	List<Annuity_Payment_v2__c> objRenewalListForReminder2ToUpdate = NEW List<Annuity_Payment_v2__c>();
                 //Get renewals list
@@ -70,7 +73,7 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
                 }
                 
                 //Send Reminder 3 - X days before drop dead date
-                Date reminder3Date = date.today().adddays(-5);
+                Date reminder3Date = date.today().adddays(Integer.valueOf(objWindowConfigurationWrapper.OnHoldReminder3));
         		boolean reminder3MailStatus = false;
 	        	List<Annuity_Payment_v2__c> objRenewalListForReminder3ToUpdate = NEW List<Annuity_Payment_v2__c>();
                 //Get renewals list
@@ -91,28 +94,26 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
                     }
                 }
                 
-                //Send Reminder 4 - on or after drop dead date
-        		boolean reminder4MailStatus = false;
-	        	List<Annuity_Payment_v2__c> objRenewalListForReminder4ToUpdate = NEW List<Annuity_Payment_v2__c>();
+                //Send Reminder after Drop Dead Date
+        		boolean mailStatus = false;
+	        	List<Annuity_Payment_v2__c> objRenewalListToUpdate = NEW List<Annuity_Payment_v2__c>();
                 //Get renewals list
-                List<Annuity_Payment_v2__c> objRenewalListForReminder4 = [select Id,Application_No__c,LastModifiedDate,Term__c,Patent_No__c,Patent__r.SymphonyIPM__Docket_No__c,Country_Code__c,Due_Date__c,Window_Close_Date__c,Hold_Date__c,Is_Reminder3_sent__c FROM Annuity_Payment_v2__c where Instruction__c = 'On Hold' AND Is_Reminder3_sent__c = false AND Window_Close_Date__c =: TODAY];                        
-                if(objRenewalListForReminder4.size() > 0){  
+                List<Annuity_Payment_v2__c> objRenewalList = [select Id,Application_No__c,LastModifiedDate,Term__c,Patent_No__c,Patent__r.SymphonyIPM__Docket_No__c,Country_Code__c,Due_Date__c,Window_Close_Date__c,Hold_Date__c,Is_Reminder3_sent__c FROM Annuity_Payment_v2__c where Instruction__c = 'On Hold' AND Is_Reminder3_sent__c = false AND Window_Close_Date__c <= TODAY];                        
+                if(objRenewalList.size() > 0){  
                     //Send mail
-                    reminder4MailStatus = SendReminderBeforeDDD(objRenewalListForReminder4,recipientList,reminder3);
-                    if(reminder4MailStatus){                
-                        strAuditTrailLogText+='||Reminder3 Sent successfully'; 
-                        for(Annuity_Payment_v2__c objRenewal: objRenewalListForReminder3){
+                    mailStatus = SendReminderAfterDDD(objRenewalList,recipientList);
+                    if(mailStatus){                
+                        strAuditTrailLogText+='||Mail Sent successfully'; 
+                        for(Annuity_Payment_v2__c objRenewal: objRenewalList){
                             //Update flag to avoid sending reminder again
-                            objRenewal.Is_Reminder4_sent__c = true;
-                            objRenewalListForReminder4ToUpdate.add(objRenewal);
+                            objRenewal.Is_Reminder3_sent__c = true;
+                            objRenewalListToUpdate.add(objRenewal);
                         }
-                        update objRenewalListForReminder4ToUpdate;
+                        update objRenewalListToUpdate;
                     }else{
-                        strAuditTrailLogText+='||Failed to send Reminder4'; 
+                        strAuditTrailLogText+='||Failed to send mail'; 
                     }
                 }
-                
-                
             }
             
         }
@@ -166,7 +167,7 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
             for(Annuity_Payment_v2__c objRenewal: objRenewalList){
                 strAuditTrailLogText += objRenewal.id + ' , ';
                 emailBody +='<tr height="20" style="height: 15pt;">';
-                emailBody +='<td class="gmail-xl63" style="border-top: none; border-left: none; border-right: 0.5pt solid windowtext; border-bottom: 0.5pt solid windowtext; border-image: initial; padding-top: 1px; padding-right: 1px; padding-left: 1px; color: black; font-size: 11pt; font-family: Calibri, sans-serif; vertical-align: bottom; white-space: nowrap;">'+ objRenewal.Patent__r.SymphonyIPM__Docket_No__c +'</td>';
+                emailBody +='<td class="gmail-xl63" style="border-top: none; border-left: 0.5pt solid windowtext; width: 52pt; font-weight: 700; border-right: 0.5pt solid windowtext; border-bottom: 0.5pt solid windowtext; border-image: initial; padding-top: 1px; padding-right: 1px; padding-left: 1px; color: black; font-size: 11pt; font-family: Calibri, sans-serif; vertical-align: bottom; white-space: nowrap;">'+ objRenewal.Patent__r.SymphonyIPM__Docket_No__c +'</td>';
                 emailBody +='<td class="gmail-xl63" style="border-top: none; border-left: none; border-right: 0.5pt solid windowtext; border-bottom: 0.5pt solid windowtext; border-image: initial; padding-top: 1px; padding-right: 1px; padding-left: 1px; color: black; font-size: 11pt; font-family: Calibri, sans-serif; vertical-align: bottom; white-space: nowrap;">'+ objRenewal.Application_No__c +'</td>';
                 patentNo = objRenewal.Patent_No__c != null ? objRenewal.Patent_No__c : '';
                 emailBody +='<td class="gmail-xl63" style="border-top: none; border-left: none; border-right: 0.5pt solid windowtext; border-bottom: 0.5pt solid windowtext; border-image: initial; padding-top: 1px; padding-right: 1px; padding-left: 1px; color: black; font-size: 11pt; font-family: Calibri, sans-serif; vertical-align: bottom; white-space: nowrap;">'+ patentNo +'</td>';
