@@ -22,7 +22,7 @@ public with sharing class WindowConfigurationHelper
     {
         Date StartDate = null;
         WindowConfigurationWrapper objWindowConfigurationWrapper = new WindowConfigurationWrapper();
-        List<WindowConfiguration__mdt> objWindowConfigurationList = [SELECT Window_Type__c, Sub_Type__c, Schedule_From__c, Quarter__c, Month__c, Day__c FROM WindowConfiguration__mdt];
+        List<WindowConfiguration__mdt> objWindowConfigurationList = [SELECT MasterLabel,Window_Type__c, Sub_Type__c, Schedule_From__c, Quarter__c, Month__c, Day__c FROM WindowConfiguration__mdt];
         for(WindowConfiguration__mdt objWindowConfiguration : objWindowConfigurationList)
         {
             if (objWindowConfiguration.Window_Type__c == 'Instruction Window' && objWindowConfiguration.Sub_Type__c == 'Start')
@@ -84,4 +84,5 @@ public with sharing class WindowConfigurationHelper
         }
         return objWindowConfigurationWrapper;
     }
+}
 }
