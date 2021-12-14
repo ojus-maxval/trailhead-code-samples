@@ -8,7 +8,6 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
 {
     global Database.QueryLocator start(Database.BatchableContext BC)
     {
-        system.debug('step1');
        return Database.getQueryLocator([select Renewal_Admin_Email__c from Renewal_Configuration__c where  name = 'RenewalConfiguration']);
     }
     global void execute(Database.BatchableContext BC, List<sObject> scope)
@@ -16,14 +15,15 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
         string strAuditTrailLogText = 'Started > ';
         list<string> recipientList = new list<string>();
         integer reminder1 = 1, reminder2 = 2, reminder3 = 3;            
-        WindowConfigurationWrapper objWindowConfigurationWrapper=new WindowConfigurationWrapper();
         try
         {         
+        	WindowConfigurationWrapper objWindowConfigurationWrapper=new WindowConfigurationWrapper();
             if(scope.size()>0)
             {
                 objWindowConfigurationWrapper = WindowConfigurationController.GetOnHoldReminderDates();
                 list<Renewal_Configuration__c> objRenewalConfigurationList =  (List<Renewal_Configuration__c>)scope;
-                recipientList.add('saranyaa.c@maxval.com');
+                
+                //recipientList.add('saranyaa.c@maxval.com'); //for testing
                 for(Renewal_Configuration__c objRenewalConfiguration : objRenewalConfigurationList)
                 {
                     recipientList.add(objRenewalConfiguration.Renewal_Admin_Email__c);
@@ -227,7 +227,7 @@ global class OnHoldMailBatch implements Database.Batchable<sObject>, Database.Al
             for(Annuity_Payment_v2__c objRenewal: objRenewalList){
                 strAuditTrailLogText += objRenewal.id + ' , ';
                 emailBody +='<tr height="20" style="height: 15pt;">';
-                emailBody +='<td class="gmail-xl63" style="border-top: none; border-left: none; border-right: 0.5pt solid windowtext; border-bottom: 0.5pt solid windowtext; border-image: initial; padding-top: 1px; padding-right: 1px; padding-left: 1px; color: black; font-size: 11pt; font-family: Calibri, sans-serif; vertical-align: bottom; white-space: nowrap;">'+ objRenewal.Patent__r.SymphonyIPM__Docket_No__c +'</td>';
+                emailBody +='<td class="gmail-xl63" style="border-top: none; border-left: 0.5pt solid windowtext; width: 52pt; font-weight: 700; border-right: 0.5pt solid windowtext; border-bottom: 0.5pt solid windowtext; border-image: initial; padding-top: 1px; padding-right: 1px; padding-left: 1px; color: black; font-size: 11pt; font-family: Calibri, sans-serif; vertical-align: bottom; white-space: nowrap;">'+ objRenewal.Patent__r.SymphonyIPM__Docket_No__c +'</td>';
                 emailBody +='<td class="gmail-xl63" style="border-top: none; border-left: none; border-right: 0.5pt solid windowtext; border-bottom: 0.5pt solid windowtext; border-image: initial; padding-top: 1px; padding-right: 1px; padding-left: 1px; color: black; font-size: 11pt; font-family: Calibri, sans-serif; vertical-align: bottom; white-space: nowrap;">'+ objRenewal.Application_No__c +'</td>';
                 patentNo = objRenewal.Patent_No__c != null ? objRenewal.Patent_No__c : '';
                 emailBody +='<td class="gmail-xl63" style="border-top: none; border-left: none; border-right: 0.5pt solid windowtext; border-bottom: 0.5pt solid windowtext; border-image: initial; padding-top: 1px; padding-right: 1px; padding-left: 1px; color: black; font-size: 11pt; font-family: Calibri, sans-serif; vertical-align: bottom; white-space: nowrap;">'+ patentNo +'</td>';
