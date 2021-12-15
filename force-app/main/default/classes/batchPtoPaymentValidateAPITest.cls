@@ -48,7 +48,6 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='US0000001';
-        OI.Publication_No__c='US0000001';
         OI.Patent_No__c='US0000001';
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='Large';
@@ -127,7 +126,6 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='US0000001A';
-        OI.Publication_No__c='US0000001A';
         OI.Patent_No__c='US0000001B1';
         OI.Filing_Date__c=date.today().addyears(-4);
         OI.Term_Name__c='Year 3.7';
@@ -203,7 +201,6 @@ public class batchPtoPaymentValidateAPITest {
             OI.Jurisdiction__c='US';
             OI.Application_Date__c=date.today().addyears(-4);
             OI.Application_No__c='US000000'+i;
-            OI.Publication_No__c='US000000'+i;
             OI.Patent_No__c='US000000'+i;
             OI.Term_Name__c='Year 3.7';
             OI.Entity_Type_Name__c='Large';
@@ -216,8 +213,7 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='US0000001';
-        OI.Patent_No__c='US0000001A';        
-        OI.Publication_No__c='US0000001A2';
+        OI.Patent_No__c='US0000001A';       
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='';
         OI.Surcharge__c=13350.00;
@@ -304,7 +300,6 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='US0000001A';
-        OI.Publication_No__c='-';
         OI.Patent_No__c='US0000001B1';
         OI.Filing_Date__c=date.today().addyears(-4);
         OI.Term_Name__c='Year 3.7';

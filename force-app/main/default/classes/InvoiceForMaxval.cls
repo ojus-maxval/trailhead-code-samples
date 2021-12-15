@@ -56,8 +56,7 @@ global with sharing class InvoiceForMaxval
                      ,Term_Name__c
                      ,id,name,Invoice_Amount_When_Pay__c
                      ,Patent_No__c
-                     ,Application_No__c 
-                     ,Publication_No__c
+                     ,Application_No__c                      
                      ,Docket_No__c
                      ,Jurisdiction__c
                      ,Renewal_Instruction__c
@@ -159,7 +158,7 @@ global with sharing class InvoiceForMaxval
                         gen.writeStringField('ItemName', strItemName);  
                     	jurisdiction = orderItem.Jurisdiction__c!=null?orderItem.Jurisdiction__c:'';
                         patentId = '-';
-                        patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:orderItem.Publication_No__c!=null && orderItem.Publication_No__c!='-' ?orderItem.Publication_No__c:'';
+                        patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:'';
                         if(patentId!='-' && !patentId.startsWith(jurisdiction))
                             patentId = jurisdiction + patentId;                        
                         gen.writeStringField('Description','Currency fluctuation for Patent# - '+ patentId +' Order# - '+ ObjInvoiceList[0].Order__r.name +' Invoice date - '+ string.valueOf(invoiceDate) );
@@ -226,11 +225,9 @@ global with sharing class InvoiceForMaxval
                 {
                     
                     gen.writeStartObject();
-                    /*MARS-729 Publication number not available in the Invoice Attachment file (xlsx) for Renewal assets*/
-                    /*Condition added by Saranyaa*/
                     jurisdiction = orderItem.Jurisdiction__c!=null?orderItem.Jurisdiction__c:'';
                     string patentId = '-';
-                    patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:orderItem.Publication_No__c!=null && orderItem.Publication_No__c!='-' ?orderItem.Publication_No__c:'';
+                    patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:'';
                     if(patentId!='-' && !patentId.startsWith(jurisdiction))
                         patentId = jurisdiction + patentId;
                     string applicationNo = '-';
@@ -355,14 +352,14 @@ global with sharing class InvoiceForMaxval
                     	Datetime dueDate = orderItem.Due_Date__c;
                         jurisdiction = orderItem.Jurisdiction__c!=null?orderItem.Jurisdiction__c:'';
                         string patentId = '-';
-                        patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:orderItem.Publication_No__c!=null && orderItem.Publication_No__c!='-' ?orderItem.Publication_No__c:'';
+                        patentId = orderItem.Patent_No__c!=null && orderItem.Patent_No__c!='-' ?orderItem.Patent_No__c:'';
                         if(patentId!='-' && !patentId.startsWith(jurisdiction))
                             patentId = jurisdiction + patentId;
                         string applicationNo = '-';
                         applicationNo = orderItem.Application_No__c!=null?orderItem.Application_No__c:'';
                         if(applicationNo!='-' && !applicationNo.startsWith(jurisdiction))
                             applicationNo = jurisdiction + applicationNo;
-                        gen.writeStringField('PatentID',patentId);
+                        gen.writeStringField('Pat No./Pub No.',patentId);
                         gen.writeStringField('ApplicationNo',applicationNo);
                         gen.writeNumberField('LineItemNumber',lineItemNumber);
                         gen.writeStringField('LineItemDescription','Annuity Payment for '+jurisdiction+' '+orderItem.Docket_No__c+' '+orderItem.Patent_No__c+' '+orderItem.Term_Name__c+' '+dueDate.format('MMM-dd-yyyy'));

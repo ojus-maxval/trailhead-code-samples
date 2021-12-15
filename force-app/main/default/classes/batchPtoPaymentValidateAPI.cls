@@ -53,7 +53,7 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
         }
         string query = 'Select id,Name,Order__r.Client__c,PTO_Validation_Request_ID__c,Paid_Status__c,Surcharge__c,'+
                         'Payment_Status__c,Order_Number__c,Client__c,Jurisdiction__c,Billing_Currency__c,'+
-                        'Fee_Amount_When_Pay__c,Fee__c,Application_No__c,Patent_No__c,Publication_No__c,MV_API_Ref_Id__c,Filing_Date__c,'+
+                        'Fee_Amount_When_Pay__c,Fee__c,Application_No__c,Patent_No__c,MV_API_Ref_Id__c,Filing_Date__c,'+
                         'Invoice_Type_Name_Value__c,Entity_Type_Name__c,Invoice__c,Invoice__r.Name,Term_Name__c FROM Order_Item__c '+
                         'WHERE PTO_Validation_Status__c=\'Request to Validate\'';
                         
@@ -156,18 +156,20 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
                         objectitem oitem = NEW objectitem();
                         boolean surchargeAvailable = False;
                         objectitem oitemSur = NEW objectitem();
-                        if(!oi.Application_No__c.substring(oi.Application_No__c.length()-1).isNumeric())
+                        if(oi.Application_No__c!=null && oi.Application_No__c!='-')
                         {
-                            oi.Application_No__c = oi.Application_No__c.substring(0,oi.Application_No__c.length()-1);
+                            if(!oi.Application_No__c.substring(oi.Application_No__c.length()-1).isNumeric())
+                            {
+                                oi.Application_No__c = oi.Application_No__c.substring(0,oi.Application_No__c.length()-1);
+                            }
+                            else if((!oi.Application_No__c.substring(oi.Application_No__c.length()-2).isNumeric())  && oi.Application_No__c.substring(0,2)!='EP')
+                                oi.Application_No__c = oi.Application_No__c.substring(0,oi.Application_No__c.length()-2);
+                            if(oi.Jurisdiction__c=='US' && (!oi.Application_No__c.substring(0,2).isNumeric()))
+                               oi.Application_No__c=oi.Application_No__c.substring(2,10);
                         }
-                        else if((!oi.Application_No__c.substring(oi.Application_No__c.length()-2).isNumeric())  && oi.Application_No__c.substring(0,2)!='EP')
-                            oi.Application_No__c = oi.Application_No__c.substring(0,oi.Application_No__c.length()-2);
-                        if(oi.Jurisdiction__c=='US' && (!oi.Application_No__c.substring(0,2).isNumeric()))
-                           oi.Application_No__c=oi.Application_No__c.substring(2,10);
+                        
                         if(oi.Patent_No__c!=null && oi.Patent_No__c!='-')
                         	oi.Patent_No__c=RemoveKindCode(oi.Patent_No__c);
-                        else
-                        	oi.Patent_No__c=RemoveKindCode(oi.Publication_No__c);
                         DateTime filingDate;
                         if(oi.Filing_Date__c!=null)
                         {  
@@ -177,13 +179,6 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
                         oitem.ApplicationNumber = oi.Application_No__c;
                         oitem.PatentNumber = oi.Patent_No__c;
                         oitem.SerialNumber = oi.Application_No__c;
-                        if(oi.Publication_No__c==null || oi.Publication_No__c=='-')
-                        	oitem.PublicationNumber = oi.Patent_No__c;
-                        else
-                        {
-                            oi.Publication_No__c=RemoveKindCode(oi.Publication_No__c);                       
-                            oitem.PublicationNumber = oi.Publication_No__c;
-                        }
                         oitem.AttorneyDocketNumber= oi.Application_No__c;
                         oitem.RenewalYear= oi.Term_Name__c.replaceAll('Year ','');
                         String Key = oi.Jurisdiction__c+'-'+oi.Term_Name__c;
@@ -208,7 +203,6 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
                                 oitemSur.ApplicationNumber = oi.Application_No__c;
                                 oitemSur.PatentNumber = oi.Patent_No__c;
                                 oitemSur.SerialNumber = oi.Application_No__c;
-                                oitemSur.PublicationNumber = oi.Publication_No__c;
                                 oitemSur.AttorneyDocketNumber= oi.Application_No__c;
                                 oitemSur.RenewalYear= oi.Term_Name__c.replaceAll('Year ','');
                                 oitemSur.FilingDate= oitem.FilingDate;
@@ -256,7 +250,7 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
                     woi.Jurisdiction = code;
                     woi.Items = Items;
                     string jsonbody = JSON.serialize(woi);
-                    //jsonbody='{"ClientRequestHandle":"d0cb82fc-a85a-42ea-b549-27ee7a3d3669","AuthHandleRef":"b772a5ac-7565-48de-b3ff-15168aa72c3a","Jurisdiction":"US","Items":[{"ApplicationNumber":"14513841","PatentNumber":"10565402","SerialNumber":"","PublicationNumber":"","AttorneyDocketNumber":"P491US1","RenewalYear":"","FilingDate":"","FeeCode":"1551","Fee":"1500.55"}]}';
+                    //jsonbody='{"ClientRequestHandle":"d0cb82fc-a85a-42ea-b549-27ee7a3d3669","AuthHandleRef":"b772a5ac-7565-48de-b3ff-15168aa72c3a","Jurisdiction":"US","Items":[{"ApplicationNumber":"14513841","PatentNumber":"10565402","SerialNumber":"","AttorneyDocketNumber":"P491US1","RenewalYear":"","FilingDate":"","FeeCode":"1551","Fee":"1500.55"}]}';
                     strAuditTrail += '| Request Body :'+jsonbody+' | ';
                     system.debug('Request Body :'+jsonbody);
                     Http http = new Http();
@@ -479,10 +473,13 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
     
     public static string RemoveKindCode(string assetNumber)
     {
-        if(!assetNumber.substring(assetNumber.length()-1).isNumeric())
-            assetNumber = assetNumber.substring(0,assetNumber.length()-1);
-        else if(!assetNumber.substring(assetNumber.length()-2).isNumeric())
-            assetNumber = assetNumber.substring(0,assetNumber.length()-2);
+        if(assetNumber!=null && assetNumber!='-')
+        {
+            if(!assetNumber.substring(assetNumber.length()-1).isNumeric())
+            	assetNumber = assetNumber.substring(0,assetNumber.length()-1);
+            else if(!assetNumber.substring(assetNumber.length()-2).isNumeric())
+                assetNumber = assetNumber.substring(0,assetNumber.length()-2);
+        }
         return assetNumber;
     }
     public class ReqData
@@ -496,8 +493,7 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
     {
         public string ApplicationNumber{get;set;}
         public string PatentNumber{get;set;}
-        public string SerialNumber{get;set;}        
-        public string PublicationNumber{get;set;}
+        public string SerialNumber{get;set;}     
         public string AttorneyDocketNumber{get;set;}
         public string RenewalYear{get;set;}
         public string FilingDate{get;set;}
