@@ -135,4 +135,49 @@
                
                 Test.stopTest();
         }
+         @isTest public static void TestMethod3()
+        {
+                PTO_Credentials__c PTO =new PTO_Credentials__c();
+                PTO.Country_Code__c ='US';
+                Insert PTO;
+                List<Id > ClList =new List<Id>();
+                Clients__c  Cl =new Clients__c ();
+                Cl.Client_Name__c = 'Sample1';
+                Insert Cl;
+                ClList.add(Cl.id);
+                Invoice_Type_Configuration__c ITC =new Invoice_Type_Configuration__c();
+                ITC.Contact_Persons__c = 'sneha.b@maxval.com';
+                ITC.Client__c =Cl.id;
+                insert ITC;
+                List<Id> ListOrd =new List<Id>();
+                Set<Id > OrdSet =new Set<Id>();
+                
+                Order__c  Ord =new Order__c ();
+                Ord.Client__c =Cl.id;
+                Ord.Validation_Request_Status__c='';
+                Ord.Order_Status__c='Order Placed';
+                Insert Ord;
+                OrdSet.add(Ord.id);
+                ListOrd.add(Ord.id);
+                
+                Payment__c PY =new Payment__c ();
+                PY.Payment_Amount__c =5800.0;
+                Insert PY;
+                List<Order_Item__c> listOI = NEW List<Order_Item__c>();
+                Order_Item__c OI =new Order_Item__c();
+                OI.Order__c =Ord.Id;
+                OI.Payment__c =PY.id;
+                OI.Payment_Status__c ='Payment Received';
+                Insert OI;
+                List<String> OIList =new List<String>();
+                OIList.add(OI.id);
+                
+                Test.startTest();
+                Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
+                MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
+                batchValidateWithPTO ObjBatch =new batchValidateWithPTO();
+                Database.executeBatch(ObjBatch, 1);
+               
+                Test.stopTest();
+        }
     }
