@@ -177,7 +177,6 @@
                 MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
                 batchValidateWithPTO ObjBatch =new batchValidateWithPTO();
                 Database.executeBatch(ObjBatch, 1);
-               
                 Test.stopTest();
         }
     }
