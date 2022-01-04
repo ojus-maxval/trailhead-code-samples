@@ -31,9 +31,11 @@ global class InvoiceStatusRequest
                     for(data itm : res.Data)
                     {
                         InvRef.add(itm.InvoiceRef);
-                        if(mapitems.containskey(itm.InvoiceRef))
+                        if(!mapitems.containskey(itm.InvoiceRef))
                         {
-                            resError er = NEW resError();
+                            mapitems.put(itm.InvoiceRef, itm);
+                        }
+                            /*resError er = NEW resError();
                             reslst.Status = false;
                             er.Code = 'Duplicate_Invoice';
                             er.Description= 'Duplicate Invoice No cant be processed.';
@@ -41,12 +43,13 @@ global class InvoiceStatusRequest
                             reslst.Error=errors;
                             return reslst;
                         }                            
-                        else
-                            mapitems.put(itm.InvoiceRef, itm); 
+                        else*/
+                         
                     }
                 }
                 system.debug('mapitems'+mapitems);
-                list<Invoice__c> ObjInvoice= [SELECT id,Name,Order__r.name,LEDES_Message__c,LEDES_Status__c from Invoice__c WHERE name IN:InvRef];                
+                list<Invoice__c> ObjInvoice= [SELECT id,Name,Order__r.name,LEDES_Message__c,LEDES_Status__c from Invoice__c WHERE name IN:InvRef];// and Order__r.Client__c=:strclintbody
+                
                 if(ObjInvoice.size()>0)
                 {
                     List<string> assetId=new List<string>();
@@ -55,10 +58,6 @@ global class InvoiceStatusRequest
                         {
                             data rItem = mapitems.get(inv.Name);
                             system.debug('rItem '+rItem );
-                            if(rItem.Status =='1')
-                                inv.Invoice_Status__c='To Do';
-                            if(rItem.Status =='2')
-                                inv .Invoice_Status__c=' In Progress';
                             if(rItem.Status =='3')
                             {
                                 inv .Invoice_Status__c='Completed';
@@ -83,6 +82,7 @@ global class InvoiceStatusRequest
                             {
                                 inv.LEDES_Status__c=ledes.LEDESStatus;
                                 string warningMessage='';
+                                inv.LEDES_Message__c='';
                                 if(ledes.warning.size()>0)
                                 {
                                     for(resError ledesWarning :ledes.warning)
