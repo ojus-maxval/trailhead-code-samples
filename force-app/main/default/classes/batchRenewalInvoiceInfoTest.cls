@@ -1,3 +1,8 @@
+/* Copyright © 2022 MaxVal Group. All Rights Reserved.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Sneha B, January 2022
+ */
 @isTest
 public class batchRenewalInvoiceInfoTest {
   
@@ -28,13 +33,21 @@ public class batchRenewalInvoiceInfoTest {
         ObjAPI11.URL__c ='https://login.salesforce.com/services/oauth2/token';
         insert ObjAPI11;
         
+        API_Credentials__c ObjAPI2 = new API_Credentials__c();
+        ObjAPI2.Password__c ='Test@1234';
+        ObjAPI2.Username__c ='MaxvalAPI';
+        ObjAPI2.Name = 'PTO Payment Validate';
+        ObjAPI2.URL__c ='https://login.salesforce.com/services/oauth2/token';
+        insert ObjAPI2;
+        
         List<Id > ClList =new List<Id>();
         Clients__c  Cl =new Clients__c ();
         Cl.Client_Name__c = 'Test Status';
+        Cl.Is_LEDES_Required__c=true;
         Insert Cl;
         ClList.add(Cl.id);
         Invoice_Type_Configuration__c ITC =new Invoice_Type_Configuration__c();
-        ITC.Contact_Persons__c = 'sneha.b@maxval.com';
+        ITC.Contact_Persons__c = 'juveria.b@maxval.com';
         ITC.Client__c =Cl.id;
         insert ITC;
         List<Id> ListOrd =new List<Id>();
