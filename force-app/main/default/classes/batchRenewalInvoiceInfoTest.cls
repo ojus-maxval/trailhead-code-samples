@@ -6,7 +6,7 @@
 @isTest
 public class batchRenewalInvoiceInfoTest {
   
-    @isTest public static void InvoiceDetailsTest()
+    @isTest public static void InvoiceAttachmentTest()
     {
          API_Auth_Detail__c API =new API_Auth_Detail__c();
         API.Type_Of_Credential__c ='QB Credential';
