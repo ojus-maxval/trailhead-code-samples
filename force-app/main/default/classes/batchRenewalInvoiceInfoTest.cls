@@ -1,0 +1,75 @@
+@isTest
+public class batchRenewalInvoiceInfoTest {
+  
+    @isTest public static void InvoiceDetailsTest()
+    {
+         API_Auth_Detail__c API =new API_Auth_Detail__c();
+        API.Type_Of_Credential__c ='QB Credential';
+        Insert API;
+          
+        API_Credentials__c ObjAPI1 = new API_Credentials__c();
+        ObjAPI1.Password__c ='Test@1234';
+        ObjAPI1.Username__c ='MaxvalAPI';
+        ObjAPI1.Name = 'Invoice Info';
+        ObjAPI1.URL__c ='https://login.salesforce.com/services/oauth2/token';
+        insert ObjAPI1;
+        
+         API_Credentials__c ObjAPI3 = new API_Credentials__c();
+        ObjAPI3.Password__c ='Test@1234';
+        ObjAPI3.Username__c ='MaxvalAPI';
+        ObjAPI3.Name = 'Invoice Attachment' ;
+        ObjAPI3.URL__c ='https://login.salesforce.com/services/oauth2/token';
+        insert ObjAPI3;
+        
+        API_Credentials__c ObjAPI11 = new API_Credentials__c();
+        ObjAPI11.Password__c ='Test@1234';
+        ObjAPI11.Username__c ='MaxvalAPI';
+        ObjAPI11.Name = 'MaxvalAPI';
+        ObjAPI11.URL__c ='https://login.salesforce.com/services/oauth2/token';
+        insert ObjAPI11;
+        
+        List<Id > ClList =new List<Id>();
+        Clients__c  Cl =new Clients__c ();
+        Cl.Client_Name__c = 'Test Status';
+        Insert Cl;
+        ClList.add(Cl.id);
+        Invoice_Type_Configuration__c ITC =new Invoice_Type_Configuration__c();
+        ITC.Contact_Persons__c = 'sneha.b@maxval.com';
+        ITC.Client__c =Cl.id;
+        insert ITC;
+        List<Id> ListOrd =new List<Id>();
+        Set<Id > OrdSet =new Set<Id>();
+        
+        Order__c  Ord =new Order__c ();
+        Ord.Client__c =Cl.id;
+        Insert Ord;
+        OrdSet.add(Ord.id);
+        ListOrd.add(Ord.id);
+        
+        Payment__c PY =new Payment__c ();
+        PY.Payment_Amount__c =5800.0;
+        Insert PY;
+        
+        Order_Item__c OI =new Order_Item__c();
+        OI.Order__c =Ord.Id;
+        OI.Payment__c =PY.id;
+        Insert OI;
+        List<Order_Item__c> OIList =new List<Order_Item__c>();
+        OIList.add(OI);
+        
+        Invoice__c  Inv =new Invoice__c ();
+        Inv.Invoice_Amount__c = 2000.0;
+        Inv.API_Status__c = 'Completed';
+        Inv.Order__c = Ord.id;
+        Inv.Invoice_Currency__c ='USD';
+        insert Inv;
+        
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
+        MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
+        batchRenewalInvoiceInfo   ObjBatch =new batchRenewalInvoiceInfo();
+        Database.executeBatch(ObjBatch, 1);
+        Test.stopTest();
+    }
+}
