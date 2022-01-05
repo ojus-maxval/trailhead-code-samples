@@ -1,6 +1,6 @@
 @isTest
 public class batchPtoPaymentValidateAPITest {
-    @isTest public static void TestMethod1()
+    @isTest public static void ValidResponse()
     {
         PTO_Credentials__c pc  = NEW PTO_Credentials__c();
         pc.Country_Code__c = 'US';
@@ -63,7 +63,7 @@ public class batchPtoPaymentValidateAPITest {
         database.executebatch(cls);
         test.stopTest();
     }
-    @isTest public static void TestMethod2()
+    @isTest public static void ValidatingFields()
     {
         PTO_Credentials__c pc  = NEW PTO_Credentials__c();
         pc.Country_Code__c = 'EP';
@@ -162,7 +162,7 @@ public class batchPtoPaymentValidateAPITest {
         database.executebatch(cls);
         test.stopTest();
     }
-    @isTest public static void TestMethod4()
+    @isTest public static void ValidateWithVariousJurisdiction()
     {
         API_Credentials__c ObjAPI1 = new API_Credentials__c();
         ObjAPI1.Password__c ='Test@1234';
@@ -200,7 +200,7 @@ public class batchPtoPaymentValidateAPITest {
         database.executebatch(cls);
         test.stopTest();
     }
-	@isTest public static void TestMethod5()
+	@isTest public static void ValidateMulitpleAssets()
     {
         PTO_Credentials__c pc  = NEW PTO_Credentials__c();
         pc.Country_Code__c = 'US';
