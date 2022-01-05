@@ -295,10 +295,10 @@ global with sharing class InvoiceForMaxval
                         {
                             gen.writeStringField('ClientName','');
                             gen.writeStringField('MatterName','');
-<<<<<<< HEAD
-=======
+
+
                             gen.writeStringField('LawFirmMatterId',clientConfig[0].Law_Firm_Matter_ID__c!=null?clientConfig[0].Law_Firm_Matter_ID__c:'');//to be shared by kavithmani based on jurisdiction
->>>>>>> MARS-1020 - Committing changes
+
                         }  
                     }
                     
