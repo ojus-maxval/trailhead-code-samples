@@ -39,7 +39,8 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
             }
         }
         //-----------------------------
-        if (Trigger.isUpdate) {
+        if (Trigger.isUpdate) {            
+            List <string> ExternallyRenewedAssets = new List <string>();
             for (Order_Item__c objNewOrderItem: Trigger.new) {
                 boolean isPaymentConfirmationAttached = false;
                 Order_Item__c oldOiObj = Trigger.oldMap.get(objNewOrderItem.Id);
@@ -51,6 +52,20 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                 {
                      objNewOrderItem.adderror('1 - This action is not allowed at this time.' );
                 }
+                
+                //MARS-291 MaRS - Ability to mark an Asset as Renewed Externally
+                if(oldOiObj.Is_Renewed_Externally__c == false && objNewOrderItem.Is_Renewed_Externally__c == true){
+                    if(objNewOrderItem.Payment_Status__c == 'Asset Renewed'){
+						objNewOrderItem.adderror('Asset has already been renewed!');   
+                    }
+                    else{
+                        //Update status in MaRS
+                        objNewOrderItem.Payment_Status__c = 'Renewed Externally';
+                        //Send updated status to Symphony
+                        ExternallyRenewedAssets.add(objNewOrderItem.id);
+                    }
+                }
+                
                 //OUTSTANDING PAYMENT
                 If(oldOiObj.Payment_Received_from_Client__c == False && 
                    objNewOrderItem.Payment_Received_from_Client__c== false && 
@@ -497,30 +512,33 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
             {
             ObjOdrItem.addError('You can not make asset renewed again');
             }
-            } */            
-        } 
+            } */         
+            
+            //MARS-291 MaRS - Ability to mark an Asset as Renewed Externally
+        	if(ExternallyRenewedAssets.size() > 0)
+            {
+                //Send payment status to Symphony
+                batchInstructionStatusUpdate CA= NEW batchInstructionStatusUpdate(ExternallyRenewedAssets,'Renewed Externally');
+                database.executebatch(CA, 1);
+            }
+        }   
     }    
     
     //EVENT: After
     if (trigger.isAfter) {        
         if (trigger.isInsert || trigger.isUpdate) {           
             if (Trigger.isUpdate) { 
-                for(Order_Item__c objNewOrderItem:trigger.new){
-                    Order_Item__c  objOldOrderItem= Trigger.oldMap.get(objNewOrderItem.ID); 
-                    if(objNewOrderItem.Cancellation_Approval__c != 'Requested' && objNewOrderItem.Cancellation_Approval__c != 'Approved' && objNewOrderItem.Cancellation_Approval__c != 'Declined'
-                       && objNewOrderItem.Payment_Status__c == 'Payment Requested' && objNewOrderItem.Send_for_approval_to_pay_PTO_fee__c == false )
-                    {   
-                        AuditTrailHelper.UpdateAudit('Trigger Assets','PaymentStatus-'+objNewOrderItem.Payment_Status__c , 'Fail');
-                        list<Invoice__c > listinv=[SELECT Invoice_No__c FROM Invoice__c WHERE id =:objNewOrderItem.Invoice__c];
-                        if(listinv.size() > 0 && listinv[0].Invoice_No__c != null && listinv[0].Invoice_No__c != '' && listinv[0].Invoice_No__c != '-'){
-                            BatchQueueHelper.CreateBatchQueueForRecordPayment(Trigger.old, Trigger.New);
-                            AuditTrailHelper.UpdateAudit('Trigger Assets','Inside if' , 'Fail');
-                        }                 
-                        else{
-                            //objNewOrderItem.Invoice__c.addError('You are allowed to record the payment only after Invoice is generated for the asset');
-                        }   
-                    }
+                BatchQueueHelper.CreateBatchQueueForRecordPayment(Trigger.old, Trigger.New);
+                
+                for(Order_Item__c objNewOrderItem:trigger.new  ){
+                    Order_Item__c  objOldOrderItem= Trigger.oldMap.get(objNewOrderItem.ID);
                     
+                    if(objOldOrderItem.Send_for_approval_to_pay_PTO_fee__c == false && objNewOrderItem.Send_for_approval_to_pay_PTO_fee__c == true){
+                        if(objNewOrderItem.Invoice__c!=null)
+                            Inv_ID.add(objNewOrderItem.Invoice__c);
+                        system.debug('Inv_IDInv_ID'+Inv_ID);
+                        
+                    }                    
                 }
                 if(Inv_ID.size()>0){
                     list<Invoice__c > listinv=[select id,Invoice_Currency__c,Invoice_Amount__c,Invoice_No__c from Invoice__c where id in:Inv_ID];
@@ -603,7 +621,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
             set < id > requestedToPTO = NEW set < id > ();
             List <string> PaymentCompletedId = new List <string>();
             List <string> PaymentReceivedId = new List <string>();
-            List <string> PaymentNotReceivedId = new List <string>();
+			List <string> PaymentNotReceivedId = new List <string>();
             //Harsha added on 25-08-2020
             List < Order_Item__c > objOrderItemToApprove = NEW List < Order_Item__c > ();
             for (Order_Item__c objOrderItem: [SELECT Id, Invoice__c,Send_for_approval_to_pay_PTO_fee__c, Order__c, Application_No__c,Payment__c, Payment_Approval_Status__c, Is_send_to_Validate_with_PTO__c, PTO_Validation_Status__c, client__c, Order__r.Client__c, PTO_Validation_Request_ID__c, Filing_Receipt_File_Id__c, Cancellation_Approval__c, Payment_Status__c,Filing_Receipt_Uploaded__c FROM Order_Item__c WHERE id IN: trigger.new]) {
@@ -668,7 +686,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                     if (objOrderItem.Cancellation_Approval__c != oldoi.Cancellation_Approval__c && objOrderItem.Cancellation_Approval__c != null && objOrderItem.Cancellation_Approval__c == 'Approved')
                     {
                         objOrderItem.Cancellation_Approved_Date__c = System.today();
-                        CancellationApprovedID.add(objOrderItem.id);
+                    	CancellationApprovedID.add(objOrderItem.id);
                         update objOrderItem;
                     }
                     
@@ -705,7 +723,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                          objOrderItem.Renewed_On__c = System.today();
                          AssetRenewedID.add(objOrderItem.id);
                          update objOrderItem;
-                    }
+	    			}
                 }
             }
             //Harsha added on 25-08-2020
@@ -734,7 +752,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                batchInstructionStatusUpdate CA= NEW batchInstructionStatusUpdate(PaymentNotReceivedId,'Payment not Received/PTO Payment in Progress');
                database.executebatch(CA, 1);
            }            
-       
+	   
            if (AssetRenewedID.size() > 0) {
                AssetRenewedStatusUpdate CA= NEW AssetRenewedStatusUpdate(AssetRenewedID);
                database.executebatch(CA, 1);
