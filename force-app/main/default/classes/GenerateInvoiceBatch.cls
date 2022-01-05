@@ -424,11 +424,9 @@ objLRFeeInvoice.Invoice_Amount__c = objOrder.Late_Fee__c + objOrder.Rush_Fee__c;
         }
             //if(assetIdPtoValidation.size() > 0)
                 //BatchQueueHelper.BatchQueueForOrderItemForPTOvalidation(assetIdPtoValidation);
-
-        catch(Exception exp)
+        }catch(Exception exp)
         {
-            AuditTrailHelper.UpdateAudit('GenerateInvoiceBatch', exp.getMessage() + '|' + exp.getStackTraceString(), 'None');
-
+                        AuditTrailHelper.UpdateAudit('GenerateInvoiceBatch', exp.getMessage() + '|' + exp.getStackTraceString(), 'None');
 
         }
     }
