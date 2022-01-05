@@ -9,6 +9,11 @@ public with sharing class PaymentScheduleHelper
             objPaymentScheduleWrapper.ScheduleStartDate = DueDate.addDays(ScheduleDateFrom);
             objPaymentScheduleWrapper.ScheduleCloseDate = DueDate.addDays(ScheduleDateTo);
         }
+        else if (ScheduleFrom == 'First Day of Week of Due Date')
+        {
+            objPaymentScheduleWrapper.ScheduleStartDate = DueDate.toStartOfWeek().addDays(ScheduleDateFrom);
+            objPaymentScheduleWrapper.ScheduleCloseDate = DueDate.toStartOfWeek().addDays(ScheduleDateTo);
+        }
         else if (ScheduleFrom == 'Last Day of Week of Due Date')
         {
             objPaymentScheduleWrapper.ScheduleStartDate = DueDate.toStartOfWeek().addDays(ScheduleDateFrom + 7);
