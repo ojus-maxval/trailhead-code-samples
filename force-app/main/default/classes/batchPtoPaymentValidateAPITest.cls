@@ -1,6 +1,6 @@
 @isTest
 public class batchPtoPaymentValidateAPITest {
-    @isTest public static void TestMethod1()
+    @isTest public static void ValidResponse()
     {
         PTO_Credentials__c pc  = NEW PTO_Credentials__c();
         pc.Country_Code__c = 'US';
@@ -48,7 +48,6 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='US0000001';
-        OI.Publication_No__c='US0000001';
         OI.Patent_No__c='US0000001';
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='Large';
@@ -63,7 +62,7 @@ public class batchPtoPaymentValidateAPITest {
         database.executebatch(cls);
         test.stopTest();
     }
-    @isTest public static void TestMethod2()
+    @isTest public static void ValidatingFields()
     {
         PTO_Credentials__c pc  = NEW PTO_Credentials__c();
         pc.Country_Code__c = 'EP';
@@ -99,8 +98,7 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='EP';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='EP0000001A';
-        OI.Patent_No__c='EP0000001A';        
-        OI.Publication_No__c='EP0000001A';
+        OI.Patent_No__c='EP0000001A';
         OI.Filing_Date__c=system.today();
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='';
@@ -113,7 +111,7 @@ public class batchPtoPaymentValidateAPITest {
         test.stopTest();
     }
     
-    @isTest public static void TestMethod3()
+    @isTest public static void ValidateWithSurcharge()
     {
         PTO_Credentials__c pc  = NEW PTO_Credentials__c();
         pc.Country_Code__c = 'US';
@@ -149,8 +147,7 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='US0000001A2';
-        OI.Patent_No__c='US0000001A2';        
-        OI.Publication_No__c='US0000001A2';
+        OI.Patent_No__c='US0000001A2';
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='Large';
         OI.Surcharge__c=13350.00;
@@ -162,7 +159,7 @@ public class batchPtoPaymentValidateAPITest {
         database.executebatch(cls);
         test.stopTest();
     }
-    @isTest public static void TestMethod4()
+    @isTest public static void ValidateWithVariousJurisdiction()
     {
         API_Credentials__c ObjAPI1 = new API_Credentials__c();
         ObjAPI1.Password__c ='Test@1234';
@@ -187,8 +184,7 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='NZ';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='NZ0000001A2';
-        OI.Patent_No__c=null;        
-        OI.Publication_No__c='NZ0000001A2';
+        OI.Patent_No__c=null;
         OI.Term_Name__c='Year 3';
         OI.Entity_Type_Name__c='Large';
         OI.Surcharge__c=13350.00;
@@ -200,7 +196,7 @@ public class batchPtoPaymentValidateAPITest {
         database.executebatch(cls);
         test.stopTest();
     }
-	@isTest public static void TestMethod5()
+	@isTest public static void ValidateMulitpleAssets()
     {
         PTO_Credentials__c pc  = NEW PTO_Credentials__c();
         pc.Country_Code__c = 'US';
@@ -236,17 +232,16 @@ public class batchPtoPaymentValidateAPITest {
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='US0000001';
-        OI.Publication_No__c='US0000001';
         OI.Patent_No__c='-';
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='Large';
         OI.Surcharge__c=13350.00;
         Insert OI;
         List<Order_Item__c> listOI = NEW List<Order_Item__c>{new Order_Item__c(Jurisdiction__c='US',Surcharge__c=13350.00,Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',Order__c =Ord.Id,PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received'),
-        new Order_Item__c(Order__c =Ord.Id,Jurisdiction__c='US',Surcharge__c=13350.00,Entity_Type_Name__c='Large',Publication_No__c='US0000001',Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received'),
-        new Order_Item__c(Order__c =Ord.Id,Jurisdiction__c='US',Surcharge__c=13350.00,Entity_Type_Name__c='Large',Publication_No__c='US0000001',Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received'),
-            new Order_Item__c(Order__c =Ord.Id,Jurisdiction__c='US',Surcharge__c=13350.00,Entity_Type_Name__c='Large',Publication_No__c='US0000001',Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received'),
-            new Order_Item__c(Order__c =Ord.Id,Jurisdiction__c='US',Surcharge__c=13350.00,Entity_Type_Name__c='Large',Publication_No__c='US0000001',Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received')};
+        new Order_Item__c(Order__c =Ord.Id,Jurisdiction__c='US',Surcharge__c=13350.00,Entity_Type_Name__c='Large',Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received'),
+        new Order_Item__c(Order__c =Ord.Id,Jurisdiction__c='US',Surcharge__c=13350.00,Entity_Type_Name__c='Large',Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received'),
+            new Order_Item__c(Order__c =Ord.Id,Jurisdiction__c='US',Surcharge__c=13350.00,Entity_Type_Name__c='Large',Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received'),
+            new Order_Item__c(Order__c =Ord.Id,Jurisdiction__c='US',Surcharge__c=13350.00,Entity_Type_Name__c='Large',Application_Date__c=date.today().addyears(-4),Application_No__c='US0000001',PTO_Validation_Request_ID__c ='PTO-3847646278932388374',Payment_Status__c ='Payment Received')};
         Insert listOI;
         ptoValidationReqWrapper wrp = NEW ptoValidationReqWrapper();
         wrp.countryCode = 'US';
