@@ -61,6 +61,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Invoice_with_Variance__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Billing_Currency__c</field>
             </layoutItems>
             <layoutItems>
@@ -106,10 +110,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Payment_Received_from_Client__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Is_Instructed_during_Rush__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -177,10 +177,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Publication_No__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Extension_Package_Version__c</field>
             </layoutItems>
             <layoutItems>
@@ -234,6 +230,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Cancellation_Rejected_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Instructed_during_Rush__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Is_Renewed_Externally__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -483,6 +487,10 @@
                 <behavior>Edit</behavior>
                 <field>Agent_Fee_Unit_Rate_When_Pay__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Agent_Status__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -582,7 +590,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h5e000005OoJI</masterLabel>
+        <masterLabel>00h5f000006KyKv</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
