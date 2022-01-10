@@ -29,7 +29,8 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
             strAuditTrail +='Renewal Invoice Info : ';
             List<Clients__c> clientConfig=new List<Clients__c>();
             if(scope.size()>0)
-            	clientConfig =[SELECT 	Id,Is_LEDES_Required__c FROM Clients__c WHERE id=:scope[0].Order__r.Client__c ];
+            	clientConfig =[SELECT Id,Is_LEDES_Required__c FROM Clients__c WHERE id=:scope[0].Order__r.Client__c];
+            List<ContentVersion> contentVersion=[SELECT Title,Checksum,PathOnClient,ContentLocation,VersionData FROM Contentversion];
             for(Invoice__c ci : scope)
             {
                 string fileName='';
@@ -46,10 +47,10 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
                     HttpResponse ledesResponse = new HttpResponse();
                     ledesResponse = CallAPI(ledesURL,AccessToken);
                     fileName='LEDESInvoice-'+ ci.Name+' INFO';
-                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id,fileName);
+                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id,fileName,contentVersion);
                 }
                 fileName='Invoice-'+ ci.Name+' INFO';
-                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id,fileName);
+                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id,fileName,contentVersion);
                 if(callAttachmentsBatch)
                 	ci.API_Status__c = 'Downloaded Info';
             }
@@ -84,18 +85,39 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
     }
     
     //This function is used to upload the file against the particular order
-    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID,string fileName)
+    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID,string fileName,List<ContentVersion> contentVersion)
     {
         boolean callAttachmentsBatch=false;
+        Map<String,ContentVersion> contentVersionMap=new Map<String,ContentVersion>();
         if(response.getstatusCode() == 200)
         {
-            strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode();
             ContentVersion conVer = new ContentVersion();
-            conVer.ContentLocation = 'S';
-            conVer.PathOnClient =fileName+'.csv';
-            conVer.Title =fileName; // Display name of the files
-            conVer.VersionData = response.getBodyAsBlob(); // converting your binary string to Blog
-            insert conVer;
+            if(contentVersion.size()>0)
+            {
+                for(ContentVersion content:contentVersion)
+                {
+                    if(!contentVersionMap.containsKey(content.PathOnClient))
+                    	contentVersionMap.put(content.PathOnClient,content); 
+                }
+            }
+            strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode();            
+            if(contentVersionMap.containsKey(fileName+'.csv'))// converting your binary string to Blog
+            {
+               conVer=contentVersionMap.get(fileName+'.csv');
+               conVer.ContentLocation = 'S';
+               conVer.PathOnClient =fileName+'.csv';
+               conVer.Title =fileName; // Display name of the files
+               conVer.VersionData = response.getBodyAsBlob();
+               update conVer; 
+            }	
+            else
+            {
+             	conVer.ContentLocation = 'S';
+                conVer.PathOnClient =fileName+'.csv';
+                conVer.Title =fileName; // Display name of the files
+                conVer.VersionData = response.getBodyAsBlob();
+                insert conVer;   
+            } 
             System.debug(conVer.Id);
             Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;
             ContentDocumentLink cDe = new ContentDocumentLink();
