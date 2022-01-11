@@ -9,17 +9,16 @@
     <columns>Application_No__c</columns>
     <columns>Due_Date__c</columns>
     <columns>Drop_Dead_Date__c</columns>
+    <columns>Cancellation_Approval__c</columns>
     <columns>Invoice__c</columns>
     <columns>Invoice_Amount_When_Pay__c</columns>
     <columns>Fee_Currency__c</columns>
     <columns>Payment_Status__c</columns>
-    <columns>Comments__c</columns>
-    <columns>Cancellation_Approval__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Payment_Status__c</field>
         <operation>equals</operation>
-        <value>Waiting to Invoice,Payment Requested,Payment Received</value>
+        <value>Waiting to Invoice,Payment Requested,Payment Received,PTO/Agent Payments Completed</value>
     </filters>
     <filters>
         <field>Cancellation_Approval__c</field>

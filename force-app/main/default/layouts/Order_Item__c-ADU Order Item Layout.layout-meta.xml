@@ -267,6 +267,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>PTO_Validation_Request_ID__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>IS_It_Renewed_Assets__c</field>
             </layoutItems>
         </layoutColumns>
@@ -297,7 +301,7 @@
                 <field>Instruction_Message__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Readonly</behavior>
                 <field>Payment_Status__c</field>
             </layoutItems>
             <layoutItems>
