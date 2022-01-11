@@ -54,6 +54,13 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                 }
                 
                 //MARS-291 MaRS - Ability to mark an Asset as Renewed Externally
+                if(oldOiObj.Payment_Status__c != 'Renewed Externally' && objNewOrderItem.Payment_Status__c == 'Renewed Externally'){
+                    if(oldOiObj.Payment_Status__c == 'Asset Renewed'){
+						objNewOrderItem.adderror('Asset has already been renewed!');   
+                    }else{
+                    	objNewOrderItem.Is_Renewed_Externally__c = true;
+                    }
+                }
                 if(oldOiObj.Is_Renewed_Externally__c == false && objNewOrderItem.Is_Renewed_Externally__c == true){
                     if(objNewOrderItem.Payment_Status__c == 'Asset Renewed'){
 						objNewOrderItem.adderror('Asset has already been renewed!');   
