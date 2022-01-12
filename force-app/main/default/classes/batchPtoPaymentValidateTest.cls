@@ -48,7 +48,6 @@ public class batchPtoPaymentValidateTest {
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
         OI.Application_No__c='US0000001';
-        OI.Publication_No__c='US0000001';
         OI.Patent_No__c='US0000001';
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='Large';

@@ -97,9 +97,9 @@ public class batchPtoPaymentValidateAPITest {
         OI.PTO_Validation_Request_ID__c='abcdefg';
         OI.Jurisdiction__c='EP';
         OI.Application_Date__c=date.today().addyears(-4);
-        OI.Application_No__c='EP0000001A';
-        OI.Patent_No__c='EP0000001A';
-        OI.Filing_Date__c=system.today();
+        OI.Application_No__c='US0000001A';
+        OI.Patent_No__c='US0000001B1';
+        OI.Filing_Date__c=date.today().addyears(-4);
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='';
         OI.Surcharge__c=13350.00;
@@ -139,15 +139,30 @@ public class batchPtoPaymentValidateAPITest {
         Order__c  Ord =new Order__c ();
         Ord.Client__c =Cl.id;
         Insert Ord;
-        
+       
+        List<Order_Item__c> listOI = NEW List<Order_Item__c>();
+        for(integer i =0;i<=4;i++)
+        {
+            Order_Item__c OI =new Order_Item__c();
+            OI.Order__c =Ord.Id;
+            OI.PTO_Validation_Status__c='Request to Validate';
+            OI.PTO_Validation_Request_ID__c='abcdefg';
+            OI.Jurisdiction__c='US';
+            OI.Application_Date__c=date.today().addyears(-4);
+            OI.Application_No__c='US000000'+i;
+            OI.Patent_No__c='US000000'+i;
+            OI.Term_Name__c='Year 3.7';
+            OI.Entity_Type_Name__c='Large';
+            listOI.add(OI);
+        }
         Order_Item__c OI =new Order_Item__c();
         OI.Order__c =Ord.Id;
         OI.PTO_Validation_Status__c='Request to Validate';
         OI.PTO_Validation_Request_ID__c='PTO-3847646278932388374';
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
-        OI.Application_No__c='US0000001A2';
-        OI.Patent_No__c='US0000001A2';
+        OI.Application_No__c='US0000001';
+        OI.Patent_No__c='US0000001A';   
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='Large';
         OI.Surcharge__c=13350.00;
@@ -231,8 +246,9 @@ public class batchPtoPaymentValidateAPITest {
         OI.PTO_Validation_Request_ID__c='PTO-3847646278932388374';
         OI.Jurisdiction__c='US';
         OI.Application_Date__c=date.today().addyears(-4);
-        OI.Application_No__c='US0000001';
-        OI.Patent_No__c='-';
+        OI.Application_No__c='US0000001A';
+        OI.Patent_No__c='US0000001B1';
+        OI.Filing_Date__c=date.today().addyears(-4);
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='Large';
         OI.Surcharge__c=13350.00;

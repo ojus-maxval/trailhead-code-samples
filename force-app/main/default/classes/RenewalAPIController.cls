@@ -105,9 +105,6 @@ global class RenewalAPIController
                
                 objOrderItem.Jurisdiction__c = res.Jurisdiction;
                 objOrderItem.Application_No__c = res.ApplicationNo;
-                /*MARS-728 - Publication number should be added in Asset Detail view in MaRS*/
-                /*Modified by Saranyaa*/
-                objOrderItem.Publication_No__c = res.PublicationNo;
                 objOrderItem.Docket_No__c = res.DocketNo;
                 //strAudit += ' ApplicationDate :'+res.ApplicationDate;
                 //Modified by Sneha - MARS-816- Filing Date should be passed to MaRS and display in Asset Detail view
@@ -194,9 +191,6 @@ global class RenewalAPIController
                
                 objOrderItem.Jurisdiction__c = res.Jurisdiction;
                 objOrderItem.Application_No__c = res.ApplicationNo;
-                /*MARS-728 - Publication number should be added in Asset Detail view in MaRS*/
-                /*Modified by Saranyaa*/
-                objOrderItem.Publication_No__c = res.PublicationNo;
                 objOrderItem.Docket_No__c = res.DocketNo;
                 //Added by Sneha(MARS-974)
                 objOrderItem.Asset_Index__c =res.AssetIndex;
@@ -283,7 +277,6 @@ global class RenewalAPIController
     {
         public string Jurisdiction{set;get;}
         public string ApplicationNo{set;get;} 
-        public string PublicationNo{set;get;} 
         public string DocketNo{set;get;} 
         public string PatentNo{set;get;} 
         public string Title{set;get;} 

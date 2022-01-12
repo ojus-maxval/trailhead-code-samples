@@ -106,8 +106,6 @@ global class PTOFeePaidServiceClass
                            		oi.Application_No__c=oi.Application_No__c.substring(2,10);
                             if(oi.Patent_No__c!=null && oi.Patent_No__c!='-')
                                 oi.Patent_No__c=RemoveKindCode(oi.Patent_No__c);
-                            else
-                                oi.Patent_No__c=RemoveKindCode(oi.Publication_No__c);
                             if(!oi.Application_No__c.substring(0,2).isNumeric() && oi.Application_No__c.substring(0,2)!=oi.Jurisdiction__c)
                                 applicationCode=oi.Application_No__c.substring(0,2);
                             else
@@ -166,8 +164,8 @@ global class PTOFeePaidServiceClass
                                         	oi.Bill_API_Message__c = Billerrormessages;
                                     }
                                 }
-                                updateOI.add(oi);
                             }
+                            updateOI.add(oi);
                         }
                         try
                         {                            
