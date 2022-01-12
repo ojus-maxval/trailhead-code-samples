@@ -173,8 +173,8 @@ public class batchPtoPaymentValidate implements Database.AllowsCallouts,Database
                     req.setBody(jsonbody);
                     req.setTimeout(120000);
                     HttpResponse res = http.send(req);  
-                    system.debug('Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody());          
-                    strAuditTrail += '| Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody()+' | ';
+                    //system.debug('Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody());          
+                    strAuditTrail += '| Response status code :' + res.getStatusCode() +' |Status :' + res.getStatus() +' | ';
                     List<Order_Item__c> oits = NEW List<Order_Item__c>();
                     List<Order_Item__c> alloits = NEW List<Order_Item__c>();
                     if(OrderItemMap.containskey(keyOI))
