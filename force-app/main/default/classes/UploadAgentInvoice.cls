@@ -209,7 +209,8 @@ public with sharing class UploadAgentInvoice
             wrp.ValidationOnAgentStatus =false;
         }
          List<ListView> listviews = [SELECT Id, Name FROM ListView WHERE SobjectType = 'Order_Item__c' AND DeveloperName='Upload_Agent_Invoice' LIMIT 1];
-         wrp.ListViewName =listviews[0].Id;
+         if(listviews.size()>0)
+        	wrp.ListViewName =listviews[0].Id;
         return wrp;
     }
     @AuraEnabled

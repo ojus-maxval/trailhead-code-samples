@@ -41,7 +41,7 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
         {
             countryAuth.put(pc.Country_Code__c,pc.Name);
         }     
-        List<PTOFeeCode__c> PTOFeeCodes = [Select id,Jurisdiction__c,Surcharge_Code__c,Term_Name__c,FeeCode__c FROM PTOFeeCode__c];
+        List<PTOFeeCode__c> PTOFeeCodes = [Select id,Jurisdiction__c,Surcharge_Code__c,Term_Name__c,FeeCode__c,Entity_Type__c FROM PTOFeeCode__c];
         for(PTOFeeCode__c code: PTOFeeCodes)
         {            
             string key = code.Jurisdiction__c+'-'+code.Term_Name__c;
@@ -433,6 +433,7 @@ public class batchPtoPaymentValidateAPI implements Database.AllowsCallouts,Datab
                                     else
                                         oi.PTO_Validation_Message__c =  oi.PTO_Validation_Message__c + mapAssetWarning.get(oi.id);
                                 }
+                                oi.PTO_Validation_Status__c='API Validation Failed';
                                 strAuditTrail += '>>>'+oi.PTO_Validation_Message__c+'<<<';
                                 oits.add(oi);
                             }

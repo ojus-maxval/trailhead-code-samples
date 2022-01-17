@@ -28,8 +28,14 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
         {
             strAuditTrail +='Renewal Invoice Info : ';
             List<Clients__c> clientConfig=new List<Clients__c>();
+            List<Id> invoiceIdList=new List<Id>();
+            for(Invoice__c invoice:scope)
+            {
+                invoiceIdList.add(invoice.Id);
+            }
             if(scope.size()>0)
-            	clientConfig =[SELECT 	Id,Is_LEDES_Required__c FROM Clients__c WHERE id=:scope[0].Order__r.Client__c ];
+            	clientConfig =[SELECT Id,Is_LEDES_Required__c FROM Clients__c WHERE id=:scope[0].Order__r.Client__c];
+            List<ContentDocumentLink> docLink=[SELECT LinkedEntityId,ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId IN:invoiceIdList];
             for(Invoice__c ci : scope)
             {
                 string fileName='';
@@ -46,10 +52,10 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
                     HttpResponse ledesResponse = new HttpResponse();
                     ledesResponse = CallAPI(ledesURL,AccessToken);
                     fileName='LEDESInvoice-'+ ci.Name+' INFO';
-                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id,fileName);
+                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id,fileName,docLink);
                 }
                 fileName='Invoice-'+ ci.Name+' INFO';
-                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id,fileName);
+                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id,fileName,docLink);
                 if(callAttachmentsBatch)
                 	ci.API_Status__c = 'Downloaded Info';
             }
@@ -84,24 +90,40 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
     }
     
     //This function is used to upload the file against the particular order
-    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID,string fileName)
+    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID,string fileName,List<ContentDocumentLink> docLink)
     {
         boolean callAttachmentsBatch=false;
+        Map<String,ContentDocumentLink> contentDocMap=new Map<String,ContentDocumentLink>();
         if(response.getstatusCode() == 200)
         {
-            strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode();
             ContentVersion conVer = new ContentVersion();
+            if(docLink.size()>0)
+            {
+                for(ContentDocumentLink content:docLink)
+                {
+                    if(!contentDocMap.containsKey(content.LinkedEntityId))
+                    	contentDocMap.put(content.LinkedEntityId,content); 
+                }
+            }
+            strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode(); 
+            if(contentDocMap.containsKey(invoiceID))
+            {
+                ContentDocumentLink contentDoc=contentDocMap.get(invoiceID);
+                strAuditTrail +='||Older files available for the invoice id - ' +invoiceID+'||ContentDoc-'+contentDoc;
+                delete contentDoc;
+            }
             conVer.ContentLocation = 'S';
             conVer.PathOnClient =fileName+'.csv';
             conVer.Title =fileName; // Display name of the files
-            conVer.VersionData = response.getBodyAsBlob(); // converting your binary string to Blog
-            insert conVer;
+            conVer.VersionData = response.getBodyAsBlob();
+            strAuditTrail +='|| File to Insert - '+fileName;
+            insert conVer; 
             System.debug(conVer.Id);
-            Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;
+            Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id=:conVer.Id].ContentDocumentId;
             ContentDocumentLink cDe = new ContentDocumentLink();
             cDe.ContentDocumentId = conDoc;
             cDe.LinkedEntityId = invoiceID; // you can use objectId,GroupId etc
-            cDe.ShareType = 'I'; // Inferred permission, checkout description of ContentDocumentLink object for more details
+            cDe.ShareType = 'I'; // Inferred permission, checkout description of ContentDocumentLink object for more details            
             insert cDe;
             callAttachmentsBatch = true;
         }
