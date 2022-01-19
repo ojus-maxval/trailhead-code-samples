@@ -76,18 +76,7 @@ global class PTOFeePaidServiceClass
                                 if(itm.PatentNumber!=null && itm.PatentNumber!='')
                                 	patentNumber = itm.PatentNumber.replaceAll(orderItems[0].Jurisdiction__c,'');
                                 
-                                if(mapitems.containskey(applicationNumber+'-'+patentNumber))
-                                {
-                                    resError er = NEW resError();
-                                    reslst.Status = false;
-                                    er.Code = '';
-                                    er.Description= 'Duplicate InvoiceNo cant be processed.';
-                                    errors.add(er);
-                                    reslst.Error=errors;
-                                    return reslst;
-                                }
-                                else
-                                    mapitems.put(applicationNumber+'-'+patentNumber, itm);
+                                mapitems.put(applicationNumber+'-'+patentNumber, itm);
                                 system.debug(applicationNumber+'-'+patentNumber);
                             }
                         }
