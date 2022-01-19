@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Make_Payments</fullName>
-    <booleanFilter>((1 AND 2 AND 3 AND 6) OR (4 AND 5 AND 2 AND 6))</booleanFilter>
+    <booleanFilter>((1 AND 2 AND 3 AND 6) OR (4 AND 5 AND 2 AND 6) OR ((1 AND 2 AND 6 AND 7 AND 8) OR 4))</booleanFilter>
     <columns>Jurisdiction__c</columns>
     <columns>Patent_No__c</columns>
     <columns>Application_No__c</columns>
@@ -14,8 +14,9 @@
     <columns>Fee_Amount_When_Instruct__c</columns>
     <columns>Fee_Amount_When_Pay__c</columns>
     <columns>Variance__c</columns>
-    <columns>Renewal_Instruction__c</columns>
     <columns>Payment_Status__c</columns>
+    <columns>Agent_Status__c</columns>
+    <columns>Payment_Mode__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Payment_Status__c</field>
@@ -30,7 +31,7 @@
     <filters>
         <field>Payment_Mode__c</field>
         <operation>equals</operation>
-        <value>Credit Card,Wire,Agent</value>
+        <value>Credit Card,Wire Transfer</value>
     </filters>
     <filters>
         <field>Payment_Approval_Status__c</field>
@@ -46,6 +47,16 @@
         <field>Suggested_Open_Date_To_Pay__c</field>
         <operation>greaterOrEqual</operation>
         <value>NEXT_N_DAYS:3</value>
+    </filters>
+    <filters>
+        <field>Agent_Status__c</field>
+        <operation>equals</operation>
+        <value>Approve Agent Invoice</value>
+    </filters>
+    <filters>
+        <field>Payment_Mode__c</field>
+        <operation>equals</operation>
+        <value>Agent</value>
     </filters>
     <label>Make Payments</label>
 </ListView>
