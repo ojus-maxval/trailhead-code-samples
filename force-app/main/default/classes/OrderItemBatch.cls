@@ -54,6 +54,8 @@ global with sharing class OrderItemBatch implements Database.Batchable<sObject>,
                     objOrderItem.Suggested_Open_Date_To_Pay__c = objPaymentScheduleWrapper.ScheduleStartDate;
                     objOrderItem.Suggested_Close_Date_To_Pay__c = objPaymentScheduleWrapper.ScheduleCloseDate;
                     objOrderItem.Payment_Mode__c = paymentSchedule.Payment_Mode__c;
+                    if(paymentSchedule.Payment_Mode__c=='Agent')
+                       objOrderItem.Agent_Status__c='Awaiting Agent Invoice'; 
                 }
                 else
                     strAuditText +='Payment Schedule is not available for '+objOrderItem.Jurisdiction__c+' jurisdiction||';

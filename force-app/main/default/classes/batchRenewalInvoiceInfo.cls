@@ -8,7 +8,6 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
     public string strAuditTrail = '';
     public batchRenewalInvoiceInfo()
     {
-        //AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
         callAttachmentsBatch = false;
         AccessToken = '';
         credentials = [SELECT Id,Name,URL__c,Username__c,Password__c FROM API_Credentials__c WHERE Name=: 'Invoice Info' Limit 1];
@@ -26,9 +25,10 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
         string status = 'Success';
         try
         {
-            strAuditTrail +='Renewal Invoice Info : ';
+            strAuditTrail +='Renewal Invoice Info batch called: ';
             List<Clients__c> clientConfig=new List<Clients__c>();
             List<Id> invoiceIdList=new List<Id>();
+        	Map<String,ContentDocumentLink> contentDocMap=new Map<String,ContentDocumentLink>();
             for(Invoice__c invoice:scope)
             {
                 invoiceIdList.add(invoice.Id);
@@ -36,6 +36,7 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
             if(scope.size()>0)
             	clientConfig =[SELECT Id,Is_LEDES_Required__c FROM Clients__c WHERE id=:scope[0].Order__r.Client__c];
             List<ContentDocumentLink> docLink=[SELECT LinkedEntityId,ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId IN:invoiceIdList];
+            strAuditTrail +='||Older files available for invoice ids - ' +invoiceIdList;
             for(Invoice__c ci : scope)
             {
                 string fileName='';
@@ -43,24 +44,29 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
                 string URL = credentials.URL__c;                
                 string ledesURL=URL.replace('invoiceref',ci.Name).replace('type','ledes');
                 URL=URL.replace('invoiceref',ci.Name).replace('/type','');
-                strAuditTrail +='Invoice file download URL - '+URL;
+                strAuditTrail +='||Invoice file download URL - '+URL;
                 res = CallAPI(URL,AccessToken);
                 if(clientConfig.size()>0 && clientConfig[0].Is_LEDES_Required__c)
                 {
                     AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
-                    strAuditTrail +='LEDES file download URL - '+ledesURL;
+                    strAuditTrail +='||LEDES file download URL - '+ledesURL;
                     HttpResponse ledesResponse = new HttpResponse();
                     ledesResponse = CallAPI(ledesURL,AccessToken);
                     fileName='LEDESInvoice-'+ ci.Name+' INFO';
-                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id,fileName,docLink);
+                    callAttachmentsBatch=UploadFile(ledesResponse,ci.Name,ci.Id,fileName);
                 }
                 fileName='Invoice-'+ ci.Name+' INFO';
-                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id,fileName,docLink);
+                callAttachmentsBatch=UploadFile(res,ci.Name,ci.Id,fileName);
                 if(callAttachmentsBatch)
                 	ci.API_Status__c = 'Downloaded Info';
             }
+            delete docLink;
+            strAuditTrail +='||deleting old files';
             if(callAttachmentsBatch)
-            	update scope;
+            {
+               strAuditTrail += '||callAttachmentsBatch-'+callAttachmentsBatch;
+               update scope;
+            }            	
         }
         catch(Exception e)
         {
@@ -90,28 +96,13 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
     }
     
     //This function is used to upload the file against the particular order
-    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID,string fileName,List<ContentDocumentLink> docLink)
+    public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID,string fileName)
     {
         boolean callAttachmentsBatch=false;
-        Map<String,ContentDocumentLink> contentDocMap=new Map<String,ContentDocumentLink>();
         if(response.getstatusCode() == 200)
         {
             ContentVersion conVer = new ContentVersion();
-            if(docLink.size()>0)
-            {
-                for(ContentDocumentLink content:docLink)
-                {
-                    if(!contentDocMap.containsKey(content.LinkedEntityId))
-                    	contentDocMap.put(content.LinkedEntityId,content); 
-                }
-            }
-            strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode(); 
-            if(contentDocMap.containsKey(invoiceID))
-            {
-                ContentDocumentLink contentDoc=contentDocMap.get(invoiceID);
-                strAuditTrail +='||Older files available for the invoice id - ' +invoiceID+'||ContentDoc-'+contentDoc;
-                delete contentDoc;
-            }
+            strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode();
             conVer.ContentLocation = 'S';
             conVer.PathOnClient =fileName+'.csv';
             conVer.Title =fileName; // Display name of the files
