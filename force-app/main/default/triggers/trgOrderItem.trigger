@@ -109,7 +109,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                      (oldOiObj.Is_send_to_Validate_with_PTO__c != objNewOrderItem.Is_send_to_Validate_with_PTO__c && objNewOrderItem.Is_send_to_Validate_with_PTO__c == true) //|| (oldOiObj.Is_send_to_Validate_with_PTO__c != objNewOrderItem.Is_send_to_Validate_with_PTO__c && objNewOrderItem.Is_send_to_Validate_with_PTO__c == true)
                     )) 
                 {
-                    objNewOrderItem.adderror('4 - This action is not allowed at this time.');
+                    //objNewOrderItem.adderror('4 - This action is not allowed at this time.');
                 }
                 // * PAYMENT LIST VIEW VALIDATION* i               
                 /*if (((objNewOrderItem.Payment_Status__c == 'Payment Received' &&
@@ -187,7 +187,8 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                      (oldOiObj.Special_Instruction__c != objNewOrderItem.Special_Instruction__c && objNewOrderItem.Special_Instruction__c != null) ||
                      (oldOiObj.Is_PTO_Fee_Paid__c != objNewOrderItem.Is_PTO_Fee_Paid__c && objNewOrderItem.Is_PTO_Fee_Paid__c == true) ||
                      (oldOiObj.Is_it_renewed_in_PTO__c != objNewOrderItem.Is_it_renewed_in_PTO__c && objNewOrderItem.Is_it_renewed_in_PTO__c == True) 
-                     && ((oldOiObj.Suggested_Open_Date_To_Pay__c < date.today().addDays(1))))) 
+                     && ((oldOiObj.Suggested_Open_Date_To_Pay__c < date.today().addDays(1)))
+                     )) 
                 {
                     objNewOrderItem.adderror('8 - This action is not allowed at this time.');
                 }
@@ -321,7 +322,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                     ){
                         objNewOrderItem.Payment_Status__c = 'Payment Received';
                     } else {
-                        objNewOrderItem.Patent_No__c.addError('You are allowed to record the payment only if meet the following criteria.[1] Payment requested from Client');
+                        objNewOrderItem.Patent_No__c.addError('You are allowed to record the payment only if meet the following criteria.[1] Payment requested from Client [2] Invoice generation is complete');
                     }
                 }
                 
@@ -625,7 +626,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
             Map < string, string > mapDecisionOnAppNo = NEW Map < string, string > ();
             Map < string, id > mapPTOValReqIDWWithOI = NEW Map < string, id > ();
             Map < Id, Id > mapOrderIds = new Map < Id, Id > ();
-            set < id > requestedToPTO = NEW set < id > ();
+            List < id > requestedToPTO = NEW List < id > ();
             List <string> PaymentCompletedId = new List <string>();
             List <string> PaymentReceivedId = new List <string>();
 			List <string> PaymentNotReceivedId = new List <string>();
@@ -691,46 +692,30 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
                     
                     
                     if (objOrderItem.Cancellation_Approval__c != oldoi.Cancellation_Approval__c && objOrderItem.Cancellation_Approval__c != null && objOrderItem.Cancellation_Approval__c == 'Approved')
-                    {
-                        objOrderItem.Cancellation_Approved_Date__c = System.today();
                     	CancellationApprovedID.add(objOrderItem.id);
-                        update objOrderItem;
-                    }
                     
                     //MARS-735 - Renewal Status update to symphony - Added by Sneha    
-                    if (objOrderItem.payment_status__c!= oldoi.payment_status__c&& objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'PTO/Agent Payments Completed') {
+                    if (objOrderItem.payment_status__c!= oldoi.payment_status__c&& objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'PTO/Agent Payments Completed')
                         PaymentCompletedId.add(objOrderItem.id);
-                    } 
+                     
                     
-                    if (objOrderItem.payment_status__c!= oldoi.payment_status__c&& objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'Payment Received') {
+                    if (objOrderItem.payment_status__c!= oldoi.payment_status__c&& objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'Payment Received')
                         PaymentReceivedId.add(objOrderItem.id);
-                    }
-                    if (objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'Payment Requested' && objOrderItem.Send_for_approval_to_pay_PTO_fee__c== true && objOrderItem.Payment_Approval_Status__c=='Approved' ) {
-                        PaymentNotReceivedId.add(objOrderItem.id);
-                    }
-
-                    if (objOrderItem.payment_status__c!= oldoi.payment_status__c&& objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'Asset Renewed') {
-                        objOrderItem.Renewed_On__c = System.today();
-                        AssetRenewedID.add(objOrderItem.id);
-                        update objOrderItem;
-                    }    
                     
-                    if (objOrderItem.Cancellation_Approval__c != oldoi.Cancellation_Approval__c && objOrderItem.Cancellation_Approval__c != null && objOrderItem.Cancellation_Approval__c == 'Declined') {
-                        objOrderItem.Cancellation_Rejected_Date__c = System.today();
+                    if (objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'Payment Requested' && objOrderItem.Send_for_approval_to_pay_PTO_fee__c== true && objOrderItem.Payment_Approval_Status__c=='Approved' ) 
+                        PaymentNotReceivedId.add(objOrderItem.id);
+
+                    if (objOrderItem.payment_status__c!= oldoi.payment_status__c&& objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'Asset Renewed') 
+                        AssetRenewedID.add(objOrderItem.id);
+                    
+                    if (objOrderItem.Cancellation_Approval__c != oldoi.Cancellation_Approval__c && objOrderItem.Cancellation_Approval__c != null && objOrderItem.Cancellation_Approval__c == 'Declined') 
                         CancellationDeclinedID.add(objOrderItem.id);
-                        Update objOrderItem;
-                    }
-                    if (objOrderItem.Cancellation_Approval__c != oldoi.Cancellation_Approval__c && objOrderItem.Cancellation_Approval__c != null && objOrderItem.Cancellation_Approval__c == 'Requested') {
+                    
+                    if (objOrderItem.Cancellation_Approval__c != oldoi.Cancellation_Approval__c && objOrderItem.Cancellation_Approval__c != null && objOrderItem.Cancellation_Approval__c == 'Requested') 
                         CancellationRequestedID.add(objOrderItem.id);
-                    }
-                    if (objOrderItem.Payment_Status__c != oldoi.Payment_Status__c && objOrderItem.Payment_Status__c != null && objOrderItem.Payment_Status__c == 'Instruct Failed') {
+                    
+                    if (objOrderItem.Payment_Status__c != oldoi.Payment_Status__c && objOrderItem.Payment_Status__c != null && objOrderItem.Payment_Status__c == 'Instruct Failed')
                         listInstructFailedIds.add(objOrderItem.id);
-                    }
-                    if (objOrderItem.payment_status__c!= oldoi.payment_status__c&& objOrderItem.payment_status__c!= null && objOrderItem.payment_status__c== 'Asset Renewed') {
-                         objOrderItem.Renewed_On__c = System.today();
-                         AssetRenewedID.add(objOrderItem.id);
-                         update objOrderItem;
-	    			}
                 }
             }
             //Harsha added on 25-08-2020
