@@ -17,36 +17,34 @@ public class AssetRenewedStatusUpdate implements Database.AllowsCallouts,Databas
         string Status = 'Success';
         try
         {
-           // strAuditTrail += 'Filing Receipt Content Details ToSymp - '; 
+           List<Order_Item__c> orderItems=new List<Order_Item__c>();
             for(Order_Item__c oi : scope)
             {
-               req r = NEW req();
-                
-                           
-                    r.OrderName = oi.Name;
-                    r.PaymentStatus = oi.Payment_Status__c;
-                   
-                    string jsonbody = JSON.serialize(r);
-                    system.debug('jsonbody: '+jsonbody);
-                    strAuditTrail += ' req: '+jsonbody;
-                    string AccessToken = SymphonyAuthenticaionHelper.SymphonyAuthenticaionHelper(oi.Order__r.Client__c);
-                    system.debug('>>>'+AccessToken);
-                    Http http = new Http();
-                    HttpRequest req = new HttpRequest();
-                    req.setMethod('POST');
-                    req.setTimeout(120000);
-                    req.setEndpoint(oi.Order__r.Client__r.Endpoint_URL__c+'/AssetRenewedStatusUpdate/toRenew');
-                    system.debug('>>>'+oi.Order__r.Client__r.Endpoint_URL__c+'/AssetRenewedStatusUpdate/toRenew/');
-                    
-                    req.setHeader('Authorization', 'Bearer ' + AccessToken);
-                    req.setHeader('Content-Type','application/json;charset=UTF-8');
-                    req.setHeader('Content-Length', string.valueOf(jsonbody.length()));            
-                    req.setBody(jsonbody);
-                    HttpResponse res = http.send(req);  
-                    system.debug('Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody());          
-                    strAuditTrail += ' |Res Status: '+res.getStatus()+' |Status Code: '+res.getStatusCode()+' |Body: '+res.getBody();
-                
+                req r = NEW req();
+                r.OrderName = oi.Name;
+                r.PaymentStatus = oi.Payment_Status__c;
+                string jsonbody = JSON.serialize(r);
+                system.debug('jsonbody: '+jsonbody);
+                strAuditTrail += ' req: '+jsonbody;
+                string AccessToken = SymphonyAuthenticaionHelper.SymphonyAuthenticaionHelper(oi.Order__r.Client__c);
+                system.debug('>>>'+AccessToken);
+                Http http = new Http();
+                HttpRequest req = new HttpRequest();
+                req.setMethod('POST');
+                req.setTimeout(120000);
+                req.setEndpoint(oi.Order__r.Client__r.Endpoint_URL__c+'/AssetRenewedStatusUpdate/toRenew');
+                system.debug('>>>'+oi.Order__r.Client__r.Endpoint_URL__c+'/AssetRenewedStatusUpdate/toRenew/');
+                req.setHeader('Authorization', 'Bearer ' + AccessToken);
+                req.setHeader('Content-Type','application/json;charset=UTF-8');
+                req.setHeader('Content-Length', string.valueOf(jsonbody.length()));            
+                req.setBody(jsonbody);
+                HttpResponse res = http.send(req);  
+                system.debug('Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody());          
+                strAuditTrail += ' |Res Status: '+res.getStatus()+' |Status Code: '+res.getStatusCode()+' |Body: '+res.getBody();
+                oi.Renewed_On__c=system.today();
+                orderItems.add(oi);
             }
+            update orderItems;
         }
         catch(exception e)
         {

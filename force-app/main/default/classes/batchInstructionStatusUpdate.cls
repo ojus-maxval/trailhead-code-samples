@@ -25,7 +25,7 @@ public class batchInstructionStatusUpdate implements Database.AllowsCallouts,Dat
         string Status = 'Success';
         try
         {
-            // strAuditTrail += 'Filing Receipt Content Details ToSymp - '; 
+            List<Order_Item__c> orderItems=new List<Order_Item__c>();
             for(Order_Item__c oi : scope)
             {
                 req r = NEW req();     
@@ -48,7 +48,19 @@ public class batchInstructionStatusUpdate implements Database.AllowsCallouts,Dat
                 HttpResponse res = http.send(req);  
                 //strAuditTrail+='Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody();          
                 strAuditTrail += 'Req:'+jsonbody+' |Res Status: '+res.getStatus()+' |Status Code: '+res.getStatusCode()+' |Body: '+res.getBody();               
+                if(recordStatus=='Rejected')
+                {
+                    oi.Cancellation_Rejected_Date__c = System.today();
+                    orderItems.add(oi);
+                }   
+                else if(recordStatus=='Approved')
+                {
+                    oi.Cancellation_Approved_Date__c=System.today();
+                    orderItems.add(oi);
+                }
             }
+            if(orderItems.size()>0)
+            	update orderItems;
         }
         catch(exception e)
         {
