@@ -1,3 +1,7 @@
+/* Copyright © 2021 MaxVal Group. All Rights Reserved.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
 global with sharing class OrderItemBatch implements Database.Batchable<sObject>, Database.AllowsCallouts
 {
     public List<Id> SelectedOrderItemIds {get;set;}
@@ -176,3 +180,4 @@ global with sharing class OrderItemBatch implements Database.Batchable<sObject>,
     }
     
 }
+

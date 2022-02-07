@@ -1,3 +1,7 @@
+/* Copyright © 2021 MaxVal Group. All Rights Reserved.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ */
 public with sharing class WindowConfigurationHelper
 {
     public static Date AddQMD(Date DateValue, decimal nQuarter, decimal nMonth, decimal nDay)
