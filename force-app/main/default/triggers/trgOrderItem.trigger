@@ -626,7 +626,7 @@ trigger trgOrderItem on Order_Item__c(before insert, before update, after insert
             Map < string, string > mapDecisionOnAppNo = NEW Map < string, string > ();
             Map < string, id > mapPTOValReqIDWWithOI = NEW Map < string, id > ();
             Map < Id, Id > mapOrderIds = new Map < Id, Id > ();
-            List < id > requestedToPTO = NEW List < id > ();
+            Set < id > requestedToPTO = NEW Set < id > ();
             List <string> PaymentCompletedId = new List <string>();
             List <string> PaymentReceivedId = new List <string>();
 			List <string> PaymentNotReceivedId = new List <string>();
