@@ -273,7 +273,8 @@ global with sharing class InvoiceForMaxval
                     gen.writeStringField('InvoiceDate',invoiceDate!=null?string.valueOf(invoiceDate):'');
                     if(clientConfig[0].Client_Name__c.contains('Dropbox') && (jurisdiction=='US' || jurisdiction=='CA'))
                     {
-                        gen.writeStringField('ClientId','');
+                        //MARS-1164 MaRS - LEDES csv generation failed for Dropbox client
+                        gen.writeStringField('ClientId','Dropbox INC BU');//to be shared by kavithmani
                         gen.writeStringField('ClientMatterId','BF_M#48539');
                         gen.writeStringField('MatterName','MaxVal Patent Annuities (North America)');
                         gen.writeStringField('LawFirmMatterId','sampleID');//to be shared by kavithamani based on jurisdiction
