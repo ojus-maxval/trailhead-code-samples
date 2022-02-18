@@ -254,6 +254,7 @@ global class RenewalAPIController
         }
         catch(Exception exp)
         {
+            //By Sindhuja for updating instruction status as failed
             ReturnValue.Status = 'Instruct Failed';
             ReturnValue.IsSuccess = false;
             strAudit += exp.getMessage() + '| ' + exp.getStacktraceString();
