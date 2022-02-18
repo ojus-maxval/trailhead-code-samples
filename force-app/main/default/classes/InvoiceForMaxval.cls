@@ -275,8 +275,9 @@ global with sharing class InvoiceForMaxval
                     {
                         gen.writeStringField('LineItemExpenseCode','E117');
                         //MARS-1164 MaRS - LEDES csv generation failed for Dropbox client
-                        string clientId = WindowConfigurationHelper.GetLEDESClientId('Dropbox');
+                        string clientId = MetadataHelper.GetLEDESClientId('Dropbox');
                         gen.writeStringField('ClientId',clientId);//to be shared by kavithmani
+                        gen.writeStringField('ClientName',clientConfig[0].Client_Name__c!=null?clientConfig[0].Client_Name__c:'');
                         gen.writeStringField('ClientMatterId','BF_M#48539');
                         gen.writeStringField('MatterName','MaxVal Patent Annuities (North America)');
                         gen.writeStringField('LawFirmMatterId','sampleID');//to be shared by kavithamani based on jurisdiction

@@ -2,7 +2,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  */
-public with sharing class WindowConfigurationHelper
+public with sharing class MetadataHelper
 {
     public static string GetLEDESClientId(string client){
         string ledesClientId = '';
