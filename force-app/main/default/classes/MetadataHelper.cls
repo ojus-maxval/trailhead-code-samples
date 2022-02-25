@@ -4,11 +4,9 @@
  */
 public with sharing class MetadataHelper
 {
-    public static string GetLEDESClientId(string client){
-        string ledesClientId = '';
-        List<LEDESClientId__mdt> ledesClientIds = [SELECT ClientId__c,MasterLabel FROM LEDESClientId__mdt WHERE MasterLabel =:client LIMIT 1];
-        if(ledesClientIds.size() > 0)
-            ledesClientId = ledesClientIds[0].ClientId__c;
-       	return ledesClientId;
-    }
+    public static List<LEDESClientId__mdt> GetLEDESDetails(string client){      
+        List<LEDESClientId__mdt> ledesClientIds = new List<LEDESClientId__mdt>();
+         ledesClientIds   = [SELECT LineItemExpensesCode__c,ClientId__c,MatterId__c,MatterName__c,LawFirmMatterId__c,MasterLabel FROM LEDESClientId__mdt WHERE MasterLabel =:client LIMIT 1];
+       	return ledesClientIds;
+    }    
 }
