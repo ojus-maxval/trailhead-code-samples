@@ -61,7 +61,7 @@ global class PTOFeePaidServiceClass
                 if(MVRequestID!=null && MVRequestID!='null' && MVRequestID!='')
                 {
                     List<Order_Item__c > updateOI = NEW List<Order_Item__c >();
-                    List<Order_Item__c > orderItems = [SELECT id,Jurisdiction__c,Name,Paid_Status__c,PTO_Validation_Request_ID__c,Payment_Status__c,Order_Number__c,Client__c,Fee_Amount_When_Pay__c,Application_No__c,Patent_No__c,MV_API_Ref_Id__c,PTO_Validation_Status__c,PTO_Validation_Message__c,Bill_No__c,Bill_Status__c,Bill_API_Code__c,Bill_API_Message__c FROM Order_Item__c WHERE PTO_Validation_Request_ID__c =: MVRequestID];
+                    List<Order_Item__c > orderItems = [SELECT id,Jurisdiction__c,Name,Paid_Status__c,PTO_Validation_Request_ID__c,Payment_Status__c,Order_Number__c,Client__c,Fee_Amount_When_Pay__c,Application_No__c,Patent_No__c,MV_API_Ref_Id__c,PTO_Validation_Status__c,PTO_Validation_Message__c,Bill_No__c,Bill_Status__c,Bill_API_Code__c,Bill_API_Message__c,Publication_No__c FROM Order_Item__c WHERE PTO_Validation_Request_ID__c =: MVRequestID];
                     system.debug(orderItems.size());
                     if (orderItems.size()>0)
                     {
@@ -71,13 +71,25 @@ global class PTOFeePaidServiceClass
                             for(requestbodyItem itm : res.Items){
                                 string applicationNumber='';
                                 string patentNumber='';
+                                string feeCode = '';
                                 if(itm.ApplicationNumber!=null && itm.ApplicationNumber!='')
                                 	applicationNumber=itm.ApplicationNumber.replaceAll(orderItems[0].Jurisdiction__c,'');
                                 if(itm.PatentNumber!=null && itm.PatentNumber!='')
                                 	patentNumber = itm.PatentNumber.replaceAll(orderItems[0].Jurisdiction__c,'');
                                 
-                                mapitems.put(applicationNumber+'-'+patentNumber, itm);
-                                system.debug(applicationNumber+'-'+patentNumber);
+                                if(mapitems.containskey(applicationNumber+'-'+patentNumber+'-'+itm.FeeCode))
+                                {
+                                    resError er = NEW resError();
+                                    reslst.Status = false;
+                                    er.Code = '';
+                                    er.Description= 'Duplicate Items cant be processed.';
+                                    errors.add(er);
+                                    reslst.Error=errors;
+                                    return reslst;
+                                }
+                                else
+                                    mapitems.put(applicationNumber+'-'+patentNumber+'-'+itm.FeeCode, itm);
+                                system.debug(applicationNumber+'-'+patentNumber+'-'+itm.FeeCode);
                             }
                         }
                         for(Order_Item__c oi : orderItems)
@@ -283,6 +295,7 @@ global class PTOFeePaidServiceClass
     {
         global string ApplicationNumber{set;get;}
         global string PatentNumber{set;get;}
+        global string FeeCode{set;get;}
         global string Status{set;get;}
         global List<errorbody> Error{set;get;}
     }
