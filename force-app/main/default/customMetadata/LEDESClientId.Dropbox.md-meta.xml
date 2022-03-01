@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Dropbox</label>
+    <protected>false</protected>
+    <values>
+        <field>ClientId__c</field>
+        <value xsi:type="xsd:string">Dropbox INC BU</value>
+    </values>
+    <values>
+        <field>LawFirmMatterId__c</field>
+        <value xsi:type="xsd:string">BF_REF_2759</value>
+    </values>
+    <values>
+        <field>LineItemExpensesCode__c</field>
+        <value xsi:type="xsd:string">E117</value>
+    </values>
+    <values>
+        <field>MatterId__c</field>
+        <value xsi:type="xsd:string">BF_M#48539</value>
+    </values>
+    <values>
+        <field>MatterName__c</field>
+        <value xsi:type="xsd:string">MaxVal Patent Annuities (North America)</value>
+    </values>
+</CustomMetadata>
