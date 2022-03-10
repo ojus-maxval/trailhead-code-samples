@@ -151,7 +151,6 @@ public class batchRenewalBillCreateTest
         qbc1.QB_Customer_Id__c = '50';
         qbc1.Client__c = Ord.Client__c;
         insert qbc1;
-        
         Order_Item__c OI =new Order_Item__c();
         OI.Order__c =Ord.Id;
         OI.PTO_Validation_Status__c='Request to Validate';
