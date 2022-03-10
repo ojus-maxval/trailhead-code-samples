@@ -247,4 +247,44 @@
         PTOFeePaidServiceClass.PTOFeePaid();
         Test.stopTest();    
 	}
+    @isTest public static void TestMethod10()
+{
+    API_Credentials__c cre=new API_Credentials__c();
+        cre.name='PTO Payment Validate';
+        cre.Username__c='test';
+        cre.URL__c='https://google.com';
+        cre.Password__c='test';
+        insert cre;
+        Clients__c objclient =new Clients__c();
+        objclient.Name='Dropbox';
+        Insert objclient ;
+        order__c Objorder = new order__c();
+        Objorder.Client__c=objclient.id;
+        Insert Objorder;
+        Order_Item__c Objorderitem1 = new Order_Item__c();
+        Objorderitem1.order__c=Objorder.id; 
+        Objorderitem1.Jurisdiction__c='EP';
+        //Objorderitem.Suggested_Open_Date_To_Pay__c=system.today()-1; 
+        Objorderitem1.Suggested_Close_Date_To_Pay__c=system.today()-1; 
+        Objorderitem1.Payment_Status__c='Payment Received'; 
+        Objorderitem1.Paid_Status__c=null;
+        Objorderitem1.Renewal_Instruction__c='Renew';
+    Objorderitem1.Patent_No__c='US232434';
+    Objorderitem1.Application_No__c ='US1233234';
+        Objorderitem1.Application_Date__c =System.today();
+	    Objorderitem1.PTO_Validation_Request_ID__c ='28c30658-9c8d-4c43-8135-4afc2e649d6f';
+        Insert Objorderitem1;
+    
+        Test.startTest();
+        RestRequest req =new RestRequest();
+        RestResponse res = RestContext.response;
+        //User_Auth_Details__c ObjAOql =[select name from User_Auth_Details__c limit 1];
+        req.requestURI = '/services/apexrest/pto/payment/validate/status/';  //Request URL
+        req.httpMethod = 'PUT';//HTTP Request Type
+        RestContext.request = req;
+        String JSONMsg ='{"ClientRequestHandle":"d0cb82fc-a85a-42ea-b549-27ee7a3d3669","RequestID":"28c30658-9c8d-4c43-8135-4afc2e649d6f","Status":3,"Items":[{"ApplicationNumber":"14513841","PatentNumber":"10565402","Status":"VP","Error":[]},{"ApplicationNumber":"78901234","PatentNumber":"8543217","FeeCode":"1551","Status":"VF","Error":[{"Description":"Amount is missing"}]}],"BillDetails":{"Status":"True","BillNo":"B202011001","Error":[{"Description":"Amount is missing"}]},"Error":[{"Description":"Amount is missing"}],"Warning":[{"Description":"Amount is missing"}]}';
+        req.requestBody = Blob.valueof(JSONMsg);
+        PTOFeePaidServiceClass.PTOFeePaid();
+        Test.stopTest();
+}
 }
