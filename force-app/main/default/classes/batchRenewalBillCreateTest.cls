@@ -40,14 +40,20 @@ public class batchRenewalBillCreateTest
         objBatchQueue.Status__c = 'To Do' ;
         insert objBatchQueue;
         
+        List<Id > ClList =new List<Id>();
         Clients__c  Cl =new Clients__c ();
         Cl.Client_Name__c = 'Test Status';
         Cl.Contact_Email_Id__c ='juveria.b@maxval.com';
         Insert Cl;
+        ClList.add(Cl.id);
         
+        List<Id> ListOrd =new List<Id>();
+        Set<Id > OrdSet =new Set<Id>();
         Order__c  Ord =new Order__c ();
         Ord.Client__c =Cl.id;
         Insert Ord;
+        OrdSet.add(Ord.id);
+        ListOrd.add(Ord.id);
         
         QB_Customer__c qbc1 = NEW QB_Customer__c();
         qbc1.Name = 'QBC1';
@@ -87,12 +93,15 @@ public class batchRenewalBillCreateTest
         ptoValidationReqWrapper wp = new ptoValidationReqWrapper();
         wp.countryCode = 'US';
         wp.countryAssets = new List<Order_Item__c>{OI};
-        batchRenewalBillCreate cls = New batchRenewalBillCreate(new list<ptoValidationReqWrapper>{wp}, '50');
+        batchRenewalBillCreate cls = New batchRenewalBillCreate(new list<ptoValidationReqWrapper>{wp}, '50\\|\\|70');
+        
         database.executebatch(cls,1);
+        Test.stopTest();
     }
     
     static testMethod void testMethod2() 
     {
+        
         PTO_Credentials__c pc  = NEW PTO_Credentials__c();
         pc.Country_Code__c = 'US';
         insert pc;
@@ -132,25 +141,51 @@ public class batchRenewalBillCreateTest
         ObjAPI1.URL__c ='https://login.salesforce.com/services/oauth2/token';
         insert ObjAPI1;
         
+        API_Auth_Detail__c aad = NEW API_Auth_Detail__c();
+        aad.Auth_Code__c = 'AAD1';
+        aad.ClientId__c	= aad.id;
+        
         Batch_Queue__c objBatchQueue = new  Batch_Queue__c();
         objBatchQueue.Name = 'Order Placed Mail Alert ';
         objBatchQueue.Status__c = 'To Do' ;
         insert objBatchQueue;
         
+        List<Id > ClList =new List<Id>();
         Clients__c  Cl =new Clients__c ();
         Cl.Client_Name__c = 'Test Status';
         Cl.Contact_Email_Id__c ='juveria.b@maxval.com';
         Insert Cl;
+		ClList.add(Cl.id);        
+        
+        List<Id> ListOrd =new List<Id>();
+        Set<Id > OrdSet =new Set<Id>();
         
         Order__c  Ord =new Order__c ();
         Ord.Client__c =Cl.id;
         Insert Ord;
+        OrdSet.add(Ord.id);
+        ListOrd.add(Ord.id);
         
         QB_Customer__c qbc1 = NEW QB_Customer__c();
         qbc1.Name = 'QBC1';
         qbc1.QB_Customer_Id__c = '50';
         qbc1.Client__c = Ord.Client__c;
+        qbc1.Active__c = true;
         insert qbc1;
+        
+        QB_Supplier__c qsc1 = NEW QB_Supplier__c();
+        qsc1.Name = 'QBC1';
+        qsc1.QB_Supplier_Id__c = '50';
+        qsc1.Jurisdiction__c = 'US';
+        qsc1.Active__c = true;
+        insert qsc1;
+        
+        Payment_Confirmation__c pc1 = NEW Payment_Confirmation__c();
+        pc1.Payment_Amount__c = 4848;
+        pc1.Amount_for_selected_Assets__c = 24;
+        pc1.Payment_Method__c = 'Wire Transfer';
+        insert pc1;        
+        
         Order_Item__c OI =new Order_Item__c();
         OI.Order__c =Ord.Id;
         OI.PTO_Validation_Status__c='Request to Validate';
@@ -169,7 +204,8 @@ public class batchRenewalBillCreateTest
         ptoValidationReqWrapper wp = new ptoValidationReqWrapper();
         wp.countryCode = 'US';
         wp.countryAssets = new List<Order_Item__c>{OI};
-        batchRenewalBillCreate cls = New batchRenewalBillCreate(new list<ptoValidationReqWrapper>{wp}, '50\\|\\|100');
+        batchRenewalBillCreate cls = New batchRenewalBillCreate(new list<ptoValidationReqWrapper>{wp}, '50\\|\\|100\\|\\|150');
         database.executebatch(cls,1);
+        Test.stopTest();
     }
 }
