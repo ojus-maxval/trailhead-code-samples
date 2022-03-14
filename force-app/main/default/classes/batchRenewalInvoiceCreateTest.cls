@@ -52,6 +52,12 @@ public class batchRenewalInvoiceCreateTest {
         OrdSet.add(Ord.id);
         ListOrd.add(Ord.id);
         
+        Batch_Queue__c objBatchQueue = new  Batch_Queue__c();
+        objBatchQueue.Name = 'Generate Invoice';
+        objBatchQueue.Status__c = 'To Do' ;
+        objBatchQueue.Parent_Id__c = cl.id;
+        insert objBatchQueue;
+        
         Payment__c PY =new Payment__c ();
         PY.Payment_Amount__c =5800.0;
         Insert PY;
