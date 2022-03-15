@@ -59,9 +59,33 @@ public class batchRenewalBillCreateTest
         qbc1.Name = 'QBC1';
         qbc1.QB_Customer_Id__c = '50';
         qbc1.Client__c = Ord.Client__c;
+        qbc1.Active__c = true;
         insert qbc1;
         
+        QB_Supplier__c qsc1 = NEW QB_Supplier__c();
+        qsc1.Name = 'QBC1';
+        qsc1.QB_Supplier_Id__c = '50';
+        qsc1.Jurisdiction__c = 'US';
+        qsc1.Active__c = true;
+        insert qsc1;
+        
+        Payment_Confirmation__c pc1 = NEW Payment_Confirmation__c();
+        
+        pc1.Name = 'ABC123';
+        pc1.Payment_Currency__c = 'USD';
+        pc1.Payment_Amount__c = 4848;
+        pc1.Amount_for_selected_Assets__c = 24;
+        pc1.Payment_Method__c = 'Wire Transfer';
+        insert pc1;  
+        /*
+        List<Payment_Confirmation__c> PaymentC = [SELECT id, Name, Payment_Currency__c, Amount_for_selected_Assets__c, Payment_Method__c, Exchange_Rate__c FROM Payment_Confirmation__c WHERE id =: pc1.id ];
+        system.debug('PaymentC:' + PaymentC[0].id + ' ' + PaymentC[0].Payment_Currency__c + ' ' + PaymentC[0].Amount_for_selected_Assets__c + ' ' + PaymentC[0].Payment_Method__c + ' ' + PaymentC[0].Exchange_Rate__c + ' ');
+        system.debug('PC1_id:' + pc1.id);
+        system.debug('Exchange rate:' + string.ValueOf(pc1.Exchange_Rate__c));
+        */
+         
         List<Order_Item__c> listOI = NEW List<Order_Item__c>();
+        /*
         Order_Item__c OI1 =new Order_Item__c();
         OI1.Order__c =Ord.Id;
         OI1.PTO_Validation_Status__c='Request to Validate';
@@ -73,11 +97,13 @@ public class batchRenewalBillCreateTest
         OI1.Term_Name__c='Year 3.7';
         OI1.Entity_Type_Name__c='Large';
         OI1.Surcharge__c=13350.00;
-        listOI.add(OI1);
+        listOI.add(OI1); 
+		*/
         test.startTest();
-        insert listOI;
+       // insert listOI;
         Order_Item__c OI =new Order_Item__c();
         OI.Order__c =Ord.Id;
+        OI.Payment_Confirmation__c = pc1.id;
         OI.PTO_Validation_Status__c='Request to Validate';
         OI.PTO_Validation_Request_ID__c='abcdefg';
         OI.Jurisdiction__c='US';
@@ -87,13 +113,18 @@ public class batchRenewalBillCreateTest
         OI.Term_Name__c='Year 3.7';
         OI.Entity_Type_Name__c='Large';
         OI.Surcharge__c=13350.00;
-        Insert OI;
-        
-        
+        OI.Fee__c=Double.valueOf('1234');
+        //Insert OI;
+        listOI.add(OI);
+        insert listOI;
+        /*
+        List<Order_Item__c> Check_Order = [SELECT id, Payment_Confirmation__r.Exchange_Rate__c FROM Order_Item__c WHERE id =: OI.id];
+        system.debug(Check_Order[0].id + ' ' + Check_Order[0].Payment_Confirmation__r.Exchange_Rate__c);
+        */
         ptoValidationReqWrapper wp = new ptoValidationReqWrapper();
         wp.countryCode = 'US';
-        wp.countryAssets = new List<Order_Item__c>{OI};
-        batchRenewalBillCreate cls = New batchRenewalBillCreate(new list<ptoValidationReqWrapper>{wp}, '50\\|\\|70');
+        wp.countryAssets = listOI;
+        batchRenewalBillCreate cls = New batchRenewalBillCreate(new list<ptoValidationReqWrapper>{wp}, '50');
         
         database.executebatch(cls,1);
         Test.stopTest();
@@ -184,10 +215,12 @@ public class batchRenewalBillCreateTest
         pc1.Payment_Amount__c = 4848;
         pc1.Amount_for_selected_Assets__c = 24;
         pc1.Payment_Method__c = 'Wire Transfer';
-        insert pc1;        
+        insert pc1;  
+        system.debug('Exchange rate:' + string.valueOf(pc1.Exchange_Rate__c));
         
         Order_Item__c OI =new Order_Item__c();
         OI.Order__c =Ord.Id;
+        OI.Payment_Confirmation__c = pc1.id;
         OI.PTO_Validation_Status__c='Request to Validate';
         OI.PTO_Validation_Request_ID__c='abcdefg';
         OI.Jurisdiction__c='US';
@@ -204,8 +237,65 @@ public class batchRenewalBillCreateTest
         ptoValidationReqWrapper wp = new ptoValidationReqWrapper();
         wp.countryCode = 'US';
         wp.countryAssets = new List<Order_Item__c>{OI};
-        batchRenewalBillCreate cls = New batchRenewalBillCreate(new list<ptoValidationReqWrapper>{wp}, '50\\|\\|100\\|\\|150');
+        batchRenewalBillCreate cls = New batchRenewalBillCreate(new list<ptoValidationReqWrapper>{wp}, '50||100||150');
         database.executebatch(cls,1);
+        
+        /*
+        RestRequest req =new RestRequest();
+        RestResponse res = RestContext.response;
+        req.requestURI = '/services/apexrest/pto/payment/validate/status/';  //Request URL
+        req.httpMethod = 'PUT';//HTTP Request Type
+        RestContext.request = req;
+        String JSONMsg ='{"ClientRequestHandle":"d0cb82fc-a85a-42ea-b549-27ee7a3d3669","RequestID":"28c30658-9c8d-4c43-8135-4afc2e649d6f","Status":3,"Items":[{"ApplicationNumber":"14513841","PatentNumber":"10565402","Status":"VP","Error":[]},{"ApplicationNumber":"78901234","PatentNumber":"8543217","FeeCode":"1551","Status":"VF","Error":[{"Description":"Amount is missing"}]}],"BillDetails":{"Status":"True","BillNo":"B202011001","Error":[{"Description":"Amount is missing"}]},"Error":[{"Description":"Amount is missing"}],"Warning":[{"Description":"Amount is missing"}]}';
+        req.requestBody = Blob.valueof(JSONMsg);
+        */
+        Test.stopTest();
+    }
+    
+    static testMethod void testMethod3() 
+    {
+        test.startTest();
+        
+        batchRenewalBillCreate.ReqData rd = new batchRenewalBillCreate.ReqData();
+        rd.APIHandleRef = 'MaxVal123';
+        rd.PaymentType = 'Wire Transfer';
+        
+        batchRenewalBillCreate.objectitem oit = new batchRenewalBillCreate.objectitem();
+        oit.Fee = '100';
+        
+        batchRenewalBillCreate.objBankFee obf = new batchRenewalBillCreate.objBankFee();
+        obf.Items = null;
+        rd.BankFee = obf;
+        
+        batchRenewalBillCreate.objBankFeeItem obfi = new batchRenewalBillCreate.objBankFeeItem();
+        obfi.AccountToRef = 'String1';
+        obfi.Billable = true;
+        obfi.Description = 'Empty';
+        obfi.Fee = '100';
+        obfi.FeeClass = 'USD';
+        
+        batchRenewalBillCreate.responsebody rb = new batchRenewalBillCreate.responsebody();
+        rb.Status = 3;
+        rb.RequestID = 'ABC123';
+        rb.BankFeeErrorItems = null;
+        rb.BankFeeWarningItems = null;
+        rb.ErrorItems = null;
+        rb.Errors = null;
+        rb.WarningItems = null;
+        rb.Warnings = null;
+        
+        batchRenewalBillCreate.responseerror re = new batchRenewalBillCreate.responseerror();
+        re.Code = 'Empty';
+        re.Description = 'Empty';
+        
+        batchRenewalBillCreate.responseerroritem rei = new batchRenewalBillCreate.responseerroritem();
+        rei.RowNumber = 3;
+        rei.Errors = null;
+        
+        batchRenewalBillCreate.apiResponse aR = new batchRenewalBillCreate.apiResponse();
+        aR.Message = 'Empty';
+        aR.Description = 'Empty';
+        
         Test.stopTest();
     }
 }

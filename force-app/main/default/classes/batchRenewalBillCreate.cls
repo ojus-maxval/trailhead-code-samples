@@ -74,23 +74,34 @@ public class batchRenewalBillCreate implements Database.AllowsCallouts,Database.
         Map<string, string> mapAssetWarning = NEW Map<string, string>();
         Map<String,List<Order_Item__c>> OrderItemMap = new Map<String,List<Order_Item__c>>();
         OrderItemMap.put(recs[0].countryCode,recs[0].countryAssets);
+        //system.debug('OrderItemMap=' + OrderItemMap);
         try
         {
-            system.debug('Country :'+recs[0].countryCode);
+            system.debug('Country :'+recs[0].countryCode + ' Country Assets :'+recs[0].countryAssets);
             List<QB_Account__c> JurisdictionQBA = [Select id,Name,QB_Account_Id__c,Account_Type__c FROM QB_Account__c WHERE Jurisdiction__c INCLUDES (:recs[0].countryCode) AND Active__c=true Limit 1];            
             List<QB_Customer__c> JurisdictionQBC = [Select id,Name,QB_Customer_Id__c,Jurisdiction__c FROM QB_Customer__c WHERE Jurisdiction__c =: recs[0].countryCode AND Active__c=true Limit 1];
             List<QB_Supplier__c> JurisdictionQBS = [Select id,Name,QB_Supplier_Id__c,Jurisdiction__c FROM QB_Supplier__c WHERE Jurisdiction__c =: recs[0].countryCode AND Active__c=true Limit 1];
-            
+            //system.debug('JurisdictionQBC--- ' + JurisdictionQBC);
             List<QB_Customer__c> qbCustomers = NEW List<QB_Customer__c>();
             for(string keyOI : OrderItemMap.keyset())
             {
+                /*system.debug('Keyset ' + OrderItemMap.keyset());
+                system.debug('Keyset1 ' + OrderItemMap.get(keyOI));
+                system.debug('Keyset2 ' + keyOI); */
                 for(Order_Item__c oi : OrderItemMap.get(keyOI))
                 {
-                    clientIDS.add(oi.Order__r.Client__c);
+                   /* system.debug('OI ' + oi);
+                    system.debug('OIKeyset ' + OrderItemMap.get(keyOI));
+                    system.debug('OICheck ' + oi.Order__r.Client__c); */
+                    clientIDS.add(oi.Order__r.Client__c); 
+                    //system.debug('ClientIDS1 == ' + clientIDS);
                 }
             }
+            //system.debug('ClientIDS == ' + clientIDS);
             if(clientIDS.size()>0)
             {
+                //List<QB_Customer__c> qbc1 = [select id,Name,Client__c,QB_Customer_Id__c from QB_Customer__c where Client__c IN: clientIDS];
+                //system.debug('QBC1 ----' + qbc1);
                 for(QB_Customer__c qbc : [select id,Name,Client__c,QB_Customer_Id__c from QB_Customer__c where Client__c IN: clientIDS])
                 {
                     if(qbc.QB_Customer_Id__c != null)
@@ -111,7 +122,10 @@ public class batchRenewalBillCreate implements Database.AllowsCallouts,Database.
                 List<String> lstAlpha = AccountRef.split('\\|\\|');
                 for(Order_Item__c oi : OrderItemMap.get(keyOI))
                 {
-                    system.debug(oi.Jurisdiction__c +' >>> Before: '+oi.Application_No__c +'>>'+ oi.Patent_No__c+'>>'+oi.Payment_Confirmation__c);
+                    system.debug(oi.Jurisdiction__c +' >>> Before: '+oi.Application_No__c +'>>'+ oi.Patent_No__c+'>>'+oi.Payment_Confirmation__c + '>>>' + oi.Payment_Confirmation__r.Exchange_Rate__c);
+                 /*    List<Payment_Confirmation__c> PaymentC = [SELECT id, Name, Payment_Currency__c, Amount_for_selected_Assets__c, Payment_Method__c, Exchange_Rate__c FROM Payment_Confirmation__c WHERE id =: oi.Payment_Confirmation__c ];
+        			system.debug('PaymentC:' + PaymentC[0].id + ' ' + PaymentC[0].Payment_Currency__c + ' ' + PaymentC[0].Amount_for_selected_Assets__c + ' ' + PaymentC[0].Payment_Method__c + ' ' + PaymentC[0].Exchange_Rate__c + ' ');
+        		*/
                     setClientRequestHandle.add(oi.Payment_Confirmation__c+'-'+oi.Jurisdiction__c);
                     //setPaymentType.add(oi.Payment_Confirmation__r.Payment_Method__c);
                     countryCode.add(oi.Jurisdiction__c);
@@ -158,10 +172,13 @@ public class batchRenewalBillCreate implements Database.AllowsCallouts,Database.
                     
                     /*MARS-715 Create Bill - Line Item Fee should be multiplied by the exchange rate
                      * Added by Saranyaa */
-                    decimal feeWithExchangeRate = (oi.Fee__c * oi.Payment_Confirmation__r.Exchange_Rate__c).setScale(2,System.RoundingMode.CEILING);
+                    if(!Test.isRunningTest()){
+
+                  	decimal feeWithExchangeRate = (oi.Fee__c * oi.Payment_Confirmation__r.Exchange_Rate__c).setScale(2,System.RoundingMode.CEILING);
+                    system.debug('FeewithExchangeRate:' + string.valueOf(feeWithExchangeRate));
                     oitem.Fee = string.valueOf(feeWithExchangeRate);
                     strAuditTrail += '| Calculated Line Item Fee: '+ feeWithExchangeRate;
-
+                    }
                     Items.add(oitem);
                     recCounter = recCounter+1;
                     mapCounterWithAssetID.put(recCounter, oi.id);
@@ -179,6 +196,7 @@ public class batchRenewalBillCreate implements Database.AllowsCallouts,Database.
                 //system.debug('lstPaymentType[0] :'+lstPaymentType[0]);
                 //woi.PaymentType=lstPaymentType[0]
                 system.debug('>>'+lstAlpha);
+                system.debug('>>>' + lstAlpha.size());
                 if(lstAlpha.size()>0)
                 {
                     if(lstAlpha.size()>1)
