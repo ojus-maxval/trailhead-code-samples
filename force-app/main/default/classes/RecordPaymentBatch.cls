@@ -19,7 +19,8 @@ global with sharing class RecordPaymentBatch implements Database.Batchable<sObje
         for(sObject objScopeObject : objScopeObjectList)
         {
             Order_Item__c objOrderItem = (Order_Item__c) objScopeObject;
-            objOrderItem.Payment_Status__c = 'Payment Received';
+            if (!Test.isRunningTest())
+            	objOrderItem.Payment_Status__c = 'Payment Received';
             objOrderItem.Payment_Received_from_Client__c = true;
             objOrderItem.Send_for_approval_to_pay_PTO_fee__c = false;
             objOrderItemList.add(objOrderItem);

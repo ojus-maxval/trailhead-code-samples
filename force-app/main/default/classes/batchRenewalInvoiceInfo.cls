@@ -1,3 +1,8 @@
+/* Copyright © 2021 MaxVal Group. All Rights Reserved.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Class Modified by Sneha B, Dec 2021
+ */
 //renewal/invoice/info/{invoiceref}/download/{type}
 public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database.Batchable<sObject>, Database.Stateful
 {
@@ -79,54 +84,56 @@ public class batchRenewalInvoiceInfo implements Database.AllowsCallouts,Database
             AuditTrailHelper.UpdateAudit('batchRenewalInvoiceInfo-download',strAuditTrail,status);
         }
     }
-    
     //Makes a call to the MaxvalAPI to get the csv file
     public HttpResponse CallAPI(string URL,string AccessToken)
     {
-        Http http = new Http();
-        HttpRequest req = new HttpRequest();
-        req.setMethod('GET');
-        req.setEndpoint(URL);
-        req.setHeader('Authorization', 'Bearer ' + AccessToken);
-        req.setHeader('Content-Type','application/json;charset=UTF-8');
-        req.setHeader('Content-Length', '0');
-        req.setTimeout(120000);
-        HttpResponse res = http.send(req);
+                Http http = new Http();
+                HttpRequest req = new HttpRequest();
+                req.setMethod('GET');
+                req.setEndpoint(URL);
+                req.setHeader('Authorization', 'Bearer ' + AccessToken);
+                req.setHeader('Content-Type','application/json;charset=UTF-8');
+                req.setHeader('Content-Length', '0');
+                req.setTimeout(120000);
+                HttpResponse res = http.send(req);  
         return res;
     }
-    
     //This function is used to upload the file against the particular order
     public boolean UploadFile(HttpResponse response,string invoiceRef,Id invoiceID,string fileName)
     {
         boolean callAttachmentsBatch=false;
         if(response.getstatusCode() == 200)
-        {
-            ContentVersion conVer = new ContentVersion();
+                {
+                    ContentVersion conVer = new ContentVersion();
             strAuditTrail +=' |Res Status:'+response.getStatus()+' Code:'+response.getStatusCode();
-            conVer.ContentLocation = 'S';
+                    conVer.ContentLocation = 'S';
             conVer.PathOnClient =fileName+'.csv';
             conVer.Title =fileName; // Display name of the files
             conVer.VersionData = response.getBodyAsBlob();
             strAuditTrail +='|| File to Insert - '+fileName;
-            insert conVer; 
-            System.debug(conVer.Id);
-            Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id=:conVer.Id].ContentDocumentId;
-            ContentDocumentLink cDe = new ContentDocumentLink();
-            cDe.ContentDocumentId = conDoc;
+                    insert conVer;
+                    System.debug(conVer.Id);
+                    Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;
+                    ContentDocumentLink cDe = new ContentDocumentLink();
+                    cDe.ContentDocumentId = conDoc;
             cDe.LinkedEntityId = invoiceID; // you can use objectId,GroupId etc
-            cDe.ShareType = 'I'; // Inferred permission, checkout description of ContentDocumentLink object for more details            
-            insert cDe;
-            callAttachmentsBatch = true;
-        }
+                    cDe.ShareType = 'I'; // Inferred permission, checkout description of ContentDocumentLink object for more details
+                    insert cDe;
+                    callAttachmentsBatch = true;
+                }
         return callAttachmentsBatch;
-    }
+        }
     
     public void finish(Database.BatchableContext BC)
     {
         if(callAttachmentsBatch)
         {
-            batchRenewalInvoiceAttachment ab = NEW batchRenewalInvoiceAttachment();
-            database.executeBatch(ab,1);
+            if(!Test.isRunningTest())
+            {
+                batchRenewalInvoiceAttachment ab = NEW batchRenewalInvoiceAttachment();
+                database.executeBatch(ab,1);
+            }
+           
         }
     }
 }

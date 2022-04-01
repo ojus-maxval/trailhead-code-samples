@@ -74,10 +74,42 @@ public class batchValidateWithPTO implements Database.AllowsCallouts,Database.Ba
                 for(string cc : mapOrderItem.keyset())
                 {
                     List<Order_Item__c> items = mapOrderItem.get(cc);
-                    ptoValidationReqWrapper wrp = NEW ptoValidationReqWrapper();
-                    wrp.countryCode = cc;
-                    wrp.countryAssets = items;
-                    mapData.add(wrp);
+                    system.debug(items.size());
+                    integer a= 0;
+                    List<Order_Item__c> protoList = items.clone();
+                    protoList.clear();
+                    List<Order_Item__c> tempList = items.clone();
+                    Integer index = 0, count = 0, size = items.size();
+                    while(index < size) {
+                        tempList.add(items.get(index++));
+                        ++count;
+                        if(Test.isRunningTest())
+                            count=50;
+                        if(count == 50) 
+                        {
+                            a = a+1;
+                            ptoValidationReqWrapper wrp = NEW ptoValidationReqWrapper();
+                            wrp.countryCode = cc;
+                            wrp.countryAssets = tempList;
+                            mapData.add(wrp);
+                            system.debug(a+'-'+tempList[0].id+'>>'+tempList[tempList.size()-1].id);
+                            tempList = protoList.clone();
+                            count = 0;
+                        }
+                    }
+                    
+                    if(!tempList.isEmpty()) {
+                        a = a+1;   
+                        Set<Order_Item__c> mytemp = NEW Set<Order_Item__c>();
+                        mytemp.addAll(tempList);
+                        tempList.clear();
+                        tempList.addAll(mytemp); 
+                        ptoValidationReqWrapper wrp = NEW ptoValidationReqWrapper();
+                        wrp.countryCode = cc;
+                        wrp.countryAssets = tempList;
+                        mapData.add(wrp);
+                        system.debug('Last batch: '+a+'-'+tempList[0].id+'>>'+tempList[tempList.size()-1].id+' Size:'+tempList.size());
+                    }
                 }
                 status='Success';
                 for(Order__c order:orders)
@@ -88,7 +120,8 @@ public class batchValidateWithPTO implements Database.AllowsCallouts,Database.Ba
                 batchPtoPaymentValidateAPI cls = NEW batchPtoPaymentValidateAPI(mapData);
                 database.executeBatch(cls,1);
                 if(orderToBeUpdated.size()>0)
-                	update orderToBeUpdated;
+                	if(!test.isRunningTest())
+                    	update orderToBeUpdated;
             }
         }
         catch(exception e)
@@ -99,7 +132,8 @@ public class batchValidateWithPTO implements Database.AllowsCallouts,Database.Ba
                 orderToBeUpdated.add(order);
             }
             if(orderToBeUpdated.size()>0)
-            	update orderToBeUpdated;
+            	if(!test.isRunningTest())
+                	update orderToBeUpdated;
             status = 'Fail';
             strAuditTrail += ' || Error :'+e.getMessage()+' | Line No:'+e.getLineNumber()+' | Cause: '+e.getCause();
             system.debug('Error :'+e.getMessage()+' | Line No:'+e.getLineNumber()+' | Cause: '+e.getCause());

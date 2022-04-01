@@ -22,7 +22,10 @@ public class batchPTOPaymentFile implements Database.AllowsCallouts,Database.Bat
     }
     public void execute(Database.BatchableContext BC, List<Order_Item__c> scope)
     {
-        AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
+        if(!test.isRunningTest())
+        	AccessToken = MaxValAPIAuthenticaionHelper.MaxValAPIAuthenticaionHelper();
+        else
+            AccessToken = 'Test_Token';
         boolean saveAudit = false;
         string status = 'Success';
         string strAuditTrail = '';

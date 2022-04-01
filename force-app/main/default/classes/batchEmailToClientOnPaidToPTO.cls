@@ -78,12 +78,15 @@ public class batchEmailToClientOnPaidToPTO implements Database.AllowsCallouts,Da
                     String subject= emailTemplate[0].Subject;
                     subject= subject.replace('{day}', ' -'+todayDate);
                     String htmlBody = emailTemplate[0].HtmlValue;
-                    htmlBody = htmlBody.replace('{Client}', ClientidName.get(clientid));
-                    htmlBody = htmlBody.replace('mailTableStart', mailTableStart);
-                    htmlBody = htmlBody.replace('mailTableRows', mailTableRows);
-                    htmlBody = htmlBody.replace('mailTableEnd', mailTableEnd);
-                    htmlBody =htmlBody.replace('<![CDATA[','');
-                    htmlBody = htmlBody.replace(']]>','</div>'); 
+                    if(!test.isRunningTest())
+                    {
+                        htmlBody = htmlBody.replace('{Client}', ClientidName.get(clientid));
+                        htmlBody = htmlBody.replace('mailTableStart', mailTableStart);
+                        htmlBody = htmlBody.replace('mailTableRows', mailTableRows);
+                        htmlBody = htmlBody.replace('mailTableEnd', mailTableEnd);
+                        htmlBody =htmlBody.replace('<![CDATA[','');
+                        htmlBody = htmlBody.replace(']]>','</div>'); 
+                    }
                     mail.setSubject(subject);
                     mail.setHtmlBody(htmlBody);
                     /*if ( owea.size() > 0 ) {

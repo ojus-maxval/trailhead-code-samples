@@ -1,7 +1,7 @@
 global class InvoiceStatusRequestToMaxval implements Database.Batchable<sObject>,  Database.AllowsCallouts
 {
  String strStatus ='In progress';
- public String query = 'SELECT id,name,Client__c,Invoice_Status__c FROM Invoice__c WHERE Invoice_Status__c=\''+strStatus+'\'';
+ public String query = 'SELECT id,name,Invoice_Status__c FROM Invoice__c WHERE Invoice_Status__c=\''+strStatus+'\'';
  global Database.QueryLocator start(Database.BatchableContext BC) 
  {
      system.debug('query@@@@@@@@'+query  );

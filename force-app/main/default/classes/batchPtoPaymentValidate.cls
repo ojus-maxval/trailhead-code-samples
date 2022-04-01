@@ -93,12 +93,17 @@ public class batchPtoPaymentValidate implements Database.AllowsCallouts,Database
                         system.debug(oi.Jurisdiction__c +' >>> Before: '+oi.Application_No__c +'>>'+ oi.Patent_No__c);
                         countryCode.add(oi.Jurisdiction__c);
                         objectitem oitem = NEW objectitem();
-                        if(!oi.Application_No__c.substring(oi.Application_No__c.length()-1).isNumeric())
+                        if(oi.Application_No__c!=null && oi.Application_No__c!='-')
                         {
-                            oi.Application_No__c = oi.Application_No__c.substring(0,oi.Application_No__c.length()-1);
-                        }
+                            if(!oi.Application_No__c.substring(oi.Application_No__c.length()-1).isNumeric())
+                            {
+                                oi.Application_No__c = oi.Application_No__c.substring(0,oi.Application_No__c.length()-1); 
+                        		strAuditTrail+= 'ApplicationNumber1 - '+oi.Application_No__c;
+                            }
                         else if((!oi.Application_No__c.substring(oi.Application_No__c.length()-2).isNumeric())  && oi.Application_No__c.substring(0,2)!='EP')
-                            oi.Application_No__c = oi.Application_No__c.substring(0,oi.Application_No__c.length()-2);
+                                oi.Application_No__c = oi.Application_No__c.substring(0,oi.Application_No__c.length()-2); 
+                        }
+                             
                         
                         if(oi.Patent_No__c!=null && oi.Patent_No__c!='-')
                         	oi.Patent_No__c=RemoveKindCode(oi.Patent_No__c);
@@ -173,8 +178,8 @@ public class batchPtoPaymentValidate implements Database.AllowsCallouts,Database
                     req.setBody(jsonbody);
                     req.setTimeout(120000);
                     HttpResponse res = http.send(req);  
-                    //system.debug('Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody());          
-                    strAuditTrail += '| Response status code :' + res.getStatusCode() +' |Status :' + res.getStatus() +' | ';
+                    system.debug('Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody());          
+                    strAuditTrail += '| Response status code :'+res.getStatusCode() +' |Status :'+res.getStatus() +' |Body '+res.getBody()+' | ';
                     List<Order_Item__c> oits = NEW List<Order_Item__c>();
                     List<Order_Item__c> alloits = NEW List<Order_Item__c>();
                     if(OrderItemMap.containskey(keyOI))

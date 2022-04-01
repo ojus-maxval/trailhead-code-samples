@@ -15,9 +15,9 @@ global with sharing class OrderItemBatch implements Database.Batchable<sObject>,
     global Database.QueryLocator start(Database.BatchableContext BC)
     {
         if (SelectedOrderItemIds !=null && SelectedOrderItemIds.size()>0) 
-            return Database.getQueryLocator([SELECT Id, Name, Jurisdiction__c, Path__c, Order__c, Order__r.Client__c, Order__r.Client__r.Invoice_Type__c, Invoice_Type_Name__c, Due_Date__c, Payment_Mode__c, Suggested_Open_Date_To_Pay__c,Suggested_Close_Date_To_Pay__c, Instruction_Date_From__c, Instruction_Date_To__c, Instructed_Date__c, Billing_Currency__c, Fee_Currency__c, Fee_Unit_Rate_When_Pay__c, Service_Fee_Currency__c, Service_Fee_Unit_Rate_When_Pay__c, Agent_Fee_Currency__c, Agent_Fee_Unit_Rate_When_Pay__c,Order__r.Client__r.RushFee_Days__c FROM Order_Item__c WHERE Id IN :SelectedOrderItemIds]);
+            return Database.getQueryLocator([SELECT Id, Name, Jurisdiction__c, Path__c, Order__c, Order__r.Client__c,Order__r.Client__r.Invoice_Type__c, Invoice_Type_Name__c, Due_Date__c, Payment_Mode__c, Suggested_Open_Date_To_Pay__c,Suggested_Close_Date_To_Pay__c, Instruction_Date_From__c, Instruction_Date_To__c, Instructed_Date__c, Billing_Currency__c, Fee_Currency__c, Fee_Unit_Rate_When_Pay__c, Service_Fee_Currency__c, Service_Fee_Unit_Rate_When_Pay__c, Agent_Fee_Currency__c, Agent_Fee_Unit_Rate_When_Pay__c,Order__r.Client__r.RushFee_Days__c FROM Order_Item__c WHERE Id IN :SelectedOrderItemIds]);
         else
-            return Database.getQueryLocator([SELECT Id, Name, Jurisdiction__c, Path__c, Order__c, Order__r.Client__c, Order__r.Client__r.Invoice_Type__c, Invoice_Type_Name__c, Due_Date__c, Payment_Mode__c, Suggested_Open_Date_To_Pay__c,Suggested_Close_Date_To_Pay__c, Instruction_Date_From__c, Instruction_Date_To__c, Instructed_Date__c, Billing_Currency__c, Fee_Currency__c, Fee_Unit_Rate_When_Pay__c, Service_Fee_Currency__c, Service_Fee_Unit_Rate_When_Pay__c, Agent_Fee_Currency__c, Agent_Fee_Unit_Rate_When_Pay__c,Order__r.Client__r.RushFee_Days__c FROM Order_Item__c]);              
+            return Database.getQueryLocator([SELECT Id, Name, Jurisdiction__c, Path__c, Order__c, Order__r.Client__c,Order__r.Client__r.Invoice_Type__c, Invoice_Type_Name__c, Due_Date__c, Payment_Mode__c, Suggested_Open_Date_To_Pay__c,Suggested_Close_Date_To_Pay__c, Instruction_Date_From__c, Instruction_Date_To__c, Instructed_Date__c, Billing_Currency__c, Fee_Currency__c, Fee_Unit_Rate_When_Pay__c, Service_Fee_Currency__c, Service_Fee_Unit_Rate_When_Pay__c, Agent_Fee_Currency__c, Agent_Fee_Unit_Rate_When_Pay__c,Order__r.Client__r.RushFee_Days__c FROM Order_Item__c]);              
     }
     global void execute(Database.BatchableContext BC, List<sObject> objScopeObjectList)
     {
@@ -109,11 +109,14 @@ global with sharing class OrderItemBatch implements Database.Batchable<sObject>,
                 //**Begin**     
                 Date dueDate = Date.newInstance(objOrderItem.Due_Date__c.year(), objOrderItem.Due_Date__c.month(), objOrderItem.Due_Date__c.day());//convert datetime to date
                 Date instructedDate = Date.newInstance(objOrderItem.Instructed_Date__c.year(), objOrderItem.Instructed_Date__c.month(), objOrderItem.Instructed_Date__c.day());
-                Integer numberDaysDue = instructedDate.daysBetween(dueDate);
-                strAuditText += ' | Rush Fee calculation: DueDate- '+dueDate + ' | Instructed Date- '+ instructedDate + ' | Days in between- '+numberDaysDue +'<='+ objOrderItem.Order__r.Client__r.RushFee_Days__c + '=' + string.valueof(numberDaysDue <= objOrderItem.Order__r.Client__r.RushFee_Days__c);
-                if(numberDaysDue <= objOrderItem.Order__r.Client__r.RushFee_Days__c){
+                Integer daysInBetween = instructedDate.daysBetween(dueDate);
+                strAuditText += ' | Rush Fee calculation: DueDate: '+ dueDate + ' | Instructed Date: '+ instructedDate + ' | Days in between: '+ daysInBetween +' <= '+ objOrderItem.Order__r.Client__r.RushFee_Days__c + '=' + string.valueof(daysInBetween <= objOrderItem.Order__r.Client__r.RushFee_Days__c);
+                if(daysInBetween <= objOrderItem.Order__r.Client__r.RushFee_Days__c){
                     objOrderItem.Is_Instructed_during_Rush__c = True; 
                     strAuditText += ' | Rush fee applicable for the asset: '+ objOrderItem.Name; 
+                }
+                else{
+                    strAuditText += ' | Rush fee NOT applicable for the asset: '+ objOrderItem.Name;
                 }
                 //**End**
                 objOrderItemList.add(objOrderItem);
@@ -144,9 +147,10 @@ global with sharing class OrderItemBatch implements Database.Batchable<sObject>,
                         LateFeeTotal = objClient.Late_Fee_Maximum__c; 
                     objOrder.Late_Fee__c = LateFeeTotal;
                 }
+                strAuditText += 'count-'+objOrder.nRush_Renewals__c;
                 
-                if (objOrder.nRush_Renewals__c >0)
-                    objOrder.Rush_Fee__c= objOrder.nRush_Renewals__c * objClient.Rush_Fee_per_Order__c;
+              if (objOrder.nRush_Renewals__c >0)
+                  objOrder.Rush_Fee__c= objOrder.nRush_Renewals__c * objClient.Rush_Fee_per_Order__c;
                 objOrder.Job_Status__c='Completed';
             }
             UPDATE objOrders;
